@@ -1,5 +1,5 @@
 const mine = require('../mine');
-const db = require('../db');
+const db = require('../../DB');
 
 class stageThree {
     constructor() {
