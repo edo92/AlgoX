@@ -6,14 +6,13 @@ class StageOne {
         this.stageOne = () => {
             const baseUrl = 'http://www.ufcstats.com/statistics/events/completed?page=';
 
-            for (let i = 1; i < 2; i++) {
-                let url = baseUrl + i;
-                mine.mineEvents(url, events => {
-                    this.filter(events, (err, list) => {
-                        db.actions.saveEvents(list);
-                    });
-                })
-            }
+            let page = 1;
+            let url = baseUrl + page;
+            mine.mineEvents(url, events => {
+                this.filter(events, (err, list) => {
+                    db.actions.saveEvents(list);
+                });
+            })
         }
     }
 

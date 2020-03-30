@@ -1,6 +1,4 @@
-require('dotenv').config();
-
-const database = require('./db');
+const database = require('./../DB');
 const operation = require('./operation');
 
 database.connect(() => {
@@ -11,5 +9,8 @@ database.connect(() => {
     // operation.stageTwo();
 
     // Collects event fighters stats
-    operation.stageThree();
+    // operation.stageThree();
+
+    // Collect Fighters stats
+    operation.stageFour();
 });

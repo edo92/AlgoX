@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const models = require('./modules');
 const actions = require('./actions');
+require('dotenv').config();
 
 class Database {
     constructor() {

@@ -2,6 +2,8 @@ const db = require('../modules');
 
 class DbActions {
     constructor() {
+        this.db = db;
+        
         this.saveEvents = async list => {
             return await list.map(async event => {
                 return await db.Events.create({ event });
@@ -9,7 +11,12 @@ class DbActions {
         }
 
         this.getEvents = async () => {
-            return await db.Events.find();
+            try {
+                return await db.Events.find();
+            } 
+            catch (err) {
+                throw err;
+            }
         }
 
         this.saveEventFights = async (id, fights) => {
