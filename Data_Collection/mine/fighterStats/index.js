@@ -1,4 +1,7 @@
-module.exports.getFighterStats = url => {
+const axios = require('axios');
+const cheerio = require('cheerio');
+
+module.exports.getFighterStats = (url, callback) => {
     // let url = 'http://www.ufcstats.com/fighter-details/07225ba28ae309b6'
     axios.get(url).then(resp => {
         let $ = cheerio.load(resp.data);
@@ -35,11 +38,13 @@ module.exports.getFighterStats = url => {
             });
 
             stats.pastFights = pastFights;
-            // console.log(stats)
+            callback({ success: stats });
 
             function parse(unparsed) {
                 return unparsed.text().replace(/\s\s+/g, ' ').trim();
             };
         });
+    }).catch(error => {
+        callback({ error });
     });
 }

@@ -8,7 +8,7 @@ class StageTwo {
 
             eventList.map(event => {
                 let id = event._id;
-                let url = event.event.link;
+                let url = event.link;
                 this.mineEventFights(url, id);
             })
         }
