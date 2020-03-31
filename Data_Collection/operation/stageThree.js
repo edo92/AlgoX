@@ -6,15 +6,14 @@ class stageThree {
         this.stageThree = async () => {
             let eventList = await db.actions.getEvents();
 
-            // eventList.map(event => {
-            let event = eventList[0];
-            setTimeout(async () => {
-                await event.fights.map((fight, index) => {
-                    let eventId = event._id;
-                    this.getFightStats(fight, eventId, index);
-                });
-            }, 1000);
-            // })
+            eventList.map(event => {
+                setTimeout(async () => {
+                    await event.fights.map((fight, index) => {
+                        let eventId = event._id;
+                        this.getFightStats(fight, eventId, index);
+                    });
+                }, 1000);
+            })
         }
 
         this.getFightStats = (fight, eventId, index) => {

@@ -9,7 +9,7 @@ database.connect(() => {
     // operation.stageTwo();
 
     // Collects event fighters stats
-    operation.stageThree();
+    // operation.stageThree();
 
     // Collect Fighters stats
     // operation.stageFour();
