@@ -43,7 +43,7 @@ module.exports.mineEventFights = (url, callback) => {
             });
         });
 
-        if (callback) callback({ success: dataset });
+        if (callback) callback({ success: await dataset });
     })
         .catch(error => {
             callback({ error });
