@@ -3,17 +3,26 @@ const db = require('../../DB');
 
 class StageFour {
     constructor() {
-        this.stageFour = async () => {
-            let eventList = await db.actions.getEvents();
+        this.state = {};
+    }
 
-            eventList.map(event => {
-                event.fights.map((fight, index) => {
-                    ['fighter1', 'fighter2'].map(fighter => {
-                        this.getFighterStats(fight[fighter], fighter, event, index);
-                    });
-                })
+    start = async () => {
+        let eventList = await db.actions.getEvents();
+
+        eventList.map(event => {
+            event.fights.map((fight, index) => {
+                ['fighter1', 'fighter2'].map(fighter => {
+                    this.state.total = (this.state.total || 0) + 1;
+                    this.getFighterStats(fight[fighter], fighter, event, index);
+                });
             })
-        }
+        })
+    }
+
+    monitorState = () => {
+        console.log('--------------- Stage Four ---------------');
+        console.log(this.state);
+        console.log('------------------------------------------');
     }
 
     getFighterStats(ftrData, which, event, index) {
@@ -29,13 +38,19 @@ class StageFour {
                         // Link created id to fighter in fightList
                         fighter.fighterId = data._id;
 
-                        console.log('getting fighter:', fighter.name);
-
-                        // Saved linked fight index
-                        if (data._id)
+                        if (data._id) {
+                            // Saved linked fight index
                             await db.actions.saveStatId(event, fighter, which, index);
+
+                            // Increment Collected
+                            this.state.collected = (this.state.collected || 0) + 1;
+
+                            // Monitore progress
+                            this.monitorState();
+                        }
                     });
                 } else {
+                    // If failed reRequest
                     this.getFighterStats(fighter, which, event, index);
                 }
             })
@@ -43,4 +58,4 @@ class StageFour {
     }
 }
 
-module.exports = new StageFour;
+module.exports = StageFour;
