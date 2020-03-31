@@ -2,6 +2,7 @@ const database = require('./../DB');
 
 const operationOne = require('./operation/stageOne');
 const operationTwo = require('./operation/stageTwo');
+const operationThree = require('./operation/stageThree');
 
 database.connect(() => {
     const page = 1;
@@ -10,12 +11,13 @@ database.connect(() => {
     // stageOne.start();
 
     // Collects event fighters 
-    let stageTwo = new operationTwo(page);
-    stageTwo.start();
+    // let stageTwo = new operationTwo(page);
+    // stageTwo.start();
 
     // Collects event fighters stats
-    // operation.stageThree();
+    let stageThree = new operationThree(page);
+    stageThree.start();
 
     // Collect Fighters stats
-    // operation.stageFour();
+    // stage 4 --
 });

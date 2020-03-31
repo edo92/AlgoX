@@ -13,6 +13,10 @@ class Actions {
 
             return await this.fighters;
         }
+
+        this.getEventList = async () => {
+            return await db.actions.getEvents();
+        }
     }
 }
 
