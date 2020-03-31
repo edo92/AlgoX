@@ -1,9 +1,13 @@
 const database = require('./../DB');
 const operation = require('./operation');
 
+const operationOne = require('./operation/stageOne');
+
 database.connect(() => {
+    const page = 1;
     // Collects events and url to event page
-    // operation.stageOne();
+    let stageOne = new operationOne(page);
+    stageOne.start();
 
     // Collects event fighters 
     // operation.stageTwo();
