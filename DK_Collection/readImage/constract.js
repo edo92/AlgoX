@@ -55,6 +55,16 @@ class Constract {
         }
     }
 
+    typeB = (descript, positions, state) => {
+        let { minX, maxX, minY, maxY } = positions;
+
+        if ((minX > 250 && minX < 920) && (maxX > 410 && maxX < 1100) &&
+            (minY > 550 && minY < 650) && (maxY > 550 && maxY < 650)
+        ) {
+            console.log('test', descript)
+        };
+    }
+
     constractName = (nameData) => {
         let char = '', translate = {
             "ä": "a", "á": "a", "ò": "o", "ö": "o", "ü": "u", "ž": "z", "ć": "c",

@@ -12,7 +12,7 @@ class Constract {
 
         let { imageText, type } = this.prepareData(result.textAnnotations);
         this.state = { fighter1: { name: '' }, fighter2: { name: '' } };
-        
+
         await imageText.map(item => {
             let descript = item.description;
             let positions = this.getPosition(item.boundingPoly.vertices);
@@ -29,7 +29,7 @@ class Constract {
         return { imageText: filtered, type: type };
 
         function detectImageType(imgData) {
-            if (imgData.length >= 30) return true;
+            if (imgData.length <= 40) return true;
             else if (imgData.length >= 80) return false;
         }
 
@@ -39,7 +39,7 @@ class Constract {
                     item.description !== 'DK' && item.description !== 'PRICE' &&
                     item.description !== 'ODDS' && item.description !== 'VS' &&
                     item.description !== 'RECORD' && item.description !== 'FPPF' &&
-                    item.description !== 'CC' && (i > 0)) {
+                    item.description !== 'CC' && item.description !== '|' && (i > 0)) {
                     return item.description;
                 }
             })
