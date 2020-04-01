@@ -17,9 +17,6 @@ class Constract {
                 let descript = item.description;
                 let { minX, maxX, minY, maxY } = this.getPosition(position);
 
-                console.log(minX, maxX, minY, maxY)
-                console.log('descript', descript)
-
                 // First Name
                 if ((minX > 950 && minX < 1275) && (maxX > 1170 && maxX < 1306) && (minY > 1244 && minY < 1310) && (maxY > 1245 && maxY < 1811)
                 ) {
@@ -61,7 +58,6 @@ class Constract {
                 };
 
             });
-            console.log(info)
             return info;
         }
     }

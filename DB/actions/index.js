@@ -77,6 +77,15 @@ class DbActions {
                 )
             } catch (err) { return err }
         }
+
+        this.saveDkPointsToEvent = async (event, updated) => {
+            try {
+                return await db.Events.findOneAndUpdate(
+                    { name: event },
+                    { fights: await updated.fights }
+                );
+            } catch (err) { throw err };
+        }
     }
 }
 
