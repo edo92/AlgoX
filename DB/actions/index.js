@@ -80,11 +80,12 @@ class DbActions {
 
         this.saveDkPointsToEvent = async (event, updated) => {
             try {
-                return await db.Events.findOneAndUpdate(
+                let saved = await db.Events.findOneAndUpdate(
                     { name: event },
                     { fights: await updated.fights }
                 );
-            } catch (err) { return err };
+                return { success: saved };
+            } catch (error) { consle.log("------errorr-----"); return { error } };
         }
     }
 }
