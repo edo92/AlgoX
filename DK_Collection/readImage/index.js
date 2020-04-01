@@ -11,7 +11,20 @@ class Constract {
 
         const [result] = await client.textDetection(dir);
 
-        return positions(result.textAnnotations);
+        return positions(filterData(result.textAnnotations));
+
+        function filterData(data) {
+            let cleared = data.filter((item, i) => {
+                if (item.description !== 'UFC' && item.description !== 'FIGHT' &&
+                    item.description !== 'DK' && item.description !== 'PRICE' &&
+                    item.description !== 'ODDS' && item.description !== 'VS' &&
+                    item.description !== 'RECORD' && item.description !== 'FPPF' &&
+                    item.description !== 'CC' && (i > 0)) {
+                    return item.description;
+                }
+            })
+            return cleared;
+        }
     }
 };
 

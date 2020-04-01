@@ -84,7 +84,7 @@ class DbActions {
                     { name: event },
                     { fights: await updated.fights }
                 );
-            } catch (err) { throw err };
+            } catch (err) { return err };
         }
     }
 }
