@@ -11,15 +11,8 @@ class Constract {
         const [result] = await client.textDetection(dir);
 
         let { imageText, type } = this.prepareData(result.textAnnotations);
-        this.state = { fighter1: { name: '' }, fighter2: { name: '' } };
 
-        await imageText.map(item => {
-            let descript = item.description;
-            let positions = this.getPosition(item.boundingPoly.vertices);
-            constract[type ? 'typeA' : 'typeB'](descript, positions, this.state);
-        });
-
-        return this.state;
+        return await constract[type ? 'typeA' : 'typeB'](imageText);
     }
 
     prepareData = (imgTxt) => {
@@ -39,7 +32,8 @@ class Constract {
                     item.description !== 'DK' && item.description !== 'PRICE' &&
                     item.description !== 'ODDS' && item.description !== 'VS' &&
                     item.description !== 'RECORD' && item.description !== 'FPPF' &&
-                    item.description !== 'CC' && item.description !== '|' && (i > 0)) {
+                    item.description !== 'CC' && item.description !== '|' && item.description !== 'I'
+                    && (i > 0)) {
                     return item.description;
                 }
             })

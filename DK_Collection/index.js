@@ -14,8 +14,9 @@ class DkCollection {
         db.connect(async () => {
             this.getDir('images', event => {
                 this.getDir(`images/${event}`, async image => {
-                    let imgTxt = await vision.readImage(`images/${event}/${image}`);
                     this.event = await db.db.Events.findOne({ name: event });
+
+                    let imgTxt = await vision.readImage(`images/${event}/${image}`);
 
                     let updated = await combineData(this.event, imgTxt);
 
@@ -26,16 +27,14 @@ class DkCollection {
             });
         })
 
-        async function combineData(thisEvent, data) {
-            await thisEvent.fights.map((fight, index) => {
-                ['fighter1', 'fighter2'].map(fighter => {
-                    let thisFighter = fight[fighter].name;
-
-                    if (compareNames(data.fighter1.name, thisFighter)) {
-                        fight[fighter].dk = data.fighter1;
+        async function combineData(thisEvent, dkData) {
+            await thisEvent.fights.map(fight => {
+                Object.keys(dkData).map(fighter => {
+                    if (compareNames(fight.fighter1.name, fighter)) {
+                        fight.fighter1.dk = dkData[fighter];
                     }
-                    else if (compareNames(data.fighter2.name, thisFighter)) {
-                        fight[fighter].dk = data.fighter2;
+                    else if (compareNames(fight.fighter2.name, fighter)){
+                        fight.fighter2.dk = dkData[fighter];
                     }
                 })
             })
@@ -107,10 +106,6 @@ class DkCollection {
     monitorState = (event, imgTxt) => {
         this.state.image = (this.state.image || 0) + 1;
         this.state.event = event;
-
-        console.log('--', imgTxt)
-
-        this.state.fight = `${imgTxt.fighter1.name} - ${imgTxt.fighter2.name}`
 
         console.log('--------- Collect Dk ----------');
 
