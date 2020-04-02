@@ -31,16 +31,11 @@ class DbActions {
             }
         }
 
-        this.saveFightStats = async (eventId, index, stats) => {
-            let thisEvent = await db.Events.findOne({ _id: eventId });
-
-            let updated = { ...thisEvent.fights[index], ...stats };
-            thisEvent.fights[index] = updated;
-
+        this.saveFightStats = async (eventId, event) => {
             try {
                 await db.Events.findOneAndUpdate(
                     { _id: eventId },
-                    { fights: await thisEvent.fights },
+                    { fights: await event.fights },
                 )
             } catch (err) {
                 console.log("error updating", err)

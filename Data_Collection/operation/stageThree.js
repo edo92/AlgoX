@@ -10,14 +10,15 @@ class stageThree {
         // Get all evenets
         let eventList = await db.actions.getEvents();
 
-        eventList.map(event => {
+        eventList.map(async event => {
             setTimeout(async () => { // Delay
                 // Map Fights for each event
-                await event.fights.map((fight, index) => {
-                    
+                await event.fights.map(async (fight, index) => {
+                    this.list = await db.db.Events.findOne({ _id: event._id });
 
                     // Collect fight states
                     this.getFightStats(fight, event._id, index);
+                    this.state.total = (this.state.total || 0) + 1;
                 });
             }, 1000);
         })
@@ -29,15 +30,10 @@ class stageThree {
         console.log('-----------------------------------------');
     }
 
-    getFightStats = (fight, eventId, index) => {
-        // Collect stats if stats are missing
+    getFightStats = async (fight, eventId, index) => {
         if (!fight.fighter1.stats && !fight.fighter2.stats) {
-            
-            // Count each fight
-            this.state.total = (this.state.total || 0) + 1;
-
             // Mine Fight stats for each fight. Return fighter1 & fighter2
-            mine.fightStats(fight.statUrl, data => {
+            mine.fightStats(fight.statUrl, async data => {
                 // Match fighter with stats by name save in fight
                 if (data.success) {
                     let stats = {
@@ -54,8 +50,12 @@ class stageThree {
                             }
                         },
                     }
+
+                    let updated = await { ...this.list.fights[index], ...stats };
+                    this.list.fights[index] = await updated;
+
                     // Save Stats to its specific fight index
-                    db.actions.saveFightStats(eventId, index, stats);
+                    db.actions.saveFightStats(eventId, await this.list);
 
                     // Increment collected
                     this.state.collected = (this.state.collected || 0) + 1;
