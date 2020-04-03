@@ -82,6 +82,42 @@ class DbActions {
                 return { success: saved };
             } catch (error) { consle.log("------errorr-----"); return { error } };
         }
+
+        this.getFightList = async () => {
+            let allEvents = await this.getEvents();
+            let allFighters = await this.getAllFighters({ obj: true });
+
+            let fighterList = [];
+
+            await allEvents.map(event => {
+                event.fights.map(fight => {
+                    // Set record for every 2 fighters in the event
+                    fight.fighter1.record = allFighters[fight.fighter1.name];
+                    fight.fighter2.record = allFighters[fight.fighter2.name];
+
+                    fighterList.push(fight);
+                })
+            })
+
+            return fighterList
+        }
+
+        this.getAllFighters = async (options) => {
+            let fighters = await db.Fighter.find();
+
+            let listObj = {};
+
+            if (options) {
+                if (options.obj) {
+                    await fighters.map(fighter => {
+                        listObj[fighter.name] = fighter;
+                    })
+                    return listObj;
+                }
+            }
+
+            return fighters
+        }
     }
 }
 
