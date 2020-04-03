@@ -32,8 +32,9 @@ class Constract {
                     item.description !== 'DK' && item.description !== 'PRICE' &&
                     item.description !== 'ODDS' && item.description !== 'VS' &&
                     item.description !== 'RECORD' && item.description !== 'FPPF' &&
-                    item.description !== 'CC' && item.description !== '|' && item.description !== 'I'
-                    && (i > 0)) {
+                    item.description !== 'CC' && item.description !== '|' &&
+                    item.description !== 'I|' && item.description !== 'I' &&
+                    (i > 0)) {
                     return item.description;
                 }
             })

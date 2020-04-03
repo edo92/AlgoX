@@ -79,56 +79,74 @@ class Constract {
             let positions = this.getPosition(item.boundingPoly.vertices);
             let { minX, maxX, minY, maxY } = positions;
 
-            // console.log('position',minX, maxX, minY, maxY );
-            // console.log('descirpt',descript);
+            console.log('position', minX, maxX, minY, maxY);
+            console.log('descirpt', descript);
 
             if ((minY > 550 && minY < 650) && (maxY > 550 && maxY < 650)
             ) {
-                if ((minX > 250 && minX < 920) && (maxX > 410 && maxX < 1100)) {
+                if ((minX > 250 && minX < 960) && (maxX > 410 && maxX < 1150)) {
                     state.ft1.ftr1 = state.ft1.ftr1 + ' ' + descript;
                 }
-                if ((minX > 1635 && minX < 2375) && (maxX > 1750 && maxX < 2550)) {
+                if ((minX > 1600 && minX < 2375) && (maxX > 1700 && maxX < 2550)) {
                     state.ft1.ftr2 = state.ft1.ftr2 + ' ' + descript;
                 }
             };
             if ((minY > 775 && minY < 870) && (minY > 775 && minY < 870)
             ) {
-                if ((minX > 265 && minX < 980) && (maxX > 410 && maxX < 1150)) {
+                if ((minX > 265 && minX < 1050) && (maxX > 410 && maxX < 1250)) {
                     state.ft2.ftr1 = state.ft2.ftr1 + ' ' + descript;
                 }
-                if ((minX > 1630 && minX < 2200) && (maxX > 1750 && maxX < 2350)) {
+                if ((minX > 1600 && minX < 2500) && (maxX > 1750 && maxX < 2500)) {
                     state.ft2.ftr2 = state.ft2.ftr2 + ' ' + descript;
+                }
+
+                // F2 fppt
+                if ((minX > 270 && minX < 290) && (maxX > 380 && maxX < 400)) {
+                    if (descript.length) state.ft2.ftr1 = state.ft2.ftr1 + ' ' + descript;
                 }
             }
             if ((minY > 1000 && minY < 1100) && (minY > 1000 && minY < 1100)
             ) {
-                if ((minX > 250 && minX < 1000) && (maxX > 410 && maxX < 1100)) {
+                if ((minX > 250 && minX < 1000) && (maxX > 410 && maxX < 1200)) {
                     state.ft3.ftr1 = state.ft3.ftr1 + ' ' + descript;
                 }
-                if ((minX > 1600 && minX < 2250) && (maxX > 1750 && maxX < 2450)) {
+                if ((minX > 1600 && minX < 2500) && (maxX > 1750 && maxX < 2700)) {
                     state.ft3.ftr2 = state.ft3.ftr2 + ' ' + descript;
                 }
             }
+
             if ((minY > 1225 && minY < 1330) && (minY > 1225 && minY < 1330)
             ) {
-                if ((minX > 250 && minX < 1050) && (maxX > 360 && maxX < 1230)) {
+                if ((minX > 250 && minX < 1050) && (maxX > 300 && maxX < 1230)) {
                     state.ft4.ftr1 = state.ft4.ftr1 + ' ' + descript;
                 }
-                if ((minX > 1600 && minX < 2300) && (maxX > 1750 && maxX < 2500)) {
+                if ((minX > 1600 && minX < 2400) && (maxX > 1750 && maxX < 2500)) {
                     state.ft4.ftr2 = state.ft4.ftr2 + ' ' + descript;
                 }
+
+                // f1 fttf
+                if ((minX > 270 && minX < 290) && (maxX > 410 && maxX < 440)) {
+                    if (descript.length) state.ft4.ftr1 = state.ft4.ftr1 + ' ' + descript;
+                }
+
+                // f2 fttf
+                if ((minX > 1630 && minX < 1650) && (maxX > 1745 && maxX < 1770)) {
+                    if (descript.length) state.ft4.ftr2 = state.ft4.ftr2 + ' ' + descript;
+                }
             }
+
             if ((minY > 1450 && minY < 1565) && (minY > 1450 && minY < 1565)
             ) {
-                if ((minX > 250 && minX < 850) && (maxX > 400 && maxX < 1030)) {
+                if ((minX > 250 && minX < 1100) && (maxX > 400 && maxX < 1330)) {
                     state.ft5.ftr1 = state.ft5.ftr1 + ' ' + descript;
                 }
 
-                if ((minX > 1620 && minX < 2430) && (maxX > 1850 && maxX < 2700)) {
-                    state.ft5.ftr2 = state.ft5.ftr2 + ' ' + descript;
+                // Fppf f1
+                if ((minX > 270 && minX < 285) && (maxX > 335 && maxX < 345)) {
+                    if (descript.length) state.ft5.ftr1 = state.ft5.ftr1 + ' ' + descript;
                 }
-                // Fppf f2
-                if ((minX > 1635 && minX < 1657) && (maxX > 1780 && maxX < 1795)) {
+
+                if ((minX > 1620 && minX < 2500) && (maxX > 1700 && maxX < 2600)) {
                     state.ft5.ftr2 = state.ft5.ftr2 + ' ' + descript;
                 }
             }
@@ -139,11 +157,14 @@ class Constract {
             let arr = ['ftr1', 'ftr2'];
 
             arr.map(fgtr => {
+                function hasNumber(myString) {
+                    return /\d/.test(myString);
+                }
                 state[item][fgtr].split(' ').map(each => {
                     if (each.charAt(0) === '$') {
                         fight[fgtr].price = each;
                     }
-                    else if (each.charAt(2) === '.') {
+                    else if (each.charAt(2) === '.' || each === 'O' || hasNumber(each)) {
                         fight[fgtr].fppf = each;
                     }
                     else {

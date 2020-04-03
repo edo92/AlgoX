@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const db = require('../DB');
-const compareNames= require('./utility/compare');
+const compareNames = require('./utility/compare');
 
 const vision = require('./readImage');
 
@@ -13,34 +13,35 @@ class DkCollection {
 
     start = () => {
         db.connect(async () => {
-            this.getDir('images', event => {
-                this.getDir(`images/${event}`, async image => {
-                    this.event = await db.db.Events.findOne({ name: event });
+            let event = 'UFC Fight Night: Lee vs. Oliveira';
+            this.event = await db.db.Events.findOne({ name: event });
 
-                    let imgTxt = await vision.readImage(`images/${event}/${image}`);
+            this.getDir(`images/${event}`, async image => {
+                let imgTxt = await vision.readImage(`images/${event}/${image}`);
 
-                    let updated = await combineData(this.event, imgTxt);
+                console.log('imgTxt',imgTxt)
+                let updated = await this.combineData(this.event, imgTxt);
 
-                    await db.actions.saveDkPointsToEvent(event, updated);
+                await db.actions.saveDkPointsToEvent(event, updated);
 
-                    this.monitorState(event, imgTxt);
-                });
+                this.monitorState(event, imgTxt);
             });
         })
+    }
 
-        async function combineData(thisEvent, dkData) {
-            await thisEvent.fights.map(fight => {
-                Object.keys(dkData).map(fighter => {
-                    if (compareNames(fight.fighter1.name, fighter)) {
-                        fight.fighter1.dk = { ...fight.fighter1.dk, ...dkData[fighter] };
-                    }
-                    if (compareNames(fight.fighter2.name, fighter)) {
-                        fight.fighter2.dk = { ...fight.fighter2.dk, ...dkData[fighter] };
-                    }
-                })
+
+    combineData = async (thisEvent, dkData) => {
+        await thisEvent.fights.map(fight => {
+            Object.keys(dkData).map(fighter => {
+                if (compareNames(fight.fighter1.name, fighter)) {
+                    fight.fighter1.dk = { ...fight.fighter1.dk, ...dkData[fighter] };
+                }
+                if (compareNames(fight.fighter2.name, fighter)) {
+                    fight.fighter2.dk = { ...fight.fighter2.dk, ...dkData[fighter] };
+                }
             })
-            return thisEvent;
-        }
+        })
+        return thisEvent;
     }
 
     getDir = (dir, callback) => {
@@ -48,10 +49,10 @@ class DkCollection {
         fs.readdir(directoryPath, (err, files) => {
             if (err) throw err;
 
-            //listing all files using forEach
-            files.forEach(file => setTimeout(() => {
-                callback(file)
-            }, 800));
+            files.forEach((file, index) => {
+                this.state.total = (this.state.total || 0) + 1;
+                setTimeout(() => { callback(file) }, 6000 * index);
+            });
         });
     }
 
