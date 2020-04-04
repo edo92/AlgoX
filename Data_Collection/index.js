@@ -20,6 +20,6 @@ database.connect(() => {
     // stageThree.start();
 
     // Collect Fighters stats
-    let stageFour = new operationFour(page);
-    stageFour.start();
+    // let stageFour = new operationFour(page);
+    // stageFour.start();
 });

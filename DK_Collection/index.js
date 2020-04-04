@@ -49,8 +49,9 @@ class DkCollection {
             if (err) throw err;
 
             files.forEach((file, index) => {
+                let diff = index > 8 ? 3 : 0;
                 this.state.total = (this.state.total || 0) + 1;
-                setTimeout(() => { callback(file) }, 6000 * index);
+                setTimeout(() => { callback(file) }, 6000 * index - diff);
             });
         });
     }
