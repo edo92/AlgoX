@@ -1,7 +1,10 @@
 const db = require('../modules');
+const Actions = require('./rawData');
 
-class DbActions {
+class DbActions extends Actions {
     constructor() {
+        super()
+        
         this.db = db;
 
         this.saveEvents = async list => {

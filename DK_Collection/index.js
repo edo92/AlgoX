@@ -19,7 +19,6 @@ class DkCollection {
             this.getDir(`images/${event}`, async image => {
                 let imgTxt = await vision.readImage(`images/${event}/${image}`);
 
-                console.log('imgTxt',imgTxt)
                 let updated = await this.combineData(this.event, imgTxt);
 
                 await db.actions.saveDkPointsToEvent(event, updated);

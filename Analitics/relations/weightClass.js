@@ -11,7 +11,7 @@ class Analizer {
                 this.analize[fight.weightClass] = {
                     total: 0, finish: 0, hight: 0, age: {},
                     stance: {}, reach: {}, weight: {}, hight: {},
-                    strAcc: {}, strDef: {},
+                    strAcc: {}, strDef: {}, winStr: {}, highWinStrWins:0,
                     highStrAccWins: 0, lowStrAccWins: 0, lowStrDefWins: 0, highStrDefWins: 0,
                     lognReachWin: 0, shortReachWin: 0, tallWins: 0, shortWins: 0,
                     youngWin: 0, oldWin: 0, lightWins: 0, heavyWins: 0
@@ -30,9 +30,14 @@ class Analizer {
                 this.countByHight(fight);
                 this.countByReach(fight);
                 this.countByAge(fight);
+                this.winStrick(fight);
             }
         })
-        console.log(this.analize)
+        console.log('analize', this.analize)
+        return {
+            fights: fightList,
+            analitics: this.analize
+        }
     }
 
 
@@ -58,10 +63,10 @@ class Analizer {
     countByAge = fight => {
         let year = new Date().getFullYear();
 
-        let f1Age = year - (Number(fight.fighter1.record.stats.dob.split(' ')[2]));
+        let f1Age = fight.fighter1.record.stats.dob;
         this.analize[fight.weightClass].age[f1Age] = (this.analize[fight.weightClass].age[f1Age] || 0) + 1;
 
-        let f2Age = year - (Number(fight.fighter2.record.stats.dob.split(' ')[2]));
+        let f2Age = fight.fighter2.record.stats.dob;
         this.analize[fight.weightClass].age[f2Age] = (this.analize[fight.weightClass].age[f2Age] || 0) + 1;
 
         // Young old 
@@ -74,8 +79,8 @@ class Analizer {
     }
 
     countByReach = fight => {
-        let f1Reach = Number(fight.fighter1.record.stats.reach.split('"')[0]);
-        let f2Reach = Number(fight.fighter2.record.stats.reach.split('"')[0]);
+        let f1Reach = fight.fighter1.record.stats.reach;
+        let f2Reach = fight.fighter2.record.stats.reach;
 
         this.analize[fight.weightClass].reach[f1Reach] = (this.analize[fight.weightClass].reach[f1Reach] || 0) + 1;
         this.analize[fight.weightClass].reach[f2Reach] = (this.analize[fight.weightClass].reach[f2Reach] || 0) + 1;
@@ -89,8 +94,8 @@ class Analizer {
     }
 
     countByWeight = fight => {
-        let f1Weight = Number(fight.fighter1.record.stats.weight.split('lbs.')[0]);
-        let f2Weight = Number(fight.fighter2.record.stats.weight.split('lbs.')[0]);
+        let f1Weight = fight.fighter1.record.stats.weight;
+        let f2Weight = fight.fighter2.record.stats.weight;
 
         this.analize[fight.weightClass].weight[f1Weight] = (this.analize[fight.weightClass].weight[f1Weight] || 0) + 1;
         this.analize[fight.weightClass].weight[f2Weight] = (this.analize[fight.weightClass].weight[f2Weight] || 0) + 1;
@@ -104,12 +109,8 @@ class Analizer {
     }
 
     countByHight = fight => {
-        let f1Hight = fight.fighter1.record.stats.hight.split(' ');
-        f1Hight = Number(f1Hight[0].split("'")[0] + '.' + f1Hight[1].split('"')[0]);
-
-        let f2Hight = fight.fighter2.record.stats.hight.split(' ');
-        f2Hight = Number(f2Hight[0].split("'")[0] + '.' + f2Hight[1].split('"')[0]);
-
+        let f1Hight = fight.fighter1.record.stats.hight;
+        let f2Hight = fight.fighter2.record.stats.hight;
 
         this.analize[fight.weightClass].hight[f1Hight] = (this.analize[fight.weightClass].hight[f1Hight] || 0) + 1;
         this.analize[fight.weightClass].hight[f2Hight] = (this.analize[fight.weightClass].hight[f2Hight] || 0) + 1;
@@ -123,8 +124,8 @@ class Analizer {
     }
 
     strikAccurancy = fight => {
-        let f1StrAcc = Number(fight.fighter1.record.stats.StrAcc.split('%')[0]);
-        let f2StrAcc = Number(fight.fighter2.record.stats.StrAcc.split('%')[0]);
+        let f1StrAcc = fight.fighter1.record.stats.StrAcc;
+        let f2StrAcc = fight.fighter2.record.stats.StrAcc;
 
         this.analize[fight.weightClass].strAcc[f1StrAcc] = (this.analize[fight.weightClass].strAcc[f1StrAcc] || 0) + 1;
         this.analize[fight.weightClass].strAcc[f2StrAcc] = (this.analize[fight.weightClass].strAcc[f2StrAcc] || 0) + 1;
@@ -138,8 +139,8 @@ class Analizer {
     }
 
     strikDefence = fight => {
-        let f1StrDef = Number(fight.fighter1.record.stats.StrDef.split('%')[0]);
-        let f2StrDef = Number(fight.fighter2.record.stats.StrDef.split('%')[0]);
+        let f1StrDef = fight.fighter1.record.stats.StrDef;
+        let f2StrDef = fight.fighter2.record.stats.StrDef;
 
         this.analize[fight.weightClass].strDef[f1StrDef] = (this.analize[fight.weightClass].strDef[f1StrDef] || 0) + 1;
         this.analize[fight.weightClass].strDef[f2StrDef] = (this.analize[fight.weightClass].strDef[f2StrDef] || 0) + 1;
@@ -150,6 +151,41 @@ class Analizer {
         else {
             this.analize[fight.weightClass].lowStrDefWins = (this.analize[fight.weightClass].lowStrDefWins || 0) + 1;
         }
+    }
+
+    winStrick = async fight => {
+        let f1Fights = fight.fighter1.record.stats.pastFights;
+        let f2Fights = fight.fighter2.record.stats.pastFights;
+
+        let winStrF1 = 0, winStrF2 = 0;
+
+        await f1Fights.map(pastFight => {
+            if (pastFight.outcome === 'win') {
+                winStrF1++;
+            }
+            else {
+                this.analize[fight.weightClass].winStr[winStrF1] = (this.analize[fight.weightClass].winStr[winStrF1] || 0) + 1;
+                winStrF1 = 0;
+            }
+        })
+        if (winStrF1 !== 0) {
+            this.analize[fight.weightClass].winStr[winStrF1] = (this.analize[fight.weightClass].winStr[winStrF1] || 0) + 1;
+        }
+
+        await f2Fights.map(pastFight => {
+            if (pastFight.outcome === 'win') {
+                winStrF2++;
+            }
+            else {
+                this.analize[fight.weightClass].winStr[winStrF2] = (this.analize[fight.weightClass].winStr[winStrF2] || 0) + 1;
+                winStrF2 = 0;
+            }
+        })
+        if (winStrF2 !== 0) {
+            this.analize[fight.weightClass].winStr[winStrF2] = (this.analize[fight.weightClass].winStr[winStrF2] || 0) + 1;
+        }
+
+        
     }
 }
 

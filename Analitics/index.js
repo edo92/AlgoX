@@ -1,12 +1,12 @@
 const db = require('../DB');
-const analizer = require('./analizer/weightClass');
+const analizer = require('./relations/weightClass');
 
 start();
 function start() {
     db.connect(async () => {
-        let fightersList = await db.actions.getFightList();
+        let rawData = await db.actions.getRawFightList();
 
         // Stage One
-        analizer.byWeightClass(fightersList);
+        analizer.byWeightClass(rawData);
     })
 }

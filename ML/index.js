@@ -5,8 +5,8 @@ class DeepLearning extends Data {
         super()
     }
 
-    start() {
-        this.testData();
+    start = async () => {
+        let dataList = await this.prepareData();
     }
 }
 
