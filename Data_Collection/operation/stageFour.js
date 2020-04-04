@@ -19,12 +19,6 @@ class StageFour {
         })
     }
 
-    monitorState = () => {
-        console.log('--------------- Stage Four ---------------');
-        console.log(this.state);
-        console.log('------------------------------------------');
-    }
-
     getFighterStats(ftrData, which, event, index) {
         let fighter = Object.assign({}, ftrData);
 
@@ -55,6 +49,12 @@ class StageFour {
                 }
             })
         }
+    }
+
+    monitorState = () => {
+        console.log('--------------- Stage Four ---------------');
+        console.log(this.state);
+        console.log('------------------------------------------');
     }
 }
 

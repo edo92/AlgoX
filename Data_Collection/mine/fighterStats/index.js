@@ -23,16 +23,19 @@ module.exports.getFighterStats = (url, callback) => {
                 stats[key] = parse($(elem).find('li').eq(value)).split(':')[1].trim();
             });
 
+
             let pastFights = [];
 
             await $(elem).find('.b-fight-details__table-body').find('tr').each((i, el) => {
                 let pastList = {
+                    outcome: pastSelect(1).children().first().text(),
+                    name: parse(pastSelect(2).children().first()),
                     opponent: parse(pastSelect(2).children().last()),
                     method: parse(pastSelect(8).first()),
-                    finish: parse(pastSelect(8).last()),
+                    finish: parse(pastSelect(8).last()).length || 'DEC',
                     round: parse(pastSelect(9).last()),
                     time: parse(pastSelect(10).last()),
-                    outcome: pastSelect(1).children().first().text()
+                    date: parse(pastSelect(7).last())
                 }
 
                 if (pastList.opponent && pastList.finish) {
@@ -46,10 +49,9 @@ module.exports.getFighterStats = (url, callback) => {
 
             stats.pastFights = pastFights;
             callback({ success: stats });
-
-
         });
-    }).catch(error => { callback({ error }) });
+    })
+        .catch(error => { callback({ error }) });
 
     function parse(unparsed) {
         return unparsed.text().replace(/\s\s+/g, ' ').trim();
