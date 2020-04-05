@@ -24,7 +24,7 @@ class Database {
             mongoose.connect(MONGODB_URI, mdbConfig);
             mongoose.connection.once('open', () => {
                 console.log('Mongodb connection successful')
-                callback();
+                if (callback) callback();
             });
         }
     }

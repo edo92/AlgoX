@@ -1,0 +1,20 @@
+{
+    "stance": {
+        "Southpaw": 1,
+        "Orthodox": 2
+    },
+    "weightClass": {
+        "Women's Bantamweight": 1,
+        "Flyweight": 2,
+        "Welterweight": 3,
+        "Women's Strawweight": 4,
+        "Lightweight": 5,
+        "Light Heavyweight": 6,
+        "Bantamweight": 7,
+        "Women's Flyweight": 8
+    },
+    "outcome": {
+        "Win": 1,
+        "Loss": 0
+    }
+}

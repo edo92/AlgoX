@@ -10,19 +10,33 @@ class Actions {
                 this.fighterHeight(fight);
                 this.strikAccurancy(fight);
                 this.strikDefence(fight);
+                this.record(fight);
                 this.SLpM(fight);
                 this.SApM(fight);
                 this.TDAvg(fight);
                 this.TDAcc(fight);
                 this.TDDef(fight);
                 this.SubAvg(fight);
+                this.dkStats(fight);
             })
 
             return fightersList;
         }
     }
 
-    fighterReach = (fight) => {
+    record = fight => {
+        let f1Record = fight.fighter1.record.stats.record.split('-');
+        fight.fighter1.record.stats.wins = Number(f1Record[0].trim());
+        fight.fighter1.record.stats.losses = Number(f1Record[1]);
+        delete fight.fighter1.record.stats.record;
+
+        let f2Record = fight.fighter2.record.stats.record.split('-');
+        fight.fighter2.record.stats.wins = Number(f2Record[0].trim());
+        fight.fighter2.record.stats.losses = Number(f2Record[1]);
+        delete fight.fighter2.record.stats.record;
+    }
+
+    fighterReach = fight => {
         // Fighters Reach
         let f1Reach = Number(fight.fighter1.record.stats.reach.split('"')[0]);
         let f2Reach = Number(fight.fighter2.record.stats.reach.split('"')[0]);
@@ -126,6 +140,11 @@ class Actions {
 
         fight.fighter1.record.stats.SubAvg = Number(f1SubAvg);
         fight.fighter2.record.stats.SubAvg = Number(f2SubAvg);
+    }
+
+    dkStats = fight => {
+        fight.fighter1.dk.fppf = Number(fight.fighter1.dk.fppf);
+        fight.fighter2.dk.fppf = Number(fight.fighter2.dk.fppf);
     }
 }
 

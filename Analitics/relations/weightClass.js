@@ -9,10 +9,12 @@ class Analizer {
         await fightList.map(fight => {
             if (!this.analize[fight.weightClass]) {
                 this.analize[fight.weightClass] = {
-                    total: 0, finish: 0, hight: 0, age: {},
                     stance: {}, reach: {}, weight: {}, hight: {},
-                    strAcc: {}, strDef: {}, winStr: {}, highWinStrWins:0,
-                    highStrAccWins: 0, lowStrAccWins: 0, lowStrDefWins: 0, highStrDefWins: 0,
+                    strAcc: {}, strDef: {}, winStr: {},
+                    total: 0, finish: 0, hight: 0, age: {},
+
+                    highWinStrWins: 0, highStrDefWins: 0,
+                    highStrAccWins: 0, lowStrAccWins: 0, lowStrDefWins: 0,
                     lognReachWin: 0, shortReachWin: 0, tallWins: 0, shortWins: 0,
                     youngWin: 0, oldWin: 0, lightWins: 0, heavyWins: 0
                 };
@@ -21,7 +23,7 @@ class Analizer {
             this.countTotalFights(fight);
 
             // If fight finished early in the weightclass
-            if (fight.method !== 'U-DEC' && fight.method !== 'S-DEC') {
+            if (fight.method.split('-')[1] !== 'DEC') {
                 this.countEarlyFinish(fight);
                 this.strikAccurancy(fight);
                 this.countByWeight(fight);
@@ -61,8 +63,6 @@ class Analizer {
     }
 
     countByAge = fight => {
-        let year = new Date().getFullYear();
-
         let f1Age = fight.fighter1.record.stats.dob;
         this.analize[fight.weightClass].age[f1Age] = (this.analize[fight.weightClass].age[f1Age] || 0) + 1;
 
@@ -185,7 +185,7 @@ class Analizer {
             this.analize[fight.weightClass].winStr[winStrF2] = (this.analize[fight.weightClass].winStr[winStrF2] || 0) + 1;
         }
 
-        
+
     }
 }
 
