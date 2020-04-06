@@ -42,8 +42,8 @@ module.exports.fightStats = (url, callback) => {
         };
 
         let dataset = {
-            fighter_1: collectData('first'),
-            fighter_2: collectData('last'),
+            fighter1: collectData('first'),
+            fighter2: collectData('last'),
         };
 
         if (callback) callback({ success: dataset });

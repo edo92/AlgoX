@@ -4,70 +4,64 @@ const db = require('../../DB');
 class stageThree {
     constructor() {
         this.state = {};
+        this.eventList = {};
+        this.fightList = [];
     }
 
     start = async () => {
         // Get all evenets
-        let eventList = await db.actions.getEvents();
+        this.eventList = await db.actions.getEvents();
 
-        eventList.map(async event => {
-            setTimeout(async () => { // Delay
-                // Map Fights for each event
-                await event.fights.map(async (fight, index) => {
-                    this.list = await db.actions.findEvent(event._id);
+        // Separate event fights in one this.fighterList arr
+        await this.eventList.map(async event => {
+            await event.fights.map(fight => {
+                fight.id = event._id;
+                this.fightList.push(fight);
+            })
+        })
 
-                    // Collect fight states
-                    this.getFightStats(fight, event._id, index);
-                    this.state.total = (this.state.total || 0) + 1;
-                });
-            }, 1000);
+        // Mine function mutates this.fighterList
+        const mineStats = (fight, index) => {
+            mine.fightStats(fight.statUrl, async data => {
+                if (data.success) {
+                    this.state.collected = (this.state.collected || 0) + 1;
+
+                    this.monitorProgress();
+
+                    await db.db.Events.updateOne(
+                        {
+                            _id: fight.id,
+                            'fights.statUrl': fight.statUrl,
+                        },
+                        {
+                            $set: {
+                                'fights.$.fighter1': {
+                                    ...this.fightList[index].fighter1, ...{ stats: data.success.fighter1 }
+                                },
+                                'fights.$.fighter2': {
+                                    ...this.fightList[index].fighter2, ...{ stats: data.success.fighter2 }
+                                }
+                            }
+                        }
+                    )
+                }
+                else {
+                    mineStats(fight, index);
+                }
+            })
+        }
+
+        // Map each fight and mine stats for each fighter
+        this.fightList.map((fight, index) => {
+            // Count fighter total
+            this.state.total = (this.state.total || 0) + 1;
+            // Delay 2s mining stats
+            setTimeout(() => { mineStats(fight, index) }, 2000);
         })
     }
 
-    getFightStats = async (fight, eventId, index) => {
-        if (!fight.fighter1.stats && !fight.fighter2.stats) {
-            // Mine Fight stats for each fight. Return fighter1 & fighter2
-            mine.fightStats(fight.statUrl, async data => {
-                // Match fighter with stats by name save in fight
-                if (data.success) {
-                    let stats = {
-                        fighter1: {
-                            ...fight.fighter1, ...{
-                                stats:
-                                    data.success.fighter_1.name === fight.fighter1.name ? data.success.fighter_1 : data.success.fighter_2
-                            }
-                        },
-                        fighter2: {
-                            ...fight.fighter2, ...{
-                                stats:
-                                    data.success.fighter_2.name === fight.fighter2.name ? data.success.fighter_2 : data.success.fighter_1
-                            }
-                        },
-                    }
-
-                    let updated = await { ...this.list.fights[index], ...stats };
-                    this.list.fights[index] = await updated;
-
-                    // Save Stats to its specific fight index
-                    db.actions.saveFightStats(eventId, await this.list);
-
-                    // Increment collected
-                    this.state.collected = (this.state.collected || 0) + 1;
-
-                    // Monitor progress
-                    this.monitoreState();
-                }
-                else {
-                    this.getFightStats(fight, eventId, index);
-                }
-            });
-        }
-    }
-
-    monitoreState = () => {
-        console.log('-------------- Stage Three --------------');
-        console.log(this.state);
-        console.log('-----------------------------------------');
+    monitorProgress = () => {
+        console.log('Progress', this.state)
     }
 }
 

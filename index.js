@@ -12,10 +12,10 @@ database.connect(() => {
     // stageTwo.start();
 
     // Collects event fighters stats
-    // let stageThree = new operation.operationThree(page);
-    // stageThree.start();
+    let stageThree = new operation.operationThree(page);
+    stageThree.start();
 
     // Collect Fighters stats
-    let stageFour = new operation.operationFour(page);
-    stageFour.start();
+    // let stageFour = new operation.operationFour(page);
+    // stageFour.start();
 });
