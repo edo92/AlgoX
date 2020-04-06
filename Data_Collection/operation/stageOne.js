@@ -19,13 +19,6 @@ class StageOne {
         })
     }
 
-    monitorState() {
-        // Log performnse which saved in this.state
-        console.log('--------------- Stage One ------------------');
-        console.log(this.state);
-        console.log('--------------------------------------------');
-    }
-
     filter(events, callback) {
         // Filer list success and error events
         let success = [];
@@ -46,6 +39,13 @@ class StageOne {
         // Send back error and success list
         this.state.total = success.length;
         callback(success);
+    }
+
+    monitorState() {
+        // Log performnse which saved in this.state
+        console.log('--------------- Stage One ------------------');
+        console.log(this.state);
+        console.log('--------------------------------------------');
     }
 }
 

@@ -17,12 +17,6 @@ class StageTwo {
         })
     }
 
-    monitorState = () => {
-        console.log('-------------- Stage Two --------------');
-        console.log(this.state);
-        console.log('---------------------------------------');
-    }
-
     mineEventFights = async (url, id) => {
         await mine.mineEventFights(url, data => {
             // Filter index data
@@ -44,6 +38,12 @@ class StageTwo {
         if (data.success) cb(data.success);
         // If mined data is unsuccessful reRequest
         else this.mineEventFights(url, id);
+    }
+
+    monitorState = () => {
+        console.log('-------------- Stage Two --------------');
+        console.log(this.state);
+        console.log('---------------------------------------');
     }
 }
 

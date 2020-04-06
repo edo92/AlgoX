@@ -1,10 +1,7 @@
 const db = require('../modules');
-const Actions = require('./rawData');
 
-class DbActions extends Actions {
+class DbActions {
     constructor() {
-        super();
-        
         this.db = db;
 
         this.saveEvents = async list => {
@@ -75,34 +72,11 @@ class DbActions extends Actions {
                 )
             } catch (err) { return err }
         }
-
-        this.saveDkPointsToEvent = async (event, updated) => {
+        this.findEvent = async id => {
             try {
-                let saved = await db.Events.findOneAndUpdate(
-                    { name: event },
-                    { fights: await updated.fights }
-                );
-                return { success: saved };
-            } catch (error) { return { error } };
-        }
-
-       
-
-        this.getAllFighters = async (options) => {
-            let fighters = await db.Fighter.find();
-
-            let listObj = {};
-
-            if (options) {
-                if (options.obj) {
-                    await fighters.map(fighter => {
-                        listObj[fighter.name] = fighter;
-                    })
-                    return listObj;
-                }
+                return await db.Events.findOne({ _id: id });
             }
-
-            return fighters
+            catch (err) { return err };
         }
     }
 }

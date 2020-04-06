@@ -14,7 +14,7 @@ class stageThree {
             setTimeout(async () => { // Delay
                 // Map Fights for each event
                 await event.fights.map(async (fight, index) => {
-                    this.list = await db.db.Events.findOne({ _id: event._id });
+                    this.list = await db.actions.findEvent(event._id);
 
                     // Collect fight states
                     this.getFightStats(fight, event._id, index);
@@ -22,12 +22,6 @@ class stageThree {
                 });
             }, 1000);
         })
-    }
-
-    monitoreState = () => {
-        console.log('-------------- Stage Three --------------');
-        console.log(this.state);
-        console.log('-----------------------------------------');
     }
 
     getFightStats = async (fight, eventId, index) => {
@@ -68,6 +62,12 @@ class stageThree {
                 }
             });
         }
+    }
+
+    monitoreState = () => {
+        console.log('-------------- Stage Three --------------');
+        console.log(this.state);
+        console.log('-----------------------------------------');
     }
 }
 
