@@ -3,12 +3,12 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var FightersSchema = new Schema({
-    name: {
+    fighterId: {
         type: String,
     },
 
-    id: {
-        type: String
+    name: {
+        type: String,
     },
 
     stats: {

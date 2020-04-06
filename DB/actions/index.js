@@ -11,14 +11,14 @@ class DbActions {
                 })
                 return 'Saved';
             }
-            catch (err) { return 'Error Occured' };
+            catch (error) { throw error };
         }
 
         this.getEvents = async () => {
             try {
                 return await db.Events.find();
             }
-            catch (err) { return 'Error Occured' };
+            catch (error) { throw error };
         }
 
         this.saveEventFights = async (eventId, fights) => {
@@ -31,7 +31,7 @@ class DbActions {
                         { ...thisEvent.event, fights: fights }
                     )
                 }
-            } catch (err) { return { error: 'Error Occured' } };
+            } catch (error) { throw error };
         }
 
         this.saveFightStats = async data => {
@@ -51,45 +51,37 @@ class DbActions {
                 )
                 return { success: 'Saved' }
             }
-            catch (err) { throw err; return { error: 'Error Occured' } };
+            catch (error) { throw error };
         }
 
-        this.saveFighterStats = async (fighter, stats, callback) => {
-            // Split url id from each fighter url link
-            let urlId = fighter.fighterUrl.split('/')[4];
-
-            // Query id if fighter exists
-            let isExists = await db.Fighter.findOne({ id: urlId });
-
-            // Save is record is not found, cb saved fighter id
-            if (!isExists) {
-                try {
-                    // Create Fighter document
-                    let savedData = await db.Fighter.create({
-                        name: fighter.name, id: urlId, stats: stats
-                    });
-                    // Send back created fighter _id
-                    callback(savedData._id);
-                } catch (err) { return err };
-            }
-        }
-
-        this.saveStatId = async (event, fighter, which, index) => {
-            event.fights[index][which] = fighter;
+        this.updateEventFight = async data => {
+            let { eventId, urlId, fighter, combinedData } = data;
 
             try {
-                return await db.Events.findOneAndUpdate(
-                    { _id: event._id },
-                    { fights: await event.fights }
+                await db.Events.updateOne(
+                    {
+                        _id: eventId,
+                        'fights.statUrl': urlId
+                    },
+                    {
+                        $set: {
+                            [`fights.$.${fighter}`]: combinedData
+                        }
+                    }
                 )
-            } catch (err) { return err }
-        }
-        
-        this.findEvent = async id => {
-            try {
-                return await db.Events.findOne({ _id: id });
             }
-            catch (err) { return err };
+            catch (error) { throw error };
+        }
+
+        this.createFighter = async fighterData => {
+            try {
+                return await db.Fighter.create(fighterData)
+            }
+            catch (error) { throw error };
+        }
+
+        this.isFighterExists = async fighterId => {
+            return await db.Fighter.exists({ fighterId });
         }
     }
 }

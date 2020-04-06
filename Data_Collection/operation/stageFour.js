@@ -3,58 +3,76 @@ const db = require('../../DB');
 
 class StageFour {
     constructor() {
+        this.fightList = [];
         this.state = {};
     }
 
     start = async () => {
-        let eventList = await db.actions.getEvents();
+        this.eventList = await db.actions.getEvents();
 
-        eventList.map(event => {
-            event.fights.map((fight, index) => {
-                ['fighter1', 'fighter2'].map(fighter => {
+        const mineFighterStats = (event, fight, each) => {
+            let fighter = fight[each];
+
+            mine.getFighterStats(fighter.fighterUrl, async data => {
+                if (!data.success) {
+                    mineFighterStats(event, fight, each);
+                }
+                else {
+                    let fighterId = fighter.fighterUrl.split('/')[4];
+
+                    let fighterData = {
+                        fighterId: fighterId,
+                        name: fighter.name,
+                        stats: data.success
+                    };
+
+                    let isExists = await db.actions.isFighterExists(fighterId);
+
+                    if (!isExists) {
+                        // Create fighte collection
+                        try {
+                            try {
+                                await db.actions.createFighter(fighterData);
+                            }
+                            finally {
+                                // Once fighter created increment collected point
+                                let saveData = {
+                                    eventId: event._id,
+                                    urlId: fight.statUrl,
+                                    fighter: each,
+                                    combinedData: { ...fighter, fighterId }
+                                }
+                                // Update fighter id in each fight for each fighter
+                                await db.actions.updateEventFight(saveData);
+
+                                this.state.collected = (this.state.collected || 0) + 1;
+                            }
+                        } catch (err) {
+                            try {
+                                await db.actions.createFighter(fighterData);
+                            }
+                            catch (createErr) {
+                                this.state.error = (this.state.error || 0) + 1;
+                            }
+                        }
+                    }
+                    this.monitorProgress();
+                }
+            })
+        }
+
+        await this.eventList.map(async event => {
+            await event.fights.map(async fight => {
+                ['fighter1', 'fighter2'].map(each => {
                     this.state.total = (this.state.total || 0) + 1;
-                    this.getFighterStats(fight[fighter], fighter, event, index);
-                });
+                    mineFighterStats(event, fight, each);
+                })
             })
         })
     }
 
-    getFighterStats(ftrData, which, event, index) {
-        let fighter = Object.assign({}, ftrData);
-
-        let url = fighter.fighterUrl;
-
-        if (!fighter.fighterId) {
-            mine.getFighterStats(url, async stats => {
-                if (stats.success) {
-                    // Create document for fighter info
-                    db.actions.saveFighterStats(fighter, stats.success, async data => {
-                        // Link created id to fighter in fightList
-                        fighter.fighterId = data._id;
-
-                        if (data._id) {
-                            // Saved linked fight index
-                            await db.actions.saveStatId(event, fighter, which, index);
-
-                            // Increment Collected
-                            this.state.collected = (this.state.collected || 0) + 1;
-
-                            // Monitore progress
-                            this.monitorState();
-                        }
-                    });
-                } else {
-                    // If failed reRequest
-                    this.getFighterStats(fighter, which, event, index);
-                }
-            })
-        }
-    }
-
-    monitorState = () => {
-        console.log('--------------- Stage Four ---------------');
-        console.log(this.state);
-        console.log('------------------------------------------');
+    monitorProgress = () => {
+        console.log(this.state)
     }
 }
 
