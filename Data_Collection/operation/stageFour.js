@@ -11,13 +11,16 @@ class StageFour {
         this.eventList = await db.actions.getEvents();
 
         const mineFighterStats = (event, fight, each) => {
+            // Each fighter in fight
             let fighter = fight[each];
 
+            // Mine fighter stats
             mine.getFighterStats(fighter.fighterUrl, async data => {
                 if (!data.success) {
                     mineFighterStats(event, fight, each);
                 }
                 else {
+                    // Split fighterUrl id make as fither id
                     let fighterId = fighter.fighterUrl.split('/')[4];
 
                     let fighterData = {
@@ -26,12 +29,13 @@ class StageFour {
                         stats: data.success
                     };
 
+                    // Check if fighter exists
                     let isExists = await db.actions.isFighterExists(fighterId);
 
                     if (!isExists) {
-                        // Create fighte collection
                         try {
                             try {
+                                // Create fighte collection
                                 await db.actions.createFighter(fighterData);
                             }
                             finally {
@@ -45,13 +49,16 @@ class StageFour {
                                 // Update fighter id in each fight for each fighter
                                 await db.actions.updateEventFight(saveData);
 
+                                // Increment collected count
                                 this.state.collected = (this.state.collected || 0) + 1;
                             }
                         } catch (err) {
+                            // If error retry create
                             try {
                                 await db.actions.createFighter(fighterData);
                             }
                             catch (createErr) {
+                                // If retry failed increment state error
                                 this.state.error = (this.state.error || 0) + 1;
                             }
                         }
