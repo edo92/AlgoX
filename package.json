@@ -1,17 +1,32 @@
 {
-    "scripts": {
-        "dev": "node index"
-    },
-    "devDependencies": {
-        "dotenv": "^8.2.0"
-    },
-    "dependencies": {
-        "@google-cloud/vision": "^1.11.0",
-        "@tensorflow/tfjs": "^1.7.2",
-        "@tensorflow/tfjs-node": "^1.7.2",
-        "axios": "^0.19.2",
-        "cheerio": "^1.0.0-rc.3",
-        "moment": "^2.24.0",
-        "mongoose": "^5.9.6"
-    }
+  "name": "portfolio",
+  "version": "8.9.2",
+  "description": "Personal Protfolio",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "client": "cd client && npm run start",
+    "dev": "concurrently \"nodemon server.js\" \"npm run client\"",
+    "go": "concurrently \"node server.js\" \"npm run client\"",
+    "setup": "npm install && cd client && npm install",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^3.5.0",
+    "nodemon": "^1.19.2",
+    "dotenv": "^8.2.0"
+  },
+  "engines": {
+    "node": "12.12.0"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.8.9",
+    "morgan": "^1.10.0",
+    "password-hash": "^1.2.2"
+  }
 }
