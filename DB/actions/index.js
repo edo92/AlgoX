@@ -5,41 +5,53 @@ class DbActions {
         this.db = db;
 
         this.saveEvents = async list => {
-            return await list.map(async event => {
-                return await db.Events.create(event);
-            })
+            try {
+                await list.map(async event => {
+                    return await db.Events.create(event);
+                })
+                return 'Saved';
+            }
+            catch (err) { return 'Error Occured' };
         }
 
         this.getEvents = async () => {
             try {
                 return await db.Events.find();
             }
-            catch (err) {
-                throw err;
-            }
+            catch (err) { return 'Error Occured' };
         }
 
-        this.saveEventFights = async (id, fights) => {
+        this.saveEventFights = async (eventId, fights) => {
             try {
-                let thisEvent = await db.Events.findOne({ _id: id });
-                return await db.Events.findOneAndUpdate(
-                    { _id: id },
-                    { ...thisEvent.event, fights: fights }
-                )
-            } catch (err) {
-                throw err
-            }
+                let thisEvent = await db.Events.findOne({ _id: eventId });
+
+                return {
+                    success: await db.Events.findOneAndUpdate(
+                        { _id: eventId },
+                        { ...thisEvent.event, fights: fights }
+                    )
+                }
+            } catch (err) { return { error: 'Error Occured' } };
         }
 
-        this.saveFightStats = async (eventId, event) => {
+        this.saveFightStats = async data => {
+            let { id, urlId, stats } = data;
             try {
-                await db.Events.findOneAndUpdate(
-                    { _id: eventId },
-                    { fights: await event.fights },
+                await db.Events.updateOne(
+                    {
+                        _id: id,
+                        'fights.statUrl': urlId,
+                    },
+                    {
+                        $set: {
+                            'fights.$.fighter1': stats.fighter1,
+                            'fights.$.fighter2': stats.fighter2
+                        }
+                    }
                 )
-            } catch (err) {
-                console.log("error updating", err)
+                return { success: 'Saved' }
             }
+            catch (err) { throw err; return { error: 'Error Occured' } };
         }
 
         this.saveFighterStats = async (fighter, stats, callback) => {
@@ -72,6 +84,7 @@ class DbActions {
                 )
             } catch (err) { return err }
         }
+        
         this.findEvent = async id => {
             try {
                 return await db.Events.findOne({ _id: id });

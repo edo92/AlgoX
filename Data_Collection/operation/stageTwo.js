@@ -9,23 +9,34 @@ class StageTwo {
     start = async () => {
         let eventList = await db.actions.getEvents();
 
-        this.state.total = eventList.length;
-
         eventList.map(event => {
-            if (!event.fights.length)
+            if (!event.fights.length) {
+                this.state.total = (this.state.total || 0) + 1;
                 this.mineEventFights(event.link, event._id);
+            }
+            else {
+                this.state.message = 'Already Exists';
+                this.monitorState();
+            }
         })
     }
 
     mineEventFights = async (url, id) => {
         await mine.mineEventFights(url, data => {
             // Filter index data
-            this.filter(data, url, id, res => {
+            this.filter(data, url, id, async res => {
                 // Save event fights in db
-                db.actions.saveEventFights(id, res);
+                let saved = await db.actions.saveEventFights(id, res);
 
-                // Increment collected
-                this.state.collected = (this.state.collected || 0) + 1;
+                if (saved.success) {
+                    // Increment collected
+                    this.state.event = saved.success.name
+                    this.state.collected = (this.state.collected || 0) + 1;
+                }
+                else {
+                    // Retry saving data
+                    db.actions.saveEventFights(id, res);
+                }
 
                 // Monitor State (collection loop)
                 this.monitorState();
@@ -42,7 +53,9 @@ class StageTwo {
 
     monitorState = () => {
         console.log('-------------- Stage Two --------------');
-        console.log(this.state);
+        console.log('name:', this.state.event)
+        console.log('total:', this.state.total);
+        console.log('collected:', this.state.collected);
         console.log('---------------------------------------');
     }
 }

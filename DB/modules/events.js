@@ -4,11 +4,13 @@ var Schema = mongoose.Schema;
 
 var EventsSchema = new Schema({
     name: {
-        type: String
+        type: String,
+        unique: true
     },
 
     date: {
-        type: String
+        type: String,
+        unique: true
     },
 
     location: {

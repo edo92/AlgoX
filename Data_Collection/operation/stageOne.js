@@ -11,15 +11,16 @@ class StageOne {
         // Mine Events from first page
         mine.mineEvents(this.url, events => {
             // Filter events list, separate from trash
-            this.filter(events, list => {
+            this.validateData(events, async list => {
                 // Save events list as separate doc
-                db.actions.saveEvents(list);
+                this.state.message = await db.actions.saveEvents(list);
+
                 this.monitorState();
-            });
+            })
         })
     }
 
-    filter(events, callback) {
+    validateData(events, callback) {
         // Filer list success and error events
         let success = [];
         let eventsData = events.success;
