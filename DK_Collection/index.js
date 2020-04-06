@@ -6,28 +6,27 @@ const compareNames = require('./utility/compare');
 const vision = require('./readImage');
 
 class DkCollection {
-    constructor() {
+    constructor(event) {
+        this.eventName = event;
         this.state = {};
         this.event = {};
     }
 
     start = () => {
         db.connect(async () => {
-            let event = 'UFC Fight Night: Lee vs. Oliveira';
-            this.event = await db.db.Events.findOne({ name: event });
+            this.event = await db.db.Events.findOne({ name: this.eventName });
 
-            this.getDir(`images/${event}`, async image => {
-                let imgTxt = await vision.readImage(`images/${event}/${image}`);
+            this.getDir(`images/${this.eventName}`, async image => {
+                let imgTxt = await vision.readImage(`DK_Collection/images/${this.eventName}/${image}`);
 
                 let updated = await this.combineData(this.event, imgTxt);
 
-                await db.actions.saveDkPointsToEvent(event, updated);
+                await db.actions.saveDkPointsToEvent(this.eventName, updated);
 
-                this.monitorState(event, imgTxt);
+                this.monitorState(this.eventName, imgTxt);
             });
         })
     }
-
 
     combineData = async (thisEvent, dkData) => {
         await thisEvent.fights.map(fight => {
@@ -68,5 +67,4 @@ class DkCollection {
     }
 }
 
-let DK = new DkCollection;
-DK.start();
+module.exports = DkCollection;
