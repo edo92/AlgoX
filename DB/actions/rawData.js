@@ -1,5 +1,9 @@
-class Actions {
+const PrepareData = require('./prepareData');
+
+class Actions extends PrepareData {
     constructor() {
+        super();
+
         this.getRawFightList = async () => {
             let fightersList = await this.getFightList();
 

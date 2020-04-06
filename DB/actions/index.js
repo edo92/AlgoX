@@ -3,7 +3,7 @@ const Actions = require('./rawData');
 
 class DbActions extends Actions {
     constructor() {
-        super()
+        super();
         
         this.db = db;
 
@@ -83,27 +83,10 @@ class DbActions extends Actions {
                     { fights: await updated.fights }
                 );
                 return { success: saved };
-            } catch (error) { consle.log("------errorr-----"); return { error } };
+            } catch (error) { return { error } };
         }
 
-        this.getFightList = async () => {
-            let allEvents = await this.getEvents();
-            let allFighters = await this.getAllFighters({ obj: true });
-
-            let fighterList = [];
-
-            await allEvents.map(event => {
-                event.fights.map(fight => {
-                    // Set record for every 2 fighters in the event
-                    fight.fighter1.record = allFighters[fight.fighter1.name];
-                    fight.fighter2.record = allFighters[fight.fighter2.name];
-
-                    fighterList.push(fight);
-                })
-            })
-
-            return fighterList
-        }
+       
 
         this.getAllFighters = async (options) => {
             let fighters = await db.Fighter.find();

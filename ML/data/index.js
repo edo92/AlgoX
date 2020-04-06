@@ -56,6 +56,7 @@ class PrepareData {
                 // Combine all data together
                 let stats = {
                     ...record,
+                    ...fight[fighter].stats,
                     fppf: fight[fighter].dk.fppf || 0,
                     weightClass: encodeString({ weightClass: fight.weightClass }) || 0,
                     stance: encodeString({ stance: record.stance }) || 0,
@@ -82,7 +83,7 @@ class PrepareData {
                 return fight.map(fighter => {
                     return [fighter.pop()];
                 })
-            }),
+            })
         }
     }
 }

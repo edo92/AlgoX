@@ -24,7 +24,7 @@ class DeepLearning extends Data {
 
         const model = tf.sequential();
 
-        model.add(tf.layers.dense({ units: 1, inputShape: [2, 17], activation: 'tanh' }))
+        model.add(tf.layers.dense({ units: 1, inputShape: [2, 28], activation: 'tanh' }))
         model.add(tf.layers.dense({ units: 1, activation: 'sigmoid' }))
         model.compile({ optimizer: tf.train.adam(.06), loss: 'meanSquaredError', lr: 0.1 })
 
