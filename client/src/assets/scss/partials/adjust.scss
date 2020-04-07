@@ -1,0 +1,33 @@
+.nav-link {
+  padding: 10px 22px !important;
+}
+
+.bg-logo {
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zoom-hover:hover {
+  transform: scale(1.5);
+  transition: ease-in-out 0.3s 0.1s;
+}
+
+.br-1 {
+  border-radius: 0.2rem;
+}
+
+@media (min-width: 0px) and (max-width: 1200px) {
+  .mt-lg-3 {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (min-width: 0px) and (max-width: 499px) {
+  .tab-content {
+    padding: 0.75rem !important;
+  }
+}
