@@ -5,7 +5,6 @@ class StageOne extends StageTwo {
     constructor() {
         super();
 
-        this.state = {};
         this.fightList = [];
 
         this.stageOne = async eventList => {
