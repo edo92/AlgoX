@@ -3,11 +3,11 @@ const operation = require('./Data_Collection');
 
 class DataColection {
     constructor() {
-        this.page = 1;
+        this.page = 2;
     }
 
     start = () => {
-        database.connect(() => {
+        database.connect(async () => {
             // Collects events and url to event page
             // let stageOne = new operation.operationOne(this.page);
             // stageOne.start();
@@ -21,8 +21,8 @@ class DataColection {
             // stageThree.start();
 
             // Collect Fighters stats
-            let stageFour = new operation.operationFour(this.page);
-            stageFour.start();
+            // let stageFour = new operation.operationFour(this.page);
+            // stageFour.start();
         });
     }
 }

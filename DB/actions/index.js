@@ -4,9 +4,10 @@ class DbActions {
     constructor() {
         this.db = db;
 
-        this.getEvents = async () => {
+        this.getEvents = async (limit) => {
             try {
-                return await db.Events.find();
+                let events = db.Events.find();
+                return limit ? await events.limit(limit) : await events;
             }
             catch (error) { throw error };
         }
