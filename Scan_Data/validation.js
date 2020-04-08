@@ -32,6 +32,7 @@ class StageTwo {
         if (
             (!fighter.name.length || typeof fighter.name !== 'string') &&
             (!fighter.outcome.length || typeof fighter.outcome !== 'string') &&
+            (!fighter.fighterId.length || typeof fighter.fighterId !== 'string') &&
             (!fighter.fighterUrl.length || typeof fighter.fighterUrl !== 'string') &&
             (!fighter.stats || typeof fighter.stats !== 'object')
         ) {
