@@ -11,7 +11,7 @@ module.exports = (dir, callback) => {
 
         files.forEach((file, index) => {
             let diff = index > 8 ? 3 : 0;
-            setTimeout(() => { callback(file) }, 6000 * index - diff);
+            setTimeout(() => { callback(file, files.length) }, 6000 * index - diff);
         });
     });
 }

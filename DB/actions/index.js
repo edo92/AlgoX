@@ -11,6 +11,16 @@ class DbActions {
             catch (err) { throw err };
         }
 
+        this.saveDkPointsToEvent = async (event, updated) => {
+            try {
+                let saved = await db.Events.findOneAndUpdate(
+                    { name: event },
+                    { fights: await updated.fights }
+                );
+                return { success: saved };
+            } catch (error) { return { error } };
+        }
+
         this.saveFighterStats = async (fighter, stats, callback) => {
             // Split url id from each fighter url link
             let urlId = fighter.fighterUrl.split('/')[4];

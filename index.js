@@ -4,7 +4,7 @@ require('dotenv').config();
 
 class DK_Collection {
     constructor() {
-        this.event = 'UFC Fight Night: Edgar vs. The Korean Zombie';
+        this.event = 'UFC Fight Night: Lee vs. Oliveira';
     }
 
     start = () => {
