@@ -1,13 +1,25 @@
+const db = require('../DB');
 const Validation = require('./validation');
 
 class QualityCheck extends Validation {
     constructor() {
         super();
+
+        this.fightsList = [];
+        this.fighterList = [];
     }
 
-    QualityCheck = eventList => {
-        
-        let fightsList = [];
+    QualityCheck = async () => {
+        let events = await db.actions.getEvents();
+
+        this.analizeEvents(events);
+        this.analizeFights();
+
+        let fighters = await db.actions.getFighters();
+        this.analizeFighters(fighters);
+    }
+
+    analizeEvents = eventList => {
         for (let eachEvent in eventList) {
             this.registerLog('events');
 
@@ -22,18 +34,19 @@ class QualityCheck extends Validation {
 
                 this.fightValidation(fight);
 
-                fightsList.push(fight);
+                this.fightsList.push(fight);
             }
         }
+    }
 
-        let fighterList = [];
-        for (let fight in fightsList) {
+    analizeFights = () => {
+        for (let fight in this.fightsList) {
             ['fighter1', 'fighter2'].map(eachFighter => {
                 // fighters count
                 this.registerLog('fighters');
 
                 // Each fighter from each fight 
-                let fighter = fightsList[fight][eachFighter];
+                let fighter = this.fightsList[fight][eachFighter];
 
                 // Validate fighter data
                 this.fighterValidation(fighter);
@@ -42,8 +55,15 @@ class QualityCheck extends Validation {
                 this.statsValidation(fighter.stats);
 
                 // Separate each fighter 
-                fighterList.push(fighter);
+                this.fighterList.push(fighter);
             })
+        }
+    }
+
+    analizeFighters = fighters => {
+        for (let each in fighters) {
+            this.fighterStatsValidation(fighters[each]);
+            this.registerLog('registered');
         }
     }
 }

@@ -4,19 +4,26 @@ class DbActions {
     constructor() {
         this.db = db;
 
+        this.getEvents = async () => {
+            try {
+                return await db.Events.find();
+            }
+            catch (error) { throw error };
+        }
+
+        this.getFighters = async () => {
+            try {
+                return await db.Fighter.find();
+            }
+            catch (error) { throw error };
+        }
+
         this.saveEvents = async list => {
             try {
                 await list.map(async event => {
                     return await db.Events.create(event);
                 })
                 return 'Saved';
-            }
-            catch (error) { throw error };
-        }
-
-        this.getEvents = async () => {
-            try {
-                return await db.Events.find();
             }
             catch (error) { throw error };
         }

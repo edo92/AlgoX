@@ -1,4 +1,21 @@
 class StageTwo {
+    fighterStatsValidation = fighter => {
+        if (
+            (!fighter.fighterId.length || typeof fighter.fighterId !== 'string') &&
+            (!fighter.name.length || typeof fighter.name !== 'string') &&
+            (typeof fighter.stats !== 'object')
+        ) {
+            this.registerLog('error');
+        }
+
+        for (let stat in fighter.stats) {
+            let fstat = fighter.stats[stat];
+            if (!fstat.length) {
+                this.registerLog('error');
+            }
+        }
+    }
+
     statsValidation = stats => {
         for (let data in stats) {
             if (

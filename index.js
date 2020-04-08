@@ -17,12 +17,12 @@ class DataColection {
             // stageTwo.start();
 
             // Collects event fighters stats
-            let stageThree = new operation.operationThree(this.page);
-            stageThree.start();
+            // let stageThree = new operation.operationThree(this.page);
+            // stageThree.start();
 
             // Collect Fighters stats
-            // let stageFour = new operation.operationFour(this.page);
-            // stageFour.start();
+            let stageFour = new operation.operationFour(this.page);
+            stageFour.start();
         });
     }
 }

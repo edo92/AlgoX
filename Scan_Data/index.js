@@ -9,10 +9,7 @@ class ScanData extends DataQualityCheck {
 
     start = async () => {
         db.connect();
-
-        let events = await db.actions.getEvents();
-
-        this.QualityCheck(events);
+        this.QualityCheck();
     }
 
     registerLog = (key) => {
