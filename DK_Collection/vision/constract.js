@@ -79,74 +79,86 @@ class Constract {
             let positions = this.getPosition(item.boundingPoly.vertices);
             let { minX, maxX, minY, maxY } = positions;
 
-            console.log('position', minX, maxX, minY, maxY);
-            console.log('descirpt', descript);
+            // console.log('position', minX, maxX, minY, maxY);
+            // console.log('descirpt', descript);
 
-            if ((minY > 550 && minY < 650) && (maxY > 550 && maxY < 650)
+            if ((minY > 250 && minY < 1000) && (maxY > 550 && maxY < 650)
             ) {
-                if ((minX > 250 && minX < 960) && (maxX > 410 && maxX < 1150)) {
+                if ((minX > 250 && minX < 1500) && (maxX > 300 && maxX < 1250)) {
                     state.ft1.ftr1 = state.ft1.ftr1 + ' ' + descript;
                 }
-                if ((minX > 1600 && minX < 2375) && (maxX > 1700 && maxX < 2550)) {
+                // F1 fppt
+                if ((minX > 270 && minX < 290) && (maxX > 330 && maxX < 400)) {
+                    if (descript.length) state.ft2.ftr1 = state.ft2.ftr1 + ' ' + descript;
+                }
+
+                if ((minX > 1600 && minX < 2575) && (maxX > 1700 && maxX < 2750)) {
                     state.ft1.ftr2 = state.ft1.ftr2 + ' ' + descript;
                 }
             };
             if ((minY > 775 && minY < 870) && (minY > 775 && minY < 870)
             ) {
-                if ((minX > 265 && minX < 1050) && (maxX > 410 && maxX < 1250)) {
+                if ((minX > 245 && minX < 1500) && (maxX > 350 && maxX < 1250)) {
                     state.ft2.ftr1 = state.ft2.ftr1 + ' ' + descript;
                 }
-                if ((minX > 1600 && minX < 2500) && (maxX > 1750 && maxX < 2500)) {
-                    state.ft2.ftr2 = state.ft2.ftr2 + ' ' + descript;
+                // F2 fppt
+                if ((minX > 270 && minX < 290) && (maxX > 320 && maxX < 400)) {
+                    if (descript.length) state.ft2.ftr1 = state.ft2.ftr1 + ' ' + descript;
                 }
 
+                if ((minX > 1600 && minX < 2500) && (maxX > 1650 && maxX < 2700)) {
+                    state.ft2.ftr2 = state.ft2.ftr2 + ' ' + descript;
+                }
                 // F2 fppt
-                if ((minX > 270 && minX < 290) && (maxX > 380 && maxX < 400)) {
+                if ((minX > 1630 && minX < 1650) && (maxX > 1650 && maxX < 1750)) {
                     if (descript.length) state.ft2.ftr1 = state.ft2.ftr1 + ' ' + descript;
                 }
             }
             if ((minY > 1000 && minY < 1100) && (minY > 1000 && minY < 1100)
             ) {
-                if ((minX > 250 && minX < 1000) && (maxX > 410 && maxX < 1200)) {
+                if ((minX > 250 && minX < 1500) && (maxX > 410 && maxX < 1500)) {
                     state.ft3.ftr1 = state.ft3.ftr1 + ' ' + descript;
                 }
-                if ((minX > 1600 && minX < 2500) && (maxX > 1750 && maxX < 2700)) {
+                // f1 fttf
+                if ((minX > 270 && minX < 320) && (maxX > 340 && maxX < 445)) {
+                    if (descript.length) state.ft3.ftr1 = state.ft3.ftr1 + ' ' + descript;
+                }
+
+                if ((minX > 1600 && minX < 2500) && (maxX > 1700 && maxX < 2750)) {
                     state.ft3.ftr2 = state.ft3.ftr2 + ' ' + descript;
                 }
             }
 
             if ((minY > 1225 && minY < 1330) && (minY > 1225 && minY < 1330)
             ) {
-                if ((minX > 250 && minX < 1050) && (maxX > 300 && maxX < 1230)) {
+                if ((minX > 250 && minX < 1500) && (maxX > 300 && maxX < 1530)) {
                     state.ft4.ftr1 = state.ft4.ftr1 + ' ' + descript;
                 }
-                if ((minX > 1600 && minX < 2400) && (maxX > 1750 && maxX < 2500)) {
-                    state.ft4.ftr2 = state.ft4.ftr2 + ' ' + descript;
-                }
-
                 // f1 fttf
                 if ((minX > 270 && minX < 290) && (maxX > 410 && maxX < 440)) {
                     if (descript.length) state.ft4.ftr1 = state.ft4.ftr1 + ' ' + descript;
                 }
 
+                if ((minX > 1600 && minX < 2600) && (maxX > 1700 && maxX < 2750)) {
+                    state.ft4.ftr2 = state.ft4.ftr2 + ' ' + descript;
+                }
                 // f2 fttf
-                if ((minX > 1630 && minX < 1650) && (maxX > 1745 && maxX < 1770)) {
+                if ((minX > 1630 && minX < 1650) && (maxX > 1700 && maxX < 1770)) {
                     if (descript.length) state.ft4.ftr2 = state.ft4.ftr2 + ' ' + descript;
                 }
             }
 
             if ((minY > 1450 && minY < 1565) && (minY > 1450 && minY < 1565)
             ) {
-                if ((minX > 250 && minX < 1100) && (maxX > 400 && maxX < 1330)) {
+                if ((minX > 250 && minX < 1500) && (maxX > 300 && maxX < 1350)) {
                     state.ft5.ftr1 = state.ft5.ftr1 + ' ' + descript;
                 }
-
                 // Fppf f1
                 if ((minX > 270 && minX < 285) && (maxX > 335 && maxX < 345)) {
                     if (descript.length) state.ft5.ftr1 = state.ft5.ftr1 + ' ' + descript;
                 }
 
-                if ((minX > 1620 && minX < 2500) && (maxX > 1700 && maxX < 2600)) {
+                if ((minX > 1600 && minX < 2500) && (maxX > 1700 && maxX < 2750)) {
                     state.ft5.ftr2 = state.ft5.ftr2 + ' ' + descript;
                 }
             }

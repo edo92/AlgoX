@@ -1,48 +1,14 @@
 const db = require('../modules');
-const Actions = require('./rawData');
 
-class DbActions extends Actions {
+class DbActions {
     constructor() {
-        super();
-        
         this.db = db;
 
-        this.saveEvents = async list => {
-            return await list.map(async event => {
-                return await db.Events.create(event);
-            })
-        }
-
-        this.getEvents = async () => {
+        this.findEvent = async eventName => {
             try {
-                return await db.Events.find();
+                return await db.Events.findOne({ name: eventName });
             }
-            catch (err) {
-                throw err;
-            }
-        }
-
-        this.saveEventFights = async (id, fights) => {
-            try {
-                let thisEvent = await db.Events.findOne({ _id: id });
-                return await db.Events.findOneAndUpdate(
-                    { _id: id },
-                    { ...thisEvent.event, fights: fights }
-                )
-            } catch (err) {
-                throw err
-            }
-        }
-
-        this.saveFightStats = async (eventId, event) => {
-            try {
-                await db.Events.findOneAndUpdate(
-                    { _id: eventId },
-                    { fights: await event.fights },
-                )
-            } catch (err) {
-                console.log("error updating", err)
-            }
+            catch (err) { throw err };
         }
 
         this.saveFighterStats = async (fighter, stats, callback) => {
@@ -63,46 +29,6 @@ class DbActions extends Actions {
                     callback(savedData._id);
                 } catch (err) { return err };
             }
-        }
-
-        this.saveStatId = async (event, fighter, which, index) => {
-            event.fights[index][which] = fighter;
-
-            try {
-                return await db.Events.findOneAndUpdate(
-                    { _id: event._id },
-                    { fights: await event.fights }
-                )
-            } catch (err) { return err }
-        }
-
-        this.saveDkPointsToEvent = async (event, updated) => {
-            try {
-                let saved = await db.Events.findOneAndUpdate(
-                    { name: event },
-                    { fights: await updated.fights }
-                );
-                return { success: saved };
-            } catch (error) { return { error } };
-        }
-
-       
-
-        this.getAllFighters = async (options) => {
-            let fighters = await db.Fighter.find();
-
-            let listObj = {};
-
-            if (options) {
-                if (options.obj) {
-                    await fighters.map(fighter => {
-                        listObj[fighter.name] = fighter;
-                    })
-                    return listObj;
-                }
-            }
-
-            return fighters
         }
     }
 }

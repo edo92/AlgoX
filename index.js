@@ -1,12 +1,17 @@
+const db = require('./DB');
 const collection = require('./DK_Collection');
+require('dotenv').config();
 
 class DK_Collection {
     constructor() {
-        this.event = 'UFC Fight Night: Lee vs. Oliveira';
+        this.event = 'UFC Fight Night: Edgar vs. The Korean Zombie';
     }
+
     start = () => {
-        let operation = new collection(this.event);
-        operation.start();
+        db.connect(() => {
+            let operation = new collection(this.event);
+            operation.dkCollection();
+        })
     }
 }
 

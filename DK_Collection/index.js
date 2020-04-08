@@ -1,71 +1,36 @@
-const path = require('path');
-const fs = require('fs');
 const db = require('../DB');
-const compareNames = require('./utility/compare');
+const util = require('./utility');
 
-const vision = require('./readImage');
+const vision = require('./vision');
 
 class DkCollection {
     constructor(event) {
-        this.eventName = event;
+        this.path = `images/${event}`;
         this.state = {};
-        this.event = {};
     }
 
-    start = () => {
-        db.connect(async () => {
-            this.event = await db.db.Events.findOne({ name: this.eventName });
+    dkCollection = async () => {
+        let test = 'UFC Fight Night: Edgar vs. The Korean Zombie'
+        this.event = await db.actions.findEvent(test); //this.event
 
-            this.getDir(`images/${this.eventName}`, async image => {
-                let imgTxt = await vision.readImage(`images/${this.eventName}/${image}`);
+        util.getDir(this.path, async image => {
+            // Read Image
+            let dkRecord = await vision.readImage(`${this.path}/${image}`);
 
-                let updated = await this.combineData(this.event, imgTxt);
-                console.log('updated', updated)
+            // Combine dk image data with fighter object
+            let updated = await util.combine(this.event, dkRecord);
 
-                await db.actions.saveDkPointsToEvent(this.eventName, updated);
+            // Save dk data to each fighter in the fight for each event
+            await db.actions.saveDkPointsToEvent(this.eventName, updated);
 
-                this.monitorState(this.eventName, imgTxt);
-            });
+            this.monitorState();
         })
     }
 
-    combineData = async (thisEvent, dkData) => {
-        await thisEvent.fights.map(fight => {
-            Object.keys(dkData).map(fighter => {
-                if (compareNames(fight.fighter1.name, fighter)) {
-                    fight.fighter1.dk = { ...fight.fighter1.dk, ...dkData[fighter] };
-                }
-                if (compareNames(fight.fighter2.name, fighter)) {
-                    fight.fighter2.dk = { ...fight.fighter2.dk, ...dkData[fighter] };
-                }
-            })
-        })
-        return thisEvent;
-    }
-
-    getDir = (dir, callback) => {
-        const imgPath = '../' + dir;
-        const directoryPath = path.join(__dirname, imgPath);
-        fs.readdir(directoryPath, (err, files) => {
-            if (err) throw err;
-
-            files.forEach((file, index) => {
-                let diff = index > 8 ? 3 : 0;
-                this.state.total = (this.state.total || 0) + 1;
-                setTimeout(() => { callback(file) }, 6000 * index - diff);
-            });
-        });
-    }
-
-    monitorState = (event, imgTxt) => {
-        this.state.image = (this.state.image || 0) + 1;
-        this.state.event = event;
-
-        console.log('--------- Collect Dk ----------');
-
-        console.log(this.state)
-
+    monitorState = () => {
         console.log('-------------------------------');
+        console.log('Event:', this.event.name);
+        console.log(this.state);
     }
 }
 
