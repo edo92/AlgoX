@@ -18,8 +18,8 @@ class StageThree extends StageFour {
                         list[[fighter.name]] = {
                             sigStrTotal: {}, sigStrLanded: {}, strHeadLanded: {},
                             strHeadTotal: {}, strBodyLanded: {}, strBodyTotal: {},
-                            strLegLanded: {}, strLegTotal: {}, distanceLanded: {},
-                            distanceTotal: {}, tdSucc: {}, tdTotal: {}, kd: {}
+                            strLegLanded: {}, strLegTotal: {}, distanceSucc: {},
+                            distanceTotal: {}, tdTotal: {}, tdAcc: {}, kd: {}
                         }
                     }
 

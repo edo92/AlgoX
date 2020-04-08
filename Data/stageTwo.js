@@ -25,18 +25,16 @@ class StageTwo extends StageThree {
 
             ['fighter1', 'fighter2'].map(each => {
                 let fighter = fight[each];
-                constracted[each] = {
 
-                    // ===== Test options
+                constracted[each] = {
+                    // Track who belongs to
                     name: fighter.name,
                     outcome: fighter.outcome,
-                    //========
-
 
                     // stats
                     age: new Date().getFullYear() - Number(fighter.dob.split(', ')[1]),
-                    hight: fighter.height,
-                    // fighter.hight.split("'")[0] + '.'.fighter.hight.split('"')[0]
+                    hight: Number(`${fighter.hight.split("'")[0]}.${fighter.hight.split("'")[1].split('"')[0].trim()}`),
+
                     weight: Number(fighter.weight.split(' ')[0]),
                     reach: Number(fighter.reach.split('"')[0]),
 
@@ -47,9 +45,8 @@ class StageTwo extends StageThree {
 
                     // Take down
                     takeDown: Number(fighter.takeDownPers.split('%')[0]),
-                    tDAcc: Number(fighter.TDAcc.split('%')),
-                    strDef: Number(fighter.TDDef),
-
+                    strDef: Number(fighter.TDDef.split('%')[0]),
+                    tdAcc: fighter.TDAcc,
 
                     // Submission
                     subAtt: Number(fighter.subAtt),
@@ -73,12 +70,12 @@ class StageTwo extends StageThree {
                         // Distance
                         distanceSucc: Number(fighter.distance.split(' of ')[0]),
                         distanceTotal: Number(fighter.distance.split(' of ')[1]),
-
                         // Takedown
                         tdSucc: Number(fighter.takeDown.split(' of ')[0]),
                         tdTotal: Number(fighter.takeDown.split(' of ')[1]),
                     },
                 }
+                console.log('fighter', fighter)
             })
             list.push(constracted);
         })

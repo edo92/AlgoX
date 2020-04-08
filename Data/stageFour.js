@@ -1,7 +1,12 @@
 class StageFour {
     constructor() {
-        this.stageFour = data => {
-            console.log('stage foru ', data)
+        this.stageFour = fightList => {
+           for(let fight in fightList){
+               for(let each in fightList[fight]){
+                   let fighter = fightList[fight][each]
+                //    console.log('fighter',fighter)
+               }
+           }
         }
     }
 }

@@ -8,6 +8,7 @@ class StageOne extends StageTwo {
         this.fightList = [];
 
         this.stageOne = async eventList => {
+            // Separate each fight from each event / to this.fightList
             await eventList.map(async event => {
                 await event.fights.map(fight => {
                     this.fightList.push(fight);
@@ -32,6 +33,7 @@ class StageOne extends StageTwo {
                     }
                 }
             })
+
             // Parse data
             Promise.all(withStats).then(res => {
                 this.stageTwo(res);
