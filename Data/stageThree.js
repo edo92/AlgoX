@@ -8,10 +8,10 @@ class StageThree extends StageFour {
         this.stageThree = async fightList => {
             let list = {};
 
-            await fightList.map(fight => {
-                ['fighter1', 'fighter2'].map(async each => {
+            for (let fight in fightList) {
+                for (let each in fightList[fight]) {
                     // Each fighter in the fight
-                    let fighter = fight[each];
+                    let fighter = fightList[fight][each];
 
                     // Countable temp objects
                     if (!list[fighter.name]) {
@@ -19,20 +19,22 @@ class StageThree extends StageFour {
                             sigStrTotal: {}, sigStrLanded: {}, strHeadLanded: {},
                             strHeadTotal: {}, strBodyLanded: {}, strBodyTotal: {},
                             strLegLanded: {}, strLegTotal: {}, distanceSucc: {},
-                            distanceTotal: {}, tdTotal: {}, tdAcc: {}, kd: {}
+                            distanceTotal: {}, tdTotal: {}, kd: {}
                         }
                     }
 
                     // Each fighter in the list
-                    let ftrPerform = list[fighter.name]
+                    let ftrPerform = list[fighter.name];
 
                     // Add up all number, and count total sum
                     for (let key in ftrPerform) {
                         ftrPerform[key].count = (ftrPerform[key].count || 0) + fighter.countable[key];
                         ftrPerform[key].total = (ftrPerform[key].total || 0) + 1;
                     }
-                })
-            })
+
+                    this.registerLogs('constracted');
+                }
+            }
 
             // Devide count with total, get average
             for (let i in list) {
@@ -55,6 +57,8 @@ class StageThree extends StageFour {
                     delete fightList[fight][each].countable;
                 }
             }
+
+            this.monitorProgress();
 
             // Organize each fighter object
             return this.stageFour(fightList);

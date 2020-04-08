@@ -7,27 +7,36 @@ class StageTwo extends StageThree {
         this.stageTwo = async eventList => {
             // Map new constracted list
             let combineList = await eventList.map(event => {
-                // Merge fight stats and fighter stats together
-                return {
-                    fighter1: { ...event.fighter1.stats, ...event.fighter1.fighterStats, },
-                    fighter2: { ...event.fighter1.stats, ...event.fighter2.fighterStats }
+                let { fighter1, fighter2 } = event;
+
+                return { // Combine each fighter [outcome, stats, fighterStats]
+                    fighter1: { outcome: fighter1.outcome, ...fighter1.stats, ...fighter1.fighterStats },
+                    fighter2: { outcome: fighter2.outcome, ...fighter2.stats, ...fighter2.fighterStats }
                 }
             })
             // Constract new object
-            return this.constractObject(combineList);
+            return await this.constractObject(combineList);
         }
     }
 
     constractObject = async fights => {
         let list = [];
-        await fights.map(fight => {
+
+        for (let eachF in fights) {
+            // Each fight
+            let fight = fights[eachF];
+
+            // Constract fighter object
             let constracted = {};
 
-            ['fighter1', 'fighter2'].map(each => {
+            for (let each in fight) {
+                // Each fighter in a fight
                 let fighter = fight[each];
 
                 constracted[each] = {
-                    // Track who belongs to
+                    tdAcc: Number(fighter.TDAcc.split('%')[0]),
+
+                    // fighter and outcome
                     name: fighter.name,
                     outcome: fighter.outcome,
 
@@ -46,7 +55,6 @@ class StageTwo extends StageThree {
                     // Take down
                     takeDown: Number(fighter.takeDownPers.split('%')[0]),
                     strDef: Number(fighter.TDDef.split('%')[0]),
-                    tdAcc: fighter.TDAcc,
 
                     // Submission
                     subAtt: Number(fighter.subAtt),
@@ -54,6 +62,7 @@ class StageTwo extends StageThree {
                     rev: Number(fighter.rev),
 
                     countable: {
+                        // KO
                         kd: Number(fighter.kd),
                         // Strick
                         sigStrTotal: Number(fighter.strSig.split(' of ')[1]),
@@ -75,10 +84,10 @@ class StageTwo extends StageThree {
                         tdTotal: Number(fighter.takeDown.split(' of ')[1]),
                     },
                 }
-                console.log('fighter', fighter)
-            })
+            }
             list.push(constracted);
-        })
+        }
+
         return this.stageThree(list);
     }
 }
