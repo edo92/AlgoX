@@ -17,9 +17,10 @@ class DkCollection {
             this.event = await db.db.Events.findOne({ name: this.eventName });
 
             this.getDir(`images/${this.eventName}`, async image => {
-                let imgTxt = await vision.readImage(`DK_Collection/images/${this.eventName}/${image}`);
+                let imgTxt = await vision.readImage(`images/${this.eventName}/${image}`);
 
                 let updated = await this.combineData(this.event, imgTxt);
+                console.log('updated', updated)
 
                 await db.actions.saveDkPointsToEvent(this.eventName, updated);
 
@@ -43,7 +44,8 @@ class DkCollection {
     }
 
     getDir = (dir, callback) => {
-        const directoryPath = path.join(__dirname, dir);
+        const imgPath = '../' + dir;
+        const directoryPath = path.join(__dirname, imgPath);
         fs.readdir(directoryPath, (err, files) => {
             if (err) throw err;
 
