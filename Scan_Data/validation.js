@@ -1,17 +1,22 @@
 class StageTwo {
     fighterStatsValidation = fighter => {
-        if (
-            (!fighter.fighterId.length || typeof fighter.fighterId !== 'string') &&
-            (!fighter.name.length || typeof fighter.name !== 'string') &&
-            (typeof fighter.stats !== 'object')
-        ) {
-            this.registerLog('error');
+        let { name, stats, fighterId } = fighter;
+        if (!name && !name.length && typeof fighter.name !== 'string') {
+            this.registerLog('Stats Name Missing');
+        }
+
+        if (!fighterId && !fighterId.length && typeof fighterId !== 'string') {
+            this.registerLog('Fighter FighterId Missing');
+        }
+
+        if (!stats && typeof stats !== 'object') {
+            this.registerLog('Fighter Stats Missing');
         }
 
         for (let stat in fighter.stats) {
             let fstat = fighter.stats[stat];
             if (!fstat.length) {
-                this.registerLog('error');
+                this.registerLog('Fighter Stats Props Missing');
             }
         }
     }
@@ -30,10 +35,10 @@ class StageTwo {
 
     fighterValidation = fighter => {
         if (
-            (!fighter.name.length || typeof fighter.name !== 'string') &&
-            (!fighter.outcome.length || typeof fighter.outcome !== 'string') &&
-            (!fighter.fighterId.length || typeof fighter.fighterId !== 'string') &&
-            (!fighter.fighterUrl.length || typeof fighter.fighterUrl !== 'string') &&
+            (!fighter.name.length || typeof fighter.name !== 'string') ||
+            (!fighter.outcome.length || typeof fighter.outcome !== 'string') ||
+            (!fighter.fighterId || !fighter.fighterId.length || typeof fighter.fighterId !== 'string') ||
+            (!fighter.fighterUrl.length || typeof fighter.fighterUrl !== 'string') ||
             (!fighter.stats || typeof fighter.stats !== 'object')
         ) {
             this.registerLog('error');

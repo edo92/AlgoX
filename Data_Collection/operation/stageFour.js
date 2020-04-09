@@ -35,23 +35,28 @@ class StageFour {
             }
             else {
                 mine.getFighterStats(fighter.fighterUrl, async data => {
-                    // Split fighterUrl id make as fither id
-                    let fighterData = {
-                        fighterId: fighterId,
-                        name: fighter.name,
-                        stats: data.success
-                    };
+                    if (data.success) {
+                        // Split fighterUrl id make as fither id
+                        let fighterData = {
+                            fighterId: fighterId,
+                            name: fighter.name,
+                            stats: data.success
+                        };
 
-                    // Create fighter profile
-                    await db.actions.createFighter(fighterData);
+                        // Create fighter profile
+                        await db.actions.createFighter(fighterData);
 
-                    // After creating userprofile update fighter id in each fight
-                    await db.actions.updateEventFight(saveData);
+                        // After creating userprofile update fighter id in each fight
+                        await db.actions.updateEventFight(saveData);
 
-                    this.registerLog('saved');
+                        // Count collected amount
+                        this.registerLog('saved');
+                    }
+                    else {
+                        mineFighterStats(event, fight, each);
+                    }
                 })
             }
-            this.monitorProgress();
         }
 
         // Runing funtion above
@@ -67,6 +72,7 @@ class StageFour {
 
     registerLog = key => {
         this.state[key] = (this.state[key] || 0) + 1;
+        this.monitorProgress();
     }
 
     monitorProgress = () => {
