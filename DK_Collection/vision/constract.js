@@ -6,54 +6,57 @@ class Constract {
             let descript = item.description;
             let { minX, maxX, minY, maxY } = this.getPosition(item.boundingPoly.vertices);
 
+            console.log('position', minX, maxX, minY, maxY);
+            console.log('descirpt', descript);
+
             // First Name
-            if ((minX > 950 && minX < 1275) && (maxX > 1170 && maxX < 1306) &&
-                (minY > 1244 && minY < 1310) && (maxY > 1245 && maxY < 1811)
+            if ((minX > 800 && minX < 1430) && (maxX > 995 && maxX < 1545) &&
+                (minY > 1215 && minY < 1310) && (maxY > 1225 && maxY < 1310)
             ) {
                 state.fighter1.name = state.fighter1.name + `${state.fighter1.name ? ' ' : ''}` + this.constractName(descript);
             }
-            if ((minX > 1510 && minX < 1670) && (maxX > 1700 && maxX < 1910) &&
-                (minY > 1200 && minY < 1360) && (maxY > 1230 && maxY < 1345)
+            if ((minX > 1370 && minX < 1825) && (maxX > 1540 && maxX < 2350) &&
+                (minY > 1190 && minY < 1360) && (maxY > 1230 && maxY < 1355)
             ) {
                 state.fighter2.name = state.fighter2.name + `${state.fighter2.name ? ' ' : ''}` + this.constractName(descript);
             };
 
             // Price
-            if ((minX > 470 && maxX < 700) && (minY > 590 && maxY < 615)
+            if ((minX > 420 && maxX < 700) && (minY > 575 && maxY < 615)
             ) {
                 state.fighter1.price = state.fighter1.price = descript.split('$')[1];
             };
-            if ((minX > 2115 && maxX < 2350) && (minY > 585 && maxY < 615)
+            if ((minX > 2115 && maxX < 2387) && (minY > 575 && maxY < 615)
             ) {
                 state.fighter2.price = state.fighter2.price = descript.split('$')[1];
             };
 
             // Odds
-            if ((minX > 540 && maxX < 695) && (minY > 805 && maxY < 825)
+            if ((minX > 500 && maxX < 695) && (minY > 805 && maxY < 825)
             ) {
                 state.fighter1.odds = state.fighter1.odds = descript;
             };
-            if ((minX > 2120 && maxX < 2285) && (minY > 805 && maxY < 825)
+            if ((minX > 2110 && maxX < 2330) && (minY > 805 && maxY < 825)
             ) {
                 state.fighter2.odds = state.fighter2.odds = descript;
             };
 
             // FPPF
-            if ((minX > 510 && maxX < 710) && (minY > 1245 && maxY < 1275)
+            if ((minX > 470 && maxX < 710) && (minY > 1245 && maxY < 1278)
             ) {
                 state.fighter1.fppf = state.fighter1.fppf = descript;
             };
-            if ((minX > 2115 && maxX < 2320) && (minY > 1245 && maxY < 1270)
+            if ((minX > 2090 && maxX < 2350) && (minY > 1240 && maxY < 1275)
             ) {
-                state.fighter2.fppf = state.fighter2.fppf = descript;
+                state.fighter2.fppf = state.fighter2.fppf = descript.length ? descript : 0;
             };
 
             // Record
-            if ((minX > 480 && maxX < 695) && (minY > 1015 && maxY < 1030)
+            if ((minX > 400 && maxX < 695) && (minY > 1015 && maxY < 1035)
             ) {
                 state.fighter1.record = state.fighter1.record = descript;
             }
-            if ((minX > 2115 && maxX < 2380) && (minY > 1025 && maxY < 1050)
+            if ((minX > 2115 && maxX < 2415) && (minY > 1025 && maxY < 1050)
             ) {
                 state.fighter2.record = state.fighter2.record = descript;
             }
@@ -79,12 +82,12 @@ class Constract {
             let positions = this.getPosition(item.boundingPoly.vertices);
             let { minX, maxX, minY, maxY } = positions;
 
-            // console.log('position', minX, maxX, minY, maxY);
-            // console.log('descirpt', descript);
+            console.log('position', minX, maxX, minY, maxY);
+            console.log('descirpt', descript);
 
             if ((minY > 250 && minY < 1000) && (maxY > 550 && maxY < 650)
             ) {
-                if ((minX > 250 && minX < 1500) && (maxX > 300 && maxX < 1250)) {
+                if ((minX > 250 && minX < 1500) && (maxX > 300 && maxX < 1290)) {
                     state.ft1.ftr1 = state.ft1.ftr1 + ' ' + descript;
                 }
                 // F1 fppt
@@ -98,7 +101,7 @@ class Constract {
             };
             if ((minY > 775 && minY < 870) && (minY > 775 && minY < 870)
             ) {
-                if ((minX > 245 && minX < 1500) && (maxX > 350 && maxX < 1250)) {
+                if ((minX > 245 && minX < 1500) && (maxX > 350 && maxX < 1300)) {
                     state.ft2.ftr1 = state.ft2.ftr1 + ' ' + descript;
                 }
                 // F2 fppt
@@ -116,22 +119,22 @@ class Constract {
             }
             if ((minY > 1000 && minY < 1100) && (minY > 1000 && minY < 1100)
             ) {
-                if ((minX > 250 && minX < 1500) && (maxX > 410 && maxX < 1500)) {
+                if ((minX > 250 && minX < 1490) && (maxX > 360 && maxX < 1500)) {
                     state.ft3.ftr1 = state.ft3.ftr1 + ' ' + descript;
-                }
-                // f1 fttf
-                if ((minX > 270 && minX < 320) && (maxX > 340 && maxX < 445)) {
-                    if (descript.length) state.ft3.ftr1 = state.ft3.ftr1 + ' ' + descript;
                 }
 
                 if ((minX > 1600 && minX < 2500) && (maxX > 1700 && maxX < 2750)) {
                     state.ft3.ftr2 = state.ft3.ftr2 + ' ' + descript;
                 }
+                // f1 fttf
+                if ((minX > 270 && minX < 320) && (maxX > 340 && maxX < 445)) {
+                    if (descript.length) state.ft3.ftr1 = state.ft3.ftr1 + ' ' + descript;
+                }
             }
 
             if ((minY > 1225 && minY < 1330) && (minY > 1225 && minY < 1330)
             ) {
-                if ((minX > 250 && minX < 1500) && (maxX > 300 && maxX < 1530)) {
+                if ((minX > 250 && minX < 1496) && (maxX > 300 && maxX < 1530)) {
                     state.ft4.ftr1 = state.ft4.ftr1 + ' ' + descript;
                 }
                 // f1 fttf
@@ -160,6 +163,10 @@ class Constract {
 
                 if ((minX > 1600 && minX < 2500) && (maxX > 1700 && maxX < 2750)) {
                     state.ft5.ftr2 = state.ft5.ftr2 + ' ' + descript;
+                }
+                //fppf f2
+                if ((minX > 1635 && minX < 1650) && (maxX > 1535 && maxX < 1555)) {
+                    if (descript.length) state.ft5.ftr2 = state.ft5.ftr2 + ' ' + descript;
                 }
             }
         })
@@ -197,20 +204,21 @@ class Constract {
 
     constractName = (nameData) => {
         let char = '', translate = {
-            "ä": "a", "á": "a", "ò": "o", "ö": "o", "ü": "u", "ž": "z", "ć": "c",
-            "Ä": "A", "Á": "A", "Ö": "O", "Ü": "U"
+            "ä": "a", "á": "a", "ò": "o", "ö": "o", "ü": "u", "ž": "z", "ć": "c", "è": "e", "é": "e", "ł": "l",
+            "Ä": "A", "Á": "A", "Ö": "O", "Ü": "U", "É": "E",
         };
 
         let name = nameData.toLowerCase();
         name = name.charAt(0).toUpperCase() + name.slice(1);
 
+        if (name === 'Vs') return ''
         for (let i in name) {
             let letter = name[i];
             let specChar = translate[letter];
             if (specChar) char += specChar;
             else char += letter;
         }
-        return char;
+        return char.trim();
     }
 
     getPosition = (position) => {

@@ -34,6 +34,7 @@ class Constract {
                     item.description !== 'RECORD' && item.description !== 'FPPF' &&
                     item.description !== 'CC' && item.description !== '|' &&
                     item.description !== 'I|' && item.description !== 'I' &&
+                    item.description !== 'Vs' &&
                     (i > 0)) {
                     return item.description;
                 }

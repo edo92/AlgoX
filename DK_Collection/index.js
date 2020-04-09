@@ -24,6 +24,7 @@ class DkCollection {
 
         if (isExists) {
             this.registerLog({ message: `Event has been registered` })
+            this.monitorState();
         }
         else {
             this.event = await db.actions.findEvent(this.eventName); //this.event
@@ -34,7 +35,7 @@ class DkCollection {
 
                 // Read Image
                 let dkRecord = await vision.readImage(`${this.path}/${image}`);
-
+                console.log('dkRecord', dkRecord)
                 // Combine dk image data with fighter object
                 let updated = await util.combine(this.event, dkRecord);
 
@@ -42,6 +43,7 @@ class DkCollection {
                 await db.actions.saveDkPointsToEvent(this.eventName, updated);
 
                 this.registerLog('registed');
+                this.monitorState();
             })
             this.registerEvent(this.eventName);
         }
