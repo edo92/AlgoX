@@ -52,7 +52,7 @@ class QualityCheck extends Validation {
                 this.fighterValidation(fighter);
 
                 // Validate fighter stats
-                this.statsValidation(fighter.stats);
+                this.fightStatsValidation(fighter.stats);
 
                 // Separate each fighter 
                 this.fighterList.push(fighter);
@@ -62,7 +62,7 @@ class QualityCheck extends Validation {
 
     analizeFighters = fighters => {
         for (let each in fighters) {
-            this.fighterStatsValidation(fighters[each]);
+            this.fightStatsValidation(fighters[each]);
             this.registerLog('registered');
         }
     }

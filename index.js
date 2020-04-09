@@ -21,8 +21,8 @@ class DataColection {
             // stageThree.start();
 
             // Collect Fighters stats
-            let stageFour = new operation.operationFour(this.page);
-            stageFour.start();
+            // let stageFour = new operation.operationFour(this.page);
+            // stageFour.start();
         });
     }
 }

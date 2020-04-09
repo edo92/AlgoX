@@ -32,14 +32,13 @@ class StageTwo {
                     // Increment collected
                     this.state.event = saved.success.name
                     this.state.collected = (this.state.collected || 0) + 1;
+                    // Monitor State (collection loop)
+                    this.monitorState();
                 }
                 else {
                     // Retry saving data
                     db.actions.saveEventFights(id, res);
                 }
-
-                // Monitor State (collection loop)
-                this.monitorState();
             })
         })
     }

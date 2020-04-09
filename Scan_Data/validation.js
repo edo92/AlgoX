@@ -21,27 +21,27 @@ class StageTwo {
         }
     }
 
-    statsValidation = stats => {
-        for (let data in stats) {
-            if (
-                (typeof stats[data] !== 'string') ||
-                (!stats[data].length) ||
-                (!stats[data])
-            ) {
-                this.registerLog('error');
-            }
+    fightStatsValidation = stats => {
+        if (!Object.keys(stats).length) {
+            this.registerLog('Fight Stats Validation');
         }
     }
 
     fighterValidation = fighter => {
-        if (
-            (!fighter.name.length || typeof fighter.name !== 'string') ||
-            (!fighter.outcome.length || typeof fighter.outcome !== 'string') ||
-            (!fighter.fighterId || !fighter.fighterId.length || typeof fighter.fighterId !== 'string') ||
-            (!fighter.fighterUrl.length || typeof fighter.fighterUrl !== 'string') ||
-            (!fighter.stats || typeof fighter.stats !== 'object')
-        ) {
-            this.registerLog('error');
+        if (!fighter.name.length || typeof fighter.name !== 'string') {
+            this.registerLog('Fighter Name Validation');
+        }
+        if (!fighter.outcome.length || typeof fighter.outcome !== 'string') {
+            this.registerLog('Fighter Outcome Validation');
+        }
+        if (!fighter.fighterId || !fighter.fighterId.length || typeof fighter.fighterId !== 'string') {
+            this.registerLog('Fighter FighterId Validation');
+        }
+        if (!fighter.fighterUrl.length || typeof fighter.fighterUrl !== 'string') {
+            this.registerLog('Fighter FighterUrl Validation');
+        }
+        if (!fighter.stats || typeof fighter.stats !== 'object') {
+            this.registerLog('Fighter Object Stats Validation');
         }
     }
 
@@ -54,7 +54,7 @@ class StageTwo {
             (!fight.statUrl.length || typeof fight.statUrl !== 'string') &&
             (typeof fight.fighter1 !== 'string') && (typeof fight.fighter2 !== 'string')
         ) {
-            this.registerLog('error');
+            this.registerLog('Fight Validation');
         }
     }
 
@@ -64,7 +64,7 @@ class StageTwo {
             (!event.link.length || typeof event.link !== 'string') &&
             (!event.fights.length || typeof event.fights !== 'object')
         ) {
-            this.registerLog('error');
+            this.registerLog('Event Validation');
         }
     }
 }
