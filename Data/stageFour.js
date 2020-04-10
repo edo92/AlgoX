@@ -1,3 +1,4 @@
+// Constract trainData, outcome, ... upcomint events
 class StageFour {
     constructor() {
         this.stageFour = async fightList => {
@@ -12,13 +13,17 @@ class StageFour {
 
             let shuffledList = this.shuffleData(trainData);
 
+            console.log('compare', shuffledList[11])
+
             // Constract outcome array
             let outcome = shuffledList.map(fight => {
                 return fight.map(fighter => {
-                    return [fighter.pop()];
+                    console.log('fighter',fighter)
+                    fighter.shift();
+                    return [fighter.shift() === 'Loss' ? 0 : 1];
                 })
             })
-            
+
             return { trainData, outcome };
         }
     }

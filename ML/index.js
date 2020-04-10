@@ -10,27 +10,33 @@ class DeepLearning extends Data {
         this.state = [];
     }
 
-    start = async () => {
-        let data = await this.prepareData();
+    predict = async data => {
         this.trainConfiguration(data);
     }
 
     trainConfiguration = data => {
-        const trinData = tf.tensor3d(data.data);
-
+        const trinData = tf.tensor3d(data.trainData);
         const outcome = tf.tensor3d(data.outcome);
-
-        const predict = tf.tensor3d([data.data[1]]);
+        const predict = tf.tensor3d([data.trainData[11]]);
 
         const model = tf.sequential();
 
-        model.add(tf.layers.dense({ units: 1, inputShape: [2, 28], activation: 'tanh' }))
-        model.add(tf.layers.dense({ units: 1, activation: 'sigmoid' }))
-        model.compile({ optimizer: tf.train.adam(.06), loss: 'meanSquaredError', lr: 0.1 })
+        model.add(tf.layers.dense({
+            units: 1, activation: 'relu', inputShape: [2, 24]
+        }));
+
+        model.add(tf.layers.dense({ units: 1 }));
+
+        model.compile({
+            loss: 'meanSquaredError',
+            optimizer: tf.train.sgd(0.000001),
+            metrics: ['MAE']
+        });
 
         model.fit(trinData, outcome, {
-            batchSize: 1,
-            epochs: 1000
+            batchSize: 64,
+            epochs: 1000,
+            validation_split: 0.2,
         })
             .then((resp) => {
                 model.predict(predict).print();
@@ -38,9 +44,7 @@ class DeepLearning extends Data {
             .catch(err => {
                 throw err;
             })
-
     }
 }
 
-let test = new DeepLearning;
-test.start();
+module.exports = DeepLearning;

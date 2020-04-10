@@ -34,20 +34,17 @@ class StageTwo extends StageThree {
                 let fighter = fight[each];
 
                 constracted[each] = {
-                    tdAcc: Number(fighter.TDAcc.split('%')[0]),
-
-                    // fighter and outcome
+                    // //-->  // fighter and outcome
                     name: fighter.name,
                     outcome: fighter.outcome,
-
                     // stats
                     age: new Date().getFullYear() - Number(fighter.dob.split(', ')[1]),
                     hight: Number(`${fighter.hight.split("'")[0]}.${fighter.hight.split("'")[1].split('"')[0].trim()}`),
-
+                    // Mes.
                     weight: Number(fighter.weight.split(' ')[0]),
                     reach: Number(fighter.reach.split('"')[0]),
 
-                    // strick
+                    //--->    // strick
                     sigStr: Number(fighter.strSigPers.split('%')[0]),
                     strAcc: Number(fighter.StrAcc.split('%')[0]),
                     strDef: Number(fighter.StrDef.split('%')[0]),
@@ -55,11 +52,13 @@ class StageTwo extends StageThree {
                     // Take down
                     takeDown: Number(fighter.takeDownPers.split('%')[0]),
                     strDef: Number(fighter.TDDef.split('%')[0]),
+                    tdAcc: Number(fighter.TDAcc.split('%')[0]),
 
                     // Submission
                     subAtt: Number(fighter.subAtt),
                     pass: Number(fighter.pass),
                     rev: Number(fighter.rev),
+
 
                     countable: {
                         // KO
@@ -87,7 +86,6 @@ class StageTwo extends StageThree {
             }
             list.push(constracted);
         }
-
         return this.stageThree(list);
     }
 }

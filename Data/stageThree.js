@@ -59,7 +59,7 @@ class StageThree extends StageFour {
             }
 
             this.monitorProgress();
-
+     
             // Organize each fighter object
             return this.stageFour(fightList);
         }

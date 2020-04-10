@@ -1,6 +1,7 @@
 const StageTwo = require('./stageTwo');
 const db = require('../DB');
 
+// Gethering fighter stats fith fighter performance stats
 class StageOne extends StageTwo {
     constructor() {
         super();
