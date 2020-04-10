@@ -4,7 +4,7 @@ require('dotenv').config();
 
 class DK_Collection {
     constructor() {
-        this.event = 'UFC Fight Night: Maia vs. Askren';
+        this.event = 'UFC 241: Cormier vs. Miocic 2';
     }
 
     start = () => {
