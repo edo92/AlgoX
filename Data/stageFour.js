@@ -18,7 +18,6 @@ class StageFour {
             // Constract outcome array
             let outcome = shuffledList.map(fight => {
                 return fight.map(fighter => {
-                    console.log('fighter',fighter)
                     fighter.shift();
                     return [fighter.shift() === 'Loss' ? 0 : 1];
                 })
