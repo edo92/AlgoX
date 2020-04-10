@@ -3,7 +3,7 @@ const operation = require('./Data_Collection');
 
 class DataColection {
     constructor() {
-        this.page = 1;
+        this.page = 5;
     }
 
     start = () => {
