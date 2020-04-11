@@ -49,7 +49,8 @@ class StageOne extends StageTwo {
                 this.monitorProgress();
                 return await this.stageTwo(res);
             })
-            .catch(() => {
+            .catch((err) => {
+                throw err
                 console.log('** Error Parsing data')
             })
         }

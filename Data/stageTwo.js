@@ -34,12 +34,14 @@ class StageTwo extends StageThree {
                 let fighter = fight[each];
 
                 constracted[each] = {
+                    // method: fight.method,
+
                     // //-->  // fighter and outcome
                     name: fighter.name,
                     outcome: fighter.outcome,
                     // stats
                     age: new Date().getFullYear() - Number(fighter.dob.split(', ')[1]),
-                    hight: Number(`${fighter.hight.split("'")[0]}.${fighter.hight.split("'")[1].split('"')[0].trim()}`),
+                    hight: Number(`${fighter.hight.split("'")[0]}${fighter.hight.split("'")[1].split('"')[0].trim()}`),
                     // Mes.
                     weight: Number(fighter.weight.split(' ')[0]),
                     reach: Number(fighter.reach.split('"')[0]),

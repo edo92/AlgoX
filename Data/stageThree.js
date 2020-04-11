@@ -1,9 +1,5 @@
-const StageFour = require('./stageFour');
-
-class StageThree extends StageFour {
+class StageThree {
     constructor() {
-        super();
-
         // Count countables
         this.stageThree = async fightList => {
             let list = {};
@@ -59,9 +55,9 @@ class StageThree extends StageFour {
             }
 
             this.monitorProgress();
-     
-            // Organize each fighter object
-            return this.stageFour(fightList);
+
+            // return raw data
+            return fightList;
         }
     }
 }

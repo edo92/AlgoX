@@ -7,8 +7,8 @@ class DataGethering extends StageOne {
 
         this.state = {};
 
-        this.getTrainData = async () => {
-            let eventList = await db.actions.getEvents();
+        this.getRawData = async () => {
+            let eventList = await db.db.Events.find()
             return await this.stageOne(eventList);
         }
 
