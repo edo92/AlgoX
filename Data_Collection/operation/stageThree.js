@@ -25,6 +25,7 @@ class stageThree {
             // If fighter1 and fihter2 stats has been saved
             if (fight.fighter1.stats && fight.fighter2.stats) {
                 this.state.message = 'Already exists';
+                this.state.exists = (this.state.exists || 0) + 1;
                 this.monitorProgress();
             }
             else {
@@ -78,7 +79,6 @@ class stageThree {
                                 this.state.error = (this.state.error || 0) + 1;
                             }
                         }
-
                     }
                 })
             }
