@@ -13,7 +13,7 @@ class CreateDataModel {
     }
 
     getModel = model => {
-        return require(`./${model}.json`)
+        return require(`./${model}.json`);
     }
 
     saveModelData = (name, model) => {

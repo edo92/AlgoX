@@ -3,7 +3,7 @@ require("@tensorflow/tfjs-node");
 
 class TrainData {
     getTrainedModel = async modelName => {
-        return await tf.loadLayersModel(`file://./ML/train/${modelName}/model.json`);
+        return await tf.loadLayersModel(`file://./ML/train/${modelName}-model/model.json`);
     }
 
     trainData = async (data, modelName) => {
