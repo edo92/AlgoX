@@ -10,7 +10,6 @@ var EventsSchema = new Schema({
 
     date: {
         type: String,
-        unique: true
     },
 
     location: {
