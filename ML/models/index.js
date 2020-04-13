@@ -16,6 +16,10 @@ class CreateDataModel {
         return require(`./${model}.json`);
     }
 
+    getDataModel = data =>{
+        return require(`./${data}.json`);
+    }
+
     saveModelData = (name, model) => {
         // Stringify model data save in models folder
         const modelJson = JSON.stringify(model);

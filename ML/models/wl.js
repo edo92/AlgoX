@@ -18,7 +18,7 @@ class WinLossRation {
 
             // Shuffle data 2 layer deep
             let shuffled = shuffleData(readyData);
-
+            
             // Remove outcome and create outcome array with that data
             let outcome = shuffled.map(each => {
                 each.map(dataset => { // Remove name

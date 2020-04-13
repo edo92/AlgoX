@@ -12,20 +12,23 @@ class TrainData {
 
         const model = tf.sequential();
 
-        model.add(tf.layers.dense({ units: 2, inputShape: [2, 24], activation: 'relu' }));
+        model.add(tf.layers.dense({ units: 24, inputShape: [2, 24], activation: 'sigmoid' }));
+        model.add(tf.layers.dense({ units: 8, activation: 'sigmoid' }));
         model.add(tf.layers.dense({ units: 2, activation: 'softmax' }));
 
-        model.compile({
+        await model.compile({
             optimizer: tf.train.adam(),
             loss: 'sparseCategoricalCrossentropy',
-            metrics: ['accuracy']
+            metrics: ['accuracy'],
         })
 
         await model.fit(trinData, outcome, {
             epochs: 100
         })
 
-        await model.save(`file://./ML/train/${modelName}`);
+        await model.save(`file://./ML/train/${modelName}-model`);
+
+
 
         console.log('Model data has been saved')
     }

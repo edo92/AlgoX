@@ -17,8 +17,40 @@ class DeepLearning {
 
     predict = async () => {
         let model = await train.getTrainedModel('wl');
-        let dataXX = [[[33,61,185,77,35,43,46,0,43,0,0,0,202,72,56,185,13,14,3,3,71,201,1,0],[33,61,205,75,35,45,76,0,40,0,0,0,97,38,21,74,7,11,10,12,33,91,0,1]]]
-        predict.predict(model, dataXX);
+        let dataModel = await models.getDataModel('wl');
+
+        for (let i in dataModel.outcome) {
+            let prediction = await predict.predict(model, [dataModel.trainData[i]]);
+            let outcome = dataModel.outcome[i];
+
+            let firstOne = prediction[0][0][0];
+            let firstTwo = prediction[0][1][0];
+            let firstWin = outcome[0][0] === 1;
+
+            let result = null;
+            if (firstWin) {
+                if (firstOne < firstTwo) {
+                    result = true
+                }
+                else {
+                    result = false
+                }
+            }
+            else {
+                if (firstOne > firstTwo) {
+                    result = true
+                }
+                else {
+                    result = false
+                }
+            }
+
+            console.log('----------------------')
+            console.log('outcome', outcome)
+            console.log('prediction', prediction)
+            console.log('is Correct', result)
+            console.log('======================')
+        }
     }
 }
 
