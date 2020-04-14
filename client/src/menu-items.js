@@ -17,8 +17,29 @@ export default {
                     id: 'draft',
                     title: 'Draft',
                     type: 'item',
-                    icon: 'feather icon-home',
+                    icon: 'feather icon-edit',
                     url: '/draft',
+                },
+                {
+                    id: 'analize',
+                    title: 'Analize',
+                    type: 'item',
+                    icon: 'feather icon-activity',
+                    url: '/analize',
+                },
+                {
+                    id: 'ml',
+                    title: 'ML',
+                    type: 'item',
+                    icon: 'feather icon-cpu',
+                    url: '/ml',
+                },
+                {
+                    id: 'settings',
+                    title: 'Settings',
+                    type: 'item',
+                    icon: 'feather icon-sliders',
+                    url: '/settings',
                 }
             ]
         }

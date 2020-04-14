@@ -6,11 +6,13 @@ window.$ = $;
 global.jQuery = $;
 
 const Dashboard = React.lazy(() => import('./Views/Dashboard'));
+const Analize = React.lazy(() => import('./Views/Analize'));
 const Draft = React.lazy(() => import('./Views/Draft'));
 
 const routes = [
     { path: '/dashboard', exact: true, name: 'Dashboard', component: Dashboard },
-    { path: '/draft', exact: true, name: 'draft', component: Draft },
+    { path: '/analize', exact: true, name: 'Analize', component: Analize },
+    { path: '/draft', exact: true, name: 'Draft', component: Draft },
 ];
 
 export default routes;
