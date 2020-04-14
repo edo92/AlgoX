@@ -1,5 +1,4 @@
 const StageOne = require('./stageOne');
-const db = require('../DB');
 
 class DataGethering extends StageOne {
     constructor() {
@@ -7,9 +6,8 @@ class DataGethering extends StageOne {
 
         this.state = {};
 
-        this.getRawData = async () => {
-            let eventList = await db.db.Events.find();
-            return await this.stageOne(eventList);
+        this.rawDataset = async list => {
+            return await this.stageOne(list);
         }
 
         this.registerLogs = obj => {

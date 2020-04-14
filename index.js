@@ -1,10 +1,31 @@
 const db = require('./DB');
+const util = require('./utility');
+
 const ml = require('./ML');
 
-start();
+class ControlPanel {
+    // predict = () => {
+    //     ml.predict();
+    // }
 
-async function start() {
-    db.connect();
+    analize = () => {
+        ml.analitic();
+    }
 
-    ml.predict();
+    train = () => {
+        ml.train();
+    }
+
+    createDataset = async () => {
+        db.connect();
+        // get fight list
+        let fightList = await db.actions.getAllFights();
+        // make raw with util lib
+        let rawDataset = await util.rawDataset(fightList);
+        // create dataset and save
+        ml.createDataset(rawDataset, { save: true });
+    }
 }
+
+let control = new ControlPanel;
+control.analize();

@@ -2,7 +2,7 @@ const tf = require('@tensorflow/tfjs');
 require("@tensorflow/tfjs-node");
 
 class Predict {
-    predict = async (model, predictData) => {
+    predictSet = async (model, predictData) => {
         const predict = tf.tensor3d(predictData);
         return await model.predict(predict).array();
     }

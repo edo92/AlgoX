@@ -56,8 +56,14 @@ class StageThree {
 
             this.monitorProgress();
 
-            // return raw data
-            return fightList;
+            // return raw data array in 3d form
+            return fightList.map(fight => {
+                return Object.keys(fight).map(each => {
+                    return Object.keys(fight[each]).map(points => {
+                        return fight[each][points];
+                    })
+                })
+            })
         }
     }
 }

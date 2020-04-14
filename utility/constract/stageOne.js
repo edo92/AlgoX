@@ -1,5 +1,5 @@
 const StageTwo = require('./stageTwo');
-const db = require('../DB');
+const db = require('../../DB');
 
 // Gethering fighter stats fith fighter performance stats
 class StageOne extends StageTwo {
@@ -8,22 +8,11 @@ class StageOne extends StageTwo {
 
         this.fightList = [];
 
-        this.stageOne = async eventList => {
-            // Separate each fight from each event / to this.fightList
-            await eventList.map(async event => {
-                // Keep track of how meny events has been scaned
-                this.registerLogs('events');
-
-                await event.fights.map(fight => {
-                    // Keep track of how meny fights has been scaned
-                    this.registerLogs('fights');
-                    // Seaparate each fight to this fightList
-                    this.fightList.push(fight);
-                })
-            })
+        this.stageOne = async list => {
+            this.fightList = list;
 
             // Map Each fight constract object with two fightes
-            let withStats = await this.fightList.map(async (fight, index) => {
+            let withStats = await list.map(async (fight, index) => {
                 // fight get personal stats for both fighters in each fight
                 let f1 = await db.db.Fighter.findOne({ fighterId: fight.fighter1.fighterId });
                 let f2 = await db.db.Fighter.findOne({ fighterId: fight.fighter2.fighterId });
@@ -49,10 +38,10 @@ class StageOne extends StageTwo {
                 this.monitorProgress();
                 return await this.stageTwo(res);
             })
-            .catch((err) => {
-                throw err
-                console.log('** Error Parsing data')
-            })
+                .catch((err) => {
+                    throw err
+                    console.log('** Error Parsing data')
+                })
         }
     }
 }
