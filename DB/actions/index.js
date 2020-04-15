@@ -20,6 +20,24 @@ class DbActions {
                 }
             })
         }
+
+
+        this.getUpcomeEvent = async () => {
+            try {
+                return await db.UpcomingEvent.findOne().sort({ date: 1 });
+            }
+            catch (err) { throw err };
+        }
+
+        this.getUpcomeFights = async () => {
+            try {
+                let upcomeEvent = await this.getUpcomeEvent();
+                return upcomeEvent.fights.map(fight => {
+                    return fight;
+                });
+            }
+            catch (err) { throw err };
+        }
     }
 }
 

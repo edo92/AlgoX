@@ -1,4 +1,5 @@
 module.exports = {
     Events: require('./events'),
-    Fighter: require('./fighter')
+    Fighter: require('./fighter'),
+    UpcomingEvent: require('./upcomEvent')
 };

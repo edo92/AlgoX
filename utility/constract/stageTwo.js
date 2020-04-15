@@ -5,6 +5,7 @@ class StageTwo extends StageThree {
         super();
 
         this.stageTwo = async eventList => {
+            console.log('eventlist', eventList)
             // Map new constracted list
             let combineList = await eventList.map(event => {
                 let { fighter1, fighter2 } = event;
