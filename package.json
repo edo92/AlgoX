@@ -9,7 +9,7 @@
     "dev": "concurrently \"nodemon server.js\" \"npm run client\"",
     "go": "concurrently \"node server.js\" \"npm run client\"",
     "build": "cd client && npm run-script build",
-    "setup": "npm install && cd client && npm install",
+    "setup": "yarn install && cd client && yarn install",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "",
