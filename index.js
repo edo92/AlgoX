@@ -30,6 +30,11 @@ class ControlPanel {
 
         // make raw with util lib
         let rawDataset = await util.rawDataset(fightList);
+
+        // rawDataset.map(item => {
+        //     console.log('rawDataset', item)
+        // })
+
         // create dataset and save
         ml.createDataset(rawDataset, { save: true });
     }

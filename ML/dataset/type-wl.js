@@ -1,4 +1,8 @@
 class WL {
+    constructor() {
+        this.state = {};
+    }
+
     create = (fightList, callback) => {
         let trainData = fightList.map(fight => {
             return fight.map(fighter => {
@@ -11,6 +15,8 @@ class WL {
                     return stats[stat];
                 })
 
+                this.state.length = statlist.length;
+                
                 // Add extra data
                 // statlist.push(fighter.name);
                 statlist.push(fighter.outcome);
@@ -25,7 +31,12 @@ class WL {
             })
         })
 
+        this.monitorProgress();
         callback({ trainData, outcome });
+    }
+
+    monitorProgress = () => {
+        console.log('state', this.state);
     }
 
     constract = stats => {

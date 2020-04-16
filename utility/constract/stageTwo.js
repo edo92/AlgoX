@@ -1,9 +1,12 @@
 class StageTwo {
     constructor() {
+        this.allEvents = [];
         this.countables = {};
     }
 
-    stageTwo = async (envFtrs) => {
+    stageTwo = async envFtrs => {
+        this.allEvents = await this.db.Events.find();
+
         for (let fighter in envFtrs) {
             let { fighterId } = envFtrs[fighter];
             // Create fighter name object in countables
@@ -65,7 +68,7 @@ class StageTwo {
         }
 
         this.eventFighters = [];
-        
+
         return this.countables;
     }
 
