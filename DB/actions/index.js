@@ -14,11 +14,12 @@ class DbActions {
         this.getAllFights = async () => {
             let events = await this.getEvents();
             // Return all fights of every event
-            return events.map(event => {
-                for (let fight in event.fights) {
-                    return event.fights[fight];
-                }
+
+            let fightList = [];
+            events.map(event => {
+                fightList = fightList.concat(event.fights);
             })
+            return fightList;
         }
 
 

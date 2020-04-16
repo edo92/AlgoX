@@ -3,8 +3,7 @@ const Formats = require('./formats');
 class StageTwo extends Formats {
     constructor() {
         super()
-        
-        this.allEvents = [];
+
         this.countables = {};
     }
 
@@ -48,13 +47,13 @@ class StageTwo extends Formats {
 
         for (let stats in this.countables) {
             const count = this.countables[stats].count;
-            
+
             for (let data in this.countables[stats]) {
                 if (data !== 'count' && data !== 'kd' && data !== 'rev' &&
                     data !== 'sigStr' && data !== 'takeDown' &&
                     data !== 'subAtt' && data !== 'pass'
                 ) {
-                    this.countables[stats][data] = this.countables[stats][data] / count;
+                    this.countables[stats][data] = Math.round((this.countables[stats][data] / count) * 2) / 2;
                 }
             }
             delete this.countables[stats].count;
@@ -78,7 +77,7 @@ class StageTwo extends Formats {
 
     getRawData = stats => {
         return {
-            fight: stats.pastFights.length,
+            fight: stats.pastFights.length - 1,
 
             age: new Date().getFullYear() - Number(stats.dob.split(', ')[1]),
             hight: Number(`${stats.hight.split("'")[0]}.${stats.hight.split("'")[1].split('"')[0].trim()}`),

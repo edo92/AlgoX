@@ -1,11 +1,6 @@
 class WL {
     constructor() {
         this.state = {};
-
-        this.config = {
-            points: 34,
-            type: 'wl'
-        }
     }
 
     stageThree = (fightList) => {
@@ -18,7 +13,7 @@ class WL {
 
                 // Reaturn each data point rount nearest 10
                 let statlist = Object.keys(stats).map(stat => {
-                    return Math.round(stats[stat] * 2) / 2;
+                    return stats[stat]//Math.round(stats[stat] * 2) / 2;
                 })
 
                 // Count constracted objects
@@ -40,7 +35,8 @@ class WL {
 
         this.monitorProgress();
 
-        return { dataset, outcome, config: this.config };
+        let config = { ...this.config, points: this.state.constracted };
+        return { dataset, outcome, config };
     }
 
     // Reorganize data points object

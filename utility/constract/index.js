@@ -7,7 +7,7 @@ class StageOne extends StageTwo {
         super();
 
         this.db = db.db;
-        this.options = {};
+        this.config = {};
         this.eventFighters = [];
     }
 
@@ -32,7 +32,7 @@ class StageOne extends StageTwo {
                 return { ...data, name, fighterId };
             })
         })
-        
+
         return await this.stageThree(readyList);
     }
 }

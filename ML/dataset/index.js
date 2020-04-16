@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 class Dataset {
-    createDataset = async (dataset, name) => {
+    createDataset = async (dataset, name, config) => {
         const filePath = `ML/dataset/datasets/${name}.json`;
         let json = JSON.stringify(dataset);
 

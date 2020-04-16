@@ -7,8 +7,8 @@ class ML {
         this.analize = require('./analize');
     }
 
-    createDataset = async (rawDataset, options) => {
-        this.dataset.createDataset(rawDataset, options);
+    createDataset = async (rawDataset, name, config) => {
+        this.dataset.createDataset(rawDataset, name, config);
     }
 
     train = async () => {

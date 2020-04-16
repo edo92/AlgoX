@@ -2,6 +2,7 @@
 class Train {
     trainModel = async (dataset) => {
         const shapeY = dataset.config.points;
+        console.log('test', dataset.config)
         const shapeX = 2;
 
         const trinData = this.tf.tensor3d(dataset.dataset);
@@ -20,7 +21,7 @@ class Train {
         })
 
         await model.fit(trinData, outcome, {
-            epochs: 100
+            epochs: 10
         })
 
         await model.save(`${this.modelPath}/${dataset.config.type}-model`);

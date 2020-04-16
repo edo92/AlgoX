@@ -4,6 +4,13 @@ const util = require('./utility');
 const ml = require('./ML');
 
 class ControlPanel {
+    test = async () => {
+        db.connect();
+
+        let fightList = await db.actions.getAllFights();
+
+    }
+
     analize = async () => {
         ml.analitic();
     }
@@ -30,6 +37,8 @@ class ControlPanel {
             if (firstOne > firstTwo) {
                 result = { secondWin: true }
             }
+            console.log('prediction,', prediction)
+            console.log('result,', result)
         })
     }
 
@@ -40,10 +49,10 @@ class ControlPanel {
         // console.log('fightList', fightList);
 
         // pass event(s) get back each fighter data in raw
-        let rawDataset = await util.rawDataset(fightList, { format: 'wl' });
+        let rawDataset = await util.rawDataset(fightList, { format: 'wl', dataset: true });
 
         // create dataset and save
-        ml.createDataset(rawDataset, 'wl');
+        ml.createDataset(rawDataset, 'wl', {});
     }
 }
 
