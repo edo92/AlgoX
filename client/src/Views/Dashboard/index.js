@@ -55,6 +55,7 @@ class SamplePage extends Component {
                         loading={this.state.draftLoad}
                         onClick={() => this.draftEvent(props.event)}
                     >
+                        {console.log('test', props.event)}
                         <span>{!this.state.draftLoad && this.state.drafting ? 'Drafted' : 'Draft'}</span>
                     </Button>
                 </span>
@@ -68,7 +69,14 @@ class SamplePage extends Component {
                             {this.state.events ? this.state.events.map((event, i) => {
                                 return (
                                     <Card key={i + event.name} isOption title={<EventHeader event={event} />}>
-                                        <p></p>
+                                        {event.fights.map(fight => (
+                                            <Row>
+                                                <Col style={{ display: 'flex', justifyContent: 'space-around' }}>
+                                                    <p>{fight.fighter1.name}</p>
+                                                    <p>{fight.fighter2.name}</p>
+                                                </Col>
+                                            </Row>
+                                        ))}
                                     </Card>
                                 )
                             }) : <Skeleton />}

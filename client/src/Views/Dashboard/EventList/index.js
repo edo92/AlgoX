@@ -22,7 +22,6 @@ class EventList extends Component {
     }
 
     render() {
-        console.log('this.props', this.props.list)
         return (
             <div className='col-12'>
                 <Card title='Upcoming Events'>

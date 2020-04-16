@@ -32,6 +32,12 @@ module.exports = io => {
             })
         });
 
+        socket.on('ml', data => {
+            routes.ml(data, list => {
+                socket.emit('ml', list)
+            })
+        })
+
         socket.on('disconnect', () => {
             socket.disconnect();
         });
