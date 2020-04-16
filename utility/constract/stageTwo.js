@@ -1,95 +1,119 @@
-const StageThree = require('./stageThree');
-
-class StageTwo extends StageThree {
+class StageTwo {
     constructor() {
-        super();
+        this.countables = {};
+    }
 
-        this.stageTwo = async eventList => {
-            console.log('eventlist', eventList)
-            // Map new constracted list
-            let combineList = await eventList.map(event => {
-                let { fighter1, fighter2 } = event;
+    stageTwo = async (envFtrs) => {
+        for (let fighter in envFtrs) {
+            let { fighterId } = envFtrs[fighter];
+            // Create fighter name object in countables
+            !this.countables[fighterId] && (this.countables[fighterId] = {});
+        }
 
-                return { // Combine each fighter [outcome, stats, fighterStats]
-                    fighter1: { outcome: fighter1.outcome, ...fighter1.stats, ...fighter1.fighterStats },
-                    fighter2: { outcome: fighter2.outcome, ...fighter2.stats, ...fighter2.fighterStats }
+        for (let event in this.allEvents) {
+            let thisEvent = this.allEvents[event];
+
+            // Map each fight in all events
+            for (let fight in thisEvent.fights) {
+                let thisFight = thisEvent.fights[fight];
+
+                // Each fighter in the fight
+                ['fighter1', 'fighter2'].map(each => {
+                    let fighter = thisFight[each];
+
+                    if (this.countables[fighter.fighterId]) {
+
+                        let rawData = this.performaceRawData(fighter.stats);
+
+                        Object.keys(rawData).map(key => {
+                            let data = rawData[key];
+
+                            if (!this.countables[fighter.fighterId][key]) {
+                                this.countables[fighter.fighterId][key] = 0;
+                                this.countables[fighter.fighterId].count = 0;
+                            }
+
+                            this.countables[fighter.fighterId][key] += data;
+                            this.countables[fighter.fighterId].count += 1;
+                        })
+                    }
+                })
+            }
+        }
+
+        for (let stats in this.countables) {
+            const count = this.countables[stats].count;
+
+            for (let data in this.countables[stats]) {
+                if (data !== 'count' && data !== 'kd' && data !== 'rev' &&
+                    data !== 'sigStr' && data !== 'takeDown' &&
+                    data !== 'subAtt' && data !== 'pass'
+                ) {
+                    this.countables[stats][data] = this.countables[stats][data] / count;
                 }
-            })
-            // Constract new object
-            return await this.constractObject(combineList);
+            }
+            delete this.countables[stats].count;
+        }
+
+        for (let fighter in this.countables) {
+            let profile = await this.db.Fighter.findOne({ fighterId: fighter });
+            delete profile.stats.pastFights;
+
+            let rawData = this.getRawData(profile.stats);
+
+            this.countables[fighter] = { ...this.countables[fighter], ...rawData };
+        }
+
+        this.eventFighters = [];
+        
+        return this.countables;
+    }
+
+    getRawData = stats => {
+        return {
+            strAcc: Number(stats.StrAcc.split('%')[0]),
+            strDef: Number(stats.StrDef.split('%')[0]),
+            strDef: Number(stats.TDDef.split('%')[0]),
+            tdAcc: Number(stats.TDAcc.split('%')[0]),
+
+            age: new Date().getFullYear() - Number(stats.dob.split(', ')[1]),
+            hight: Number(`${stats.hight.split("'")[0]}.${stats.hight.split("'")[1].split('"')[0].trim()}`),
+            // Mes.
+            weight: Number(stats.weight.split(' ')[0]),
+            reach: Number(stats.reach.split('"')[0]),
         }
     }
 
-    constractObject = async fights => {
-        let list = [];
+    performaceRawData = stats => {
+        return {
+            sigStr: Number(stats.strSigPers.split('%')[0]),
+            // Take down
+            takeDown: Number(stats.takeDownPers.split('%')[0]),
+            // Submission
+            subAtt: Number(stats.subAtt),
+            pass: Number(stats.pass),
+            rev: Number(stats.rev),
 
-        for (let eachF in fights) {
-            // Each fight
-            let fight = fights[eachF];
-
-            // Constract fighter object
-            let constracted = {};
-
-            for (let each in fight) {
-                // Each fighter in a fight
-                let fighter = fight[each];
-
-                constracted[each] = {
-                    // method: fight.method,
-
-                    // //-->  // fighter and outcome
-                    name: fighter.name,
-                    outcome: fighter.outcome,
-                    // stats
-                    age: new Date().getFullYear() - Number(fighter.dob.split(', ')[1]),
-                    hight: Number(`${fighter.hight.split("'")[0]}${fighter.hight.split("'")[1].split('"')[0].trim()}`),
-                    // Mes.
-                    weight: Number(fighter.weight.split(' ')[0]),
-                    reach: Number(fighter.reach.split('"')[0]),
-
-                    //--->    // strick
-                    sigStr: Number(fighter.strSigPers.split('%')[0]),
-                    strAcc: Number(fighter.StrAcc.split('%')[0]),
-                    strDef: Number(fighter.StrDef.split('%')[0]),
-
-                    // Take down
-                    takeDown: Number(fighter.takeDownPers.split('%')[0]),
-                    strDef: Number(fighter.TDDef.split('%')[0]),
-                    tdAcc: Number(fighter.TDAcc.split('%')[0]),
-
-                    // Submission
-                    subAtt: Number(fighter.subAtt),
-                    pass: Number(fighter.pass),
-                    rev: Number(fighter.rev),
-
-
-                    countable: {
-                        // KO
-                        kd: Number(fighter.kd),
-                        // Strick
-                        sigStrTotal: Number(fighter.strSig.split(' of ')[1]),
-                        sigStrLanded: Number(fighter.strSig.split(' of ')[0]),
-                        // Head
-                        strHeadLanded: Number(fighter.strHead.split(' of ')[0]),
-                        strHeadTotal: Number(fighter.strHead.split(' of ')[1]),
-                        // Body
-                        strBodyLanded: Number(fighter.strBody.split(' of ')[0]),
-                        strBodyTotal: Number(fighter.strBody.split(' of ')[1]),
-                        // Leg
-                        strLegLanded: Number(fighter.strLeg.split(' of ')[0]),
-                        strLegTotal: Number(fighter.strLeg.split(' of ')[1]),
-                        // Distance
-                        distanceSucc: Number(fighter.distance.split(' of ')[0]),
-                        distanceTotal: Number(fighter.distance.split(' of ')[1]),
-                        // Takedown
-                        tdSucc: Number(fighter.takeDown.split(' of ')[0]),
-                        tdTotal: Number(fighter.takeDown.split(' of ')[1]),
-                    },
-                }
-            }
-            list.push(constracted);
+            kd: Number(stats.kd),
+            // Strick
+            sigStrTotal: Number(stats.strSig.split(' of ')[1]),
+            sigStrLanded: Number(stats.strSig.split(' of ')[0]),
+            // Head
+            strHeadLanded: Number(stats.strHead.split(' of ')[0]),
+            strHeadTotal: Number(stats.strHead.split(' of ')[1]),
+            // Body
+            strBodyLanded: Number(stats.strBody.split(' of ')[0]),
+            strBodyTotal: Number(stats.strBody.split(' of ')[1]),
+            // Leg
+            strLegLanded: Number(stats.strLeg.split(' of ')[0]),
+            strLegTotal: Number(stats.strLeg.split(' of ')[1]),
+            // Distance
+            distanceSucc: Number(stats.distance.split(' of ')[0]),
+            distanceTotal: Number(stats.distance.split(' of ')[1]),
+            // Takedown
+            tdSucc: Number(stats.takeDown.split(' of ')[0]),
+            tdTotal: Number(stats.takeDown.split(' of ')[1]),
         }
-        return this.stageThree(list);
     }
 }
 module.exports = StageTwo;

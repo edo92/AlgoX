@@ -5,8 +5,12 @@ class DataGethering extends StageOne {
         super();
 
         this.state = {};
+        this.allEvents = [];
 
-        this.rawDataset = async list => {
+        this.rawDataset = async (list, options) => {
+            this.allEvents = await this.db.Events.find()
+
+            this.state.options = options;
             return await this.stageOne(list);
         }
 

@@ -20,7 +20,6 @@ class ControlPanel {
         db.connect();
         let fightList = await db.actions.getUpcomeFights();
         let rawDataset = await util.rawDataset(fightList);
-        // console.log('rawDataset', rawDataset)
     }
 
     createDataset = async () => {
@@ -34,17 +33,7 @@ class ControlPanel {
         // create dataset and save
         ml.createDataset(rawDataset, { save: true });
     }
-
-    test = async () => {
-        db.connect();
-        //
-        let upcome = await db.actions.getUpcomeFights();
-
-        // let past = await db.actions.getAllFights();
-
-        let rawDataset = await util.rawDataset(upcome);
-    }
 }
 
 let control = new ControlPanel;
-control.test();
+control.createDataset();

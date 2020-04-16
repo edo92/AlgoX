@@ -6,7 +6,7 @@ class DbActions {
 
         this.getEvents = async () => {
             try {
-                return await db.Events.find().limit(5);
+                return await db.Events.find();
             }
             catch (err) { throw err }
         }
