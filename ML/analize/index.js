@@ -7,6 +7,7 @@ class AnalizeData {
 
     analize = async (dataModel, actions) => {
         for (let i in dataModel.outcome) {
+            // predict
             let prediction = await actions.prediction([dataModel.trainData[i]]);
             let outcome = dataModel.outcome[i];
 

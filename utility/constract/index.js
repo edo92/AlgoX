@@ -1,27 +1,40 @@
-const StageOne = require('./stageOne');
+const StageTwo = require('./constract');
+const db = require('../../DB');
 
-class DataGethering extends StageOne {
+// Fighter's fight performense through history avg.
+class StageOne extends StageTwo {
     constructor() {
         super();
 
-        this.state = {};
-        this.allEvents = [];
+        this.db = db.db;
+        this.options = {};
+        this.eventFighters = [];
+    }
 
-        this.rawDataset = async (list, options) => {
-            this.allEvents = await this.db.Events.find();
+    rawDataset = async (fightList, config) => {
+        this.config = config;
 
-            this.state.options = options;
-            return await this.stageOne(list);
+        this.allEvents = await this.db.Events.find();
+
+        for (let fight in fightList) {
+            ['fighter1', 'fighter2'].map(each => {
+                let { name, fighterId } = fightList[fight][each];
+                this.eventFighters.push({ fighterId, name });
+            })
         }
 
-        this.registerLogs = obj => {
-            this.state[obj] = (this.state[obj] || 0) + 1;
-        }
+        let stats = await this.stageTwo(this.eventFighters);
 
-        this.monitorProgress = () => {
-            console.log(this.state);
-        }
+        let readyList = fightList.map(fight => {
+            return ['fighter1', 'fighter2'].map(each => {
+                let { name, fighterId, outcome } = fight[each];
+                let data = { stats: stats[fighterId], outcome };
+                return { ...data, name, fighterId };
+            })
+        })
+        
+        return await this.stageThree(readyList);
     }
 }
 
-module.exports = new DataGethering;
+module.exports = new StageOne;

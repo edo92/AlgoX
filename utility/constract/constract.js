@@ -1,12 +1,14 @@
-class StageTwo {
+const Formats = require('./formats');
+
+class StageTwo extends Formats {
     constructor() {
+        super()
+        
         this.allEvents = [];
         this.countables = {};
     }
 
     stageTwo = async envFtrs => {
-        this.allEvents = await this.db.Events.find();
-
         for (let fighter in envFtrs) {
             let { fighterId } = envFtrs[fighter];
             // Create fighter name object in countables
@@ -46,7 +48,7 @@ class StageTwo {
 
         for (let stats in this.countables) {
             const count = this.countables[stats].count;
-
+            
             for (let data in this.countables[stats]) {
                 if (data !== 'count' && data !== 'kd' && data !== 'rev' &&
                     data !== 'sigStr' && data !== 'takeDown' &&
@@ -59,10 +61,12 @@ class StageTwo {
         }
 
         for (let fighter in this.countables) {
+            // Find fighter's individual profile 
             let profile = await this.db.Fighter.findOne({ fighterId: fighter });
-            delete profile.stats.pastFights;
 
             let rawData = this.getRawData(profile.stats);
+
+            delete profile.stats.pastFights;
 
             this.countables[fighter] = { ...this.countables[fighter], ...rawData };
         }
@@ -74,16 +78,24 @@ class StageTwo {
 
     getRawData = stats => {
         return {
-            strAcc: Number(stats.StrAcc.split('%')[0]),
-            strDef: Number(stats.StrDef.split('%')[0]),
-            strDef: Number(stats.TDDef.split('%')[0]),
-            tdAcc: Number(stats.TDAcc.split('%')[0]),
+            fight: stats.pastFights.length,
 
             age: new Date().getFullYear() - Number(stats.dob.split(', ')[1]),
             hight: Number(`${stats.hight.split("'")[0]}.${stats.hight.split("'")[1].split('"')[0].trim()}`),
+
             // Mes.
             weight: Number(stats.weight.split(' ')[0]),
             reach: Number(stats.reach.split('"')[0]),
+
+            strAcc: Number(stats.StrAcc.split('%')[0]),
+            strDef: Number(stats.StrDef.split('%')[0]),
+            slpm: Number(stats.SLpM),
+
+            tdAcc: Number(stats.TDAcc.split('%')[0]),
+            tdDef: Number(stats.TDDef.split('%')[0]),
+            tdAvg: Number(stats.TDAvg),
+
+            subAvg: Number(stats.SubAvg)
         }
     }
 
@@ -110,12 +122,20 @@ class StageTwo {
             // Leg
             strLegLanded: Number(stats.strLeg.split(' of ')[0]),
             strLegTotal: Number(stats.strLeg.split(' of ')[1]),
-            // Distance
-            distanceSucc: Number(stats.distance.split(' of ')[0]),
-            distanceTotal: Number(stats.distance.split(' of ')[1]),
+
             // Takedown
             tdSucc: Number(stats.takeDown.split(' of ')[0]),
             tdTotal: Number(stats.takeDown.split(' of ')[1]),
+
+            // Distance
+            distanceSucc: Number(stats.distance.split(' of ')[0]),
+            distanceTotal: Number(stats.distance.split(' of ')[1]),
+
+            clinchSucc: Number(stats.takeDown.split(' of ')[0]),
+            clinchTotal: Number(stats.takeDown.split(' of ')[1]),
+
+            groundSucc: Number(stats.takeDown.split(' of ')[0]),
+            groundTotal: Number(stats.takeDown.split(' of ')[1]),
         }
     }
 }

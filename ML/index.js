@@ -13,14 +13,14 @@ class ML {
 
     train = async () => {
         // Get train dataset
-        let trainData = await this.dataset.getDataset('wl');
+        let dataset = await this.dataset.getDataset('wl');
         // Train dataset with wl datasetmodule
-        this.models.trainDataset(trainData, 'wl');
+        this.models.trainDataset(dataset);
     }
 
-    prediction = async target => {
+    prediction = async data => {
         let model = await this.models.getTrainedModel('wl');
-        return await this.predict.predictSet(model, target);
+        return await this.predict.predictSet(model, data);
     }
 
     analitic = async () => {
