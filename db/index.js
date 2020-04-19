@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const models = require('./models.js');
+const models = require('./models');
 
 class DB {
     constructor() {

@@ -8,7 +8,8 @@ class Socket {
 
     listen = (to, callback) => {
         socketio.on(to, data => {
-            callback(data);
+            if (data)
+                callback(data);
         });
     }
 }

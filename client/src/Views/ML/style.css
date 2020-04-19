@@ -1,0 +1,11 @@
+.ant-list::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
+
+.ellipsButtonStyle svg {
+    margin-top: -15px !important;
+}
+
+.fs-11 {
+    font-size: 11px !important;
+}

@@ -1,21 +1,12 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { List, Avatar, Badge, Steps, Divider, InputNumber, Button, Skeleton, Radio } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, SearchOutlined, NodeIndexOutlined, AppstoreAddOutlined, BulbOutlined } from '@ant-design/icons';
 
 import Aux from '../../hoc/_Aux';
 import Card from '../../App/components/MainCard';
 import socket from '../../socket';
 
-const { Step } = Steps;
-
-const br = {
-    borderRight: '1px solid gray',
-    paddingLeft: '.5rem',
-};
-const bl = {
-    borderLeft: '1px solid gray',
-}
 const radioStyle = {
     display: 'block',
     height: '30px',
@@ -25,7 +16,10 @@ const radioStyle = {
 class Draft extends Component {
     state = {
         progress: 1,
-        draft: {}
+        draft: { dkValues: {} },
+        dk: {},
+        select: {},
+        showMode: false
     };
 
     componentDidMount() {
@@ -34,52 +28,130 @@ class Draft extends Component {
 
     connectSocket = () => {
         // Request
-        socket.emit('get-draft');
+        socket.emit('draft', { action: 'get' });
         // Listen
-        socket.listen('get-draft', data => {
+        socket.listen('draft', data => {
             this.setState({
-                draft: data[0]
+                draft: { ...this.state.draft, ...data }
+            })
+        })
+
+        socket.listen('generate', data => {
+            this.setState({
+                generate: { ...this.state.generate, ...data }
             })
         })
     }
 
+    handleInputDk = (name, val, plc) => {
+        this.setState({
+            ...this.state,
+            draft: {
+                ...this.state.draft,
+                dkValues: {
+                    ...this.state.draft.dkValues,
+                    [name]: {
+                        ...this.state.draft.dkValues[name],
+                        [plc]: val
+                    }
+                }
+            }
+        })
+    }
+
+    saveDraft = () => {
+        socket.emit('draft', {
+            ...this.state.draft.dkValues,
+            ...{ action: 'save' }
+        });
+
+        this.setState({
+            ...this.state.draft.submited = true,
+        });
+    }
+
+    generate = () => {
+        socket.emit('generate', { action: 'generate', test: 'test' });
+        this.setState({ showMode: true });
+    }
+
+    predict = () => {
+        socket.emit('ml', { action: 'predict', test: 'test' });
+    }
+
+    handelSelect = (input, opt) => {
+        let { name, checked } = input.target;
+        this.setState({
+            select: {
+                ...this.state.select,
+                [name]: { [opt]: checked }
+            }
+        })
+    }
+
     render() {
+        console.log('this.state', this.state)
         return (
             <Aux>
                 <Row>
                     <Col>
-                        <Card isOption title={this.state.draft.name}>
+                        <Card isOption title={
+                            <Row>
+                                <Button onClick={this.generate} className='mr-3' type='ghost'>Generate<AppstoreAddOutlined /></Button>
+                                <Button onClick={this.predict} className='mr-3' type='ghost'>Predict<BulbOutlined /></Button>
+                            </Row>
+                        }>
                             <List className='w-100 px-3'>
                                 {this.state.draft.fights ? this.state.draft.fights.map((fight, i) => {
-                                    if (true) {
-                                        return (
-                                            <Row className='justify-content-center'>
-                                                <Col>
-                                                    <div>
-                                                        <Radio.Group onChange={this.onChange} value={'value'}>
-                                                            <Radio style={radioStyle} value={1}> Option A  </Radio>
-                                                            <Radio style={radioStyle} value={2}> Option B </Radio>
-                                                        </Radio.Group>
-                                                        <Avatar size={70}></Avatar>
-                                                        <span>{fight.fighter1.name}</span>
-                                                    </div>
-                                                </Col>
-                                                <Col>
-                                                    <div>
-                                                        <span>{fight.fighter2.name}</span>
-                                                        <Avatar size={70}></Avatar>
-                                                        <Radio.Group onChange={this.onChange} value={'value'}>
-                                                            <Radio style={radioStyle} value={1}> Option A  </Radio>
-                                                            <Radio style={radioStyle} value={2}> Option B </Radio>
-                                                        </Radio.Group>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                        )
-                                    } else {
-                                        return ['fighter1', 'fighter2'].map(fighter => {
+                                    if (this.state.draft.dkData) {
+                                        if (!this.state.showMode) {
                                             return (
-                                                <List.Item key={i}>
+                                                <Row key={i} style={{ justifyContent: 'space-between' }}>
+                                                    <Col xs={6}>
+                                                        <Row>
+                                                            <Radio.Group className='p-3' name={fight.fighter1.name} onChange={this.onChange}>
+                                                                <Radio onChange={val => this.handelSelect(val, 'fav')} style={radioStyle} value={1}><small><Badge status='success' />Favorit</small></Radio>
+                                                                <Radio onChange={val => this.handelSelect(val, 'include')} style={radioStyle} value={2}><small><Badge status='warning' />Include</small></Radio>
+                                                                <Radio onChange={val => this.handelSelect(val, 'exclude')} style={radioStyle} value={3}><small><Badge status='error' />Exclude</small></Radio>
+                                                                <Radio onChange={val => this.handelSelect(val, 'neutral')} style={radioStyle} value={4}><small><Badge status='default' />Neutral</small></Radio>
+                                                            </Radio.Group>
+                                                            <Col className='p-4'>
+                                                                <Avatar size={75}></Avatar>
+                                                                <span className='px-2 h6'>{fight.fighter1.name}</span>
+                                                                <div className='p-1'>
+                                                                    <Button className='mx-1' shape='circle' icon={<NodeIndexOutlined />} />
+                                                                    <Button className='mx-1' shape='circle' icon={<SearchOutlined />} />
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    </Col>
+                                                    <Col xs={6}>
+                                                        <Row>
+                                                            <Col className='p-4 text-right'>
+                                                                <span className='px-2 h6'>{fight.fighter2.name}</span>
+                                                                <Avatar size={75}></Avatar>
+                                                                <div className='p-2'>
+                                                                    <Button className='mx-1' shape='circle' icon={<NodeIndexOutlined />} />
+                                                                    <Button className='mx-1' shape='circle' icon={<SearchOutlined />} />
+                                                                </div>
+                                                            </Col>
+                                                            <Radio.Group className='p-3' name={fight.fighter2.name} onChange={this.onChange}>
+                                                                <Radio onChange={val => this.handelSelect(val, 'fav')} style={radioStyle} value={1}><small><Badge status='success' />Favorit</small></Radio>
+                                                                <Radio onChange={val => this.handelSelect(val, 'include')} style={radioStyle} value={2}><small><Badge status='warning' />Include</small></Radio>
+                                                                <Radio onChange={val => this.handelSelect(val, 'exclude')} style={radioStyle} value={3}><small><Badge status='error' />Exclude</small></Radio>
+                                                                <Radio onChange={val => this.handelSelect(val, 'neutral')} style={radioStyle} value={4}><small><Badge status='default' />Neutral</small></Radio>
+                                                            </Radio.Group>
+                                                        </Row>
+                                                    </Col>
+                                                    <Divider />
+                                                </Row>
+                                            )
+                                        }
+                                    } else {
+                                        return ['fighter1', 'fighter2'].map((fighter, j) => {
+                                            let fighterDk = this.state.draft.dkValues[fight[fighter].name];
+                                            return (
+                                                <List.Item key={`${i}${j}`}>
                                                     <Col xl={12}>
                                                         <Row>
                                                             <Col md={1}>
@@ -95,9 +167,9 @@ class Draft extends Component {
                                                                 <b><p className='mt-2'>{fight[fighter].name}</p></b>
                                                             </span>
                                                             <span className='mt-2'>
-                                                                <span className='pl-5'><InputNumber placeholder='FPPF' /></span>
-                                                                <span className='pl-3'><InputNumber placeholder='Price' /></span>
-                                                                <span className='pl-3'><InputNumber placeholder='Price' /></span>
+                                                                <span className='pl-5'><InputNumber value={fighterDk.fppf} onChange={val => this.handleInputDk(fight[fighter].name, val, 'fppf')} placeholder='FPPF' /></span>
+                                                                <span className='pl-3'><InputNumber value={fighterDk.price} onChange={val => this.handleInputDk(fight[fighter].name, val, 'price')} placeholder='Price' /></span>
+                                                                <span className='pl-3'><InputNumber onChange={val => this.handleInputDk(fight[fighter].name, val, 'record')} placeholder='Record' /></span>
                                                             </span>
                                                         </Row>
                                                     </Col>
@@ -106,10 +178,17 @@ class Draft extends Component {
                                         })
                                     }
                                 }) : <Skeleton />}
+                                <Row>
+                                    {this.state.showMode ? <Row>
+                                        <Col>
+                                            <Button onClick={() => this.setState({ showMode: false })}>Go Back</Button>
+                                        </Col>
+                                    </Row> : null}
+                                </Row>
                             </List>
                             <Col>
                                 <Divider />
-                                <Button className='text-right' type='primary'  > Save </Button>
+                                <Button onClick={this.saveDraft} loading={this.state.draft.submited} disables={this.state.draft.submited ? this.state.draft.submited : undefined} className='text-right' type='primary'> Save </Button>
                             </Col>
                         </Card>
                     </Col>

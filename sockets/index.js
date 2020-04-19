@@ -4,7 +4,26 @@ const db = require('../db').models;
 
 module.exports = io => {
     io.sockets.on('connection', socket => {
+        socket.on('draft', data => {
+            routes.draft[data.action](data, db, list => {
+                socket.emit('draft', list);
+            })
+        })
 
+        socket.on('ml', data => {
+            routes.ml[data.action](data, list => {
+                socket.emit('ml', list);
+            })
+        })
+
+        socket.on('generate', data => {
+            routes.generate[data.action](data, list => {
+                socket.emit('generate', list);
+            })
+        })
+
+
+        
         // Get upcoming events
         socket.on(GET_EVENT_LIST, data => {
             routes.getUpcomingEvents(data, db, list => {
@@ -19,12 +38,6 @@ module.exports = io => {
             })
         });
 
-        socket.on(GET_DRAFT, data => {
-            routes.getDraft(data, db, list => {
-                socket.emit(GET_DRAFT, list);
-            })
-        })
-
         //  Save Event
         socket.on(SAVE_EVENT, data => {
             routes.saveEvent(data, list => {
@@ -32,11 +45,7 @@ module.exports = io => {
             })
         });
 
-        socket.on('ml', data => {
-            routes.ml(data, list => {
-                socket.emit('ml', list)
-            })
-        })
+
 
         socket.on('disconnect', () => {
             socket.disconnect();
