@@ -18,7 +18,7 @@ class StageOne extends StageTwo {
         this.allEvents = await db.getEvents();
 
         const action = () => {
-            let point = (fightList.length - 1) * (1 / 300);
+            let point = (fightList.length - 1) * (1 / 330);
             cbAction({ dataset: { progress: this.progress += point } });
         }
 
@@ -34,7 +34,7 @@ class StageOne extends StageTwo {
 
         let readyList = fightList.map(fight => {
             return ['fighter1', 'fighter2'].map(each => {
-                action()
+                action();
                 let { name, fighterId, outcome } = fight[each];
                 let data = { stats: stats[fighterId], outcome };
                 return { ...data, name, fighterId };

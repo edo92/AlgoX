@@ -4,23 +4,38 @@ const util = require('./utility');
 
 class ML {
     createDataset = async (data, callback) => {
+        // Get all fights in every event
         let fightList = await db.getAllFights();
-        let rawDataset = await util.rawDataset(fightList, callback, { shuffle: true, format: data.type, dataset: true });
-        let results = await ml.createDataset(rawDataset, { ...data });
-        await db.saveDataset({ ...data, ...{ results } });
+
+        // Conver fight list to raw data
+        const rawOptions = { shuffle: true, format: data.type, dataset: true };
+        let rawDataset = await util.rawDataset(fightList, callback, rawOptions);
+
+        // Create dataset in db
+        let setInfo = await ml.createDataset(rawDataset, { ...data });
+        await db.saveDataset({ ...data, ...setInfo });
+
+        // Callback
+        callback({ dataset: { creating: false } });
     }
 
     train = async (data, callback) => {
         let results = await ml.train(data, callback);
-        await db.saveModel({ ...data, ...{ results } });
+
+        // Get model and dataset for backtest
+        let model = await ml.models.getTrainedModel(data.modelName);
+        let dataset = await ml.dataset.getDataset(data.dataset);
+
+        // Analize results
+        let analized = await ml.analize.analizeModel(model, dataset);
+        await db.saveModel({ ...data, ...{ results: { ...results, ...analized } } });
     }
 
-    predict = async (data, callback) => {
+    predict = async (config, callback) => {
         let predictData = await db.getDraft();
         let rawDataset = await util.rawDataset(predictData.fights, callback, { format: 'wl', plain: true });
-
-        let test = await ml.prediction(rawDataset);
-        console.log('prediction', test)
+        let results = await ml.prediction(rawDataset, predictData, config);
+        callback({ fights: results, predictLoad: false, generate: true });
     }
 
     get = async (data, callback) => {

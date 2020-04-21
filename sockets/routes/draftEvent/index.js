@@ -36,6 +36,7 @@ class DraftEvent {
 
     get = async (data, db, callback) => {
         let drafts = await db.Draft.find();
+        let models = await db.Model.find();
 
         let dkData = true;
         let dkValues = {};
@@ -61,7 +62,9 @@ class DraftEvent {
                 }
             }
         }
-        callback({ fights: drafts[0].fights, dkData, dkValues, submited: false });
+        // Callback
+        let fights = drafts[0].fights;
+        callback({ fights, models, dkData, dkValues, submited: false });
     }
 }
 

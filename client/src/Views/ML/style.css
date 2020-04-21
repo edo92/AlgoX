@@ -1,11 +1,24 @@
-.ant-list::-webkit-scrollbar { 
-    display: none;  /* Safari and Chrome */
+.ant-list::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
 
 .ellipsButtonStyle svg {
-    margin-top: -15px !important;
+  margin-top: -15px !important;
 }
 
 .fs-11 {
-    font-size: 11px !important;
+  font-size: 11px !important;
+}
+
+#dataset-control-panel {
+  padding: 0;
+}
+#dataset-control-panel .card-header {
+  padding: 1rem;
+}
+#dataset-control-panel .card-title {
+  width: 100%;
+}
+#dataset-control-panel .col-xl-3 {
+  padding: 0;
 }

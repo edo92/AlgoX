@@ -3,9 +3,11 @@ class WL {
         this.state = {};
     }
 
-    stageThree = (fightList) => {
+    stageThree = (fightList, trackProgress) => {
         let dataset = fightList.map(fight => {
             return fight.map(fighter => {
+                trackProgress(); // Track progress percenet
+
                 // Make order
                 let stats = this[this.config.format](fighter.stats);
 
@@ -36,6 +38,7 @@ class WL {
         // Separate outcome 
         let outcome = dataset.map(data => {
             return data.map(each => {
+                trackProgress();
                 if (this.config.dataset) {
                     return [each.pop() === 'Loss' ? 0 : 1]; // last item is outcome
                 }
@@ -61,7 +64,7 @@ class WL {
         })
 
         function shuffle(arr) {
-            let limit = Math.floor(Math.random() * 5) + 1;
+            let limit = Math.floor(Math.random() * 15) + 5;
             for (let times = 1; times <= limit; times++) {
                 for (let i in arr) {
                     const j = Math.floor(Math.random() * i)

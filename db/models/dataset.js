@@ -11,6 +11,14 @@ var DatasetSchema = new Schema({
     type: {
         type: String
     },
+
+    size: {
+        type: Number
+    },
+    
+    dataPoints: {
+        type: Number
+    }
 });
 
 var Dataset = mongoose.model("Dataset", DatasetSchema)

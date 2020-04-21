@@ -17,6 +17,14 @@ class Dataset {
             if (err) throw err;
             console.log(config.datasetName + ' Model Saved');
         })
+
+        // Count length
+        let dataPoints = 0;
+        let datasetSize = dataset.dataset.length;
+
+        // Count datapoints inside each dataset's set
+        for (let i in dataset.dataset[0][0]) { dataPoints += 1 };
+        return { size: datasetSize, dataPoints: dataPoints };
     }
 
     getDataset = name => {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { List, Avatar, Badge, Steps, Divider, InputNumber, Button, Skeleton, Radio } from 'antd';
+import { List, Avatar, Badge, Steps, Divider, InputNumber, Button, Skeleton, Radio, Select } from 'antd';
 import { InfoCircleOutlined, SearchOutlined, NodeIndexOutlined, AppstoreAddOutlined, BulbOutlined } from '@ant-design/icons';
 
 import Aux from '../../hoc/_Aux';
@@ -15,6 +15,9 @@ const radioStyle = {
 
 class Draft extends Component {
     state = {
+        predict: {
+            model: ''
+        },
         progress: 1,
         draft: { dkValues: {} },
         dk: {},
@@ -31,6 +34,13 @@ class Draft extends Component {
         socket.emit('draft', { action: 'get' });
         // Listen
         socket.listen('draft', data => {
+            this.setState({
+                draft: { ...this.state.draft, ...data }
+            })
+        })
+
+        socket.listen('ml', data => {
+            console.log('data', data)
             this.setState({
                 draft: { ...this.state.draft, ...data }
             })
@@ -71,12 +81,21 @@ class Draft extends Component {
     }
 
     generate = () => {
-        socket.emit('generate', { action: 'generate', test: 'test' });
+        socket.emit('generate', { action: 'generate', ...{ list: this.state.draft.fights } });
         this.setState({ showMode: true });
     }
 
     predict = () => {
-        socket.emit('ml', { action: 'predict', test: 'test' });
+        if (this.state.predict.model.length) {
+            socket.emit('ml', { action: 'predict', ...this.state.predict });
+            this.setState({
+                ...this.state,
+                draft: {
+                    ...this.state.draft,
+                    predictLoad: true
+                }
+            })
+        }
     }
 
     handelSelect = (input, opt) => {
@@ -89,6 +108,16 @@ class Draft extends Component {
         })
     }
 
+    handleInputSelect = (cont, name, val) => {
+        this.setState({
+            ...this.state,
+            [cont]: {
+                ...this.state[cont],
+                [name]: val
+            }
+        })
+    }
+
     render() {
         console.log('this.state', this.state)
         return (
@@ -97,8 +126,15 @@ class Draft extends Component {
                     <Col>
                         <Card isOption title={
                             <Row>
-                                <Button onClick={this.generate} className='mr-3' type='ghost'>Generate<AppstoreAddOutlined /></Button>
-                                <Button onClick={this.predict} className='mr-3' type='ghost'>Predict<BulbOutlined /></Button>
+                                <Button disabled={!this.state.draft.generate} onClick={this.generate} className='mr-3' type='ghost'>Generate<AppstoreAddOutlined /></Button>
+                                <Button onClick={this.predict} disabled={this.state.draft.predictLoad || !this.state.predict.model.length} loading={this.state.draft.predictLoad} className='mr-3' type='ghost'>Predict<BulbOutlined /></Button>
+                                <Select onChange={val => this.handleInputSelect('predict', 'model', val)} defaultValue={'Model'} >
+                                    {(this.state.draft.models || []).map((model, i) => {
+                                        return (
+                                            <Select.Option key={i} value={model.modelName}>{model.modelName}</Select.Option>
+                                        )
+                                    })}
+                                </Select>
                             </Row>
                         }>
                             <List className='w-100 px-3'>
@@ -122,6 +158,10 @@ class Draft extends Component {
                                                                     <Button className='mx-1' shape='circle' icon={<NodeIndexOutlined />} />
                                                                     <Button className='mx-1' shape='circle' icon={<SearchOutlined />} />
                                                                 </div>
+                                                                <div>
+                                                                    {fight.fighter1.result && <Badge status={fight.fighter1.result.win ? 'success' : 'error'} />}
+                                                                    <span>{fight.fighter1.result && (fight.fighter1.result.win || fight.fighter1.result.loss)}</span>
+                                                                </div>
                                                             </Col>
                                                         </Row>
                                                     </Col>
@@ -133,6 +173,10 @@ class Draft extends Component {
                                                                 <div className='p-2'>
                                                                     <Button className='mx-1' shape='circle' icon={<NodeIndexOutlined />} />
                                                                     <Button className='mx-1' shape='circle' icon={<SearchOutlined />} />
+                                                                </div>
+                                                                <div>
+                                                                    {fight.fighter2.result && <Badge status={fight.fighter2.result.win ? 'success' : 'error'} />}
+                                                                    <span>{fight.fighter2.result && (fight.fighter2.result.win || fight.fighter2.result.loss)}</span>
                                                                 </div>
                                                             </Col>
                                                             <Radio.Group className='p-3' name={fight.fighter2.name} onChange={this.onChange}>

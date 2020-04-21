@@ -8,24 +8,24 @@ class ML {
     }
 
     createDataset = async (rawDataset, config) => {
-        this.dataset.createDataset(rawDataset, config);
+        return await this.dataset.createDataset(rawDataset, config);
     }
 
     train = async (options, callback) => {
-        // Get train dataset
-        let dataset = await this.dataset.getDataset(options.type);
-        // Train dataset with wl datasetmodule
+        // Get dataset by passed dataset name
+        let dataset = await this.dataset.getDataset(options.dataset);
+        // Train dataset with selected name
         return await this.models.trainDataset(dataset, options, callback);
     }
 
-    prediction = async data => {
-        let model = await this.models.getTrainedModel('wl');
-        return await this.predict.predictSet(model, data);
+    prediction = async (rawDataset, predictData, config) => {
+        let model = await this.models.getTrainedModel(config.model);
+        return await this.predict.predictSet(model, rawDataset, predictData);
     }
 
     analitic = async () => {
-        let data = await this.dataset.getDataset('wl');
-        this.analize.analizeModel(data, this);
+        let dataset = await this.dataset.getDataset('wl');
+        this.analize.analizeModel(dataset, this);
     }
 }
 

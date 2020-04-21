@@ -4,7 +4,7 @@ class DbActions {
     constructor() {
         this.getEvents = async () => {
             try {
-                return await db.Events.find().limit(4);
+                return await db.Events.find().limit(5);
             }
             catch (err) { throw err }
         }
@@ -19,7 +19,6 @@ class DbActions {
             })
             return fightList;
         }
-
 
         this.getUpcomeEvent = async () => {
             try {
