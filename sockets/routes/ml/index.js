@@ -28,12 +28,15 @@ class ML {
 
         // Analize results
         let analized = await ml.analize.analizeModel(model, dataset);
-        await db.saveModel({ ...data, ...{ results: { ...results, ...analized } } });
+        let saveData = { ...data, ...{ results: { ...results, ...analized } } };
+        await db.saveModel(saveData);
+        callback({ train: { creating: false } });
     }
 
     predict = async (config, callback) => {
         let predictData = await db.getDraft();
-        let rawDataset = await util.rawDataset(predictData.fights, callback, { format: 'wl', plain: true });
+        const test = () => { }
+        let rawDataset = await util.rawDataset(predictData.fights, test, { shuffle: true, format: 'wl', plain: true });
         let results = await ml.prediction(rawDataset, predictData, config);
         callback({ fights: results, predictLoad: false, generate: true });
     }

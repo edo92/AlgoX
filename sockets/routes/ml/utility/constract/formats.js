@@ -9,7 +9,7 @@ class WL {
                 trackProgress(); // Track progress percenet
 
                 // Make order
-                let stats = this[this.config.format](fighter.stats);
+                let stats = this.constractDataObject(fighter.stats);
 
                 // Reaturn each data point rount nearest 10
                 let statlist = Object.keys(stats).map(stat => {
@@ -79,7 +79,7 @@ class WL {
     }
 
     // Reorganize data points object
-    wl = stats => {
+    constractDataObject = stats => {
         this.registerLog('dataPoints', Object.keys(stats).length)
         return {
             age: stats.age,

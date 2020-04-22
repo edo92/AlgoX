@@ -5,7 +5,6 @@ class Predict {
     predictSet = async (model, rawDataset, predictData) => {
         const predict = tf.tensor3d(rawDataset.dataset);
         let predicted = await model.predict([predict]).array();
-
         let list = {};
 
         predicted.map((each, index) => {

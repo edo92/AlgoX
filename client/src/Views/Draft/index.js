@@ -159,6 +159,7 @@ class Draft extends Component {
                                                                     <Button className='mx-1' shape='circle' icon={<SearchOutlined />} />
                                                                 </div>
                                                                 <div>
+                                                                    {fight.fighter1.result && <span>{fight.fighter1.outcome}</span>}
                                                                     {fight.fighter1.result && <Badge status={fight.fighter1.result.win ? 'success' : 'error'} />}
                                                                     <span>{fight.fighter1.result && (fight.fighter1.result.win || fight.fighter1.result.loss)}</span>
                                                                 </div>

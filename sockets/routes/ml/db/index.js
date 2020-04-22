@@ -4,7 +4,7 @@ class DbActions {
     constructor() {
         this.getEvents = async () => {
             try {
-                return await db.Events.find().limit(5);
+                return await db.Events.find();
             }
             catch (err) { throw err }
         }
@@ -55,7 +55,6 @@ class DbActions {
 
         this.getModels = async () => {
             try {
-                let list = [];
                 return await db.Model.find().sort({ createdAt: 1 });
             }
             catch (err) { throw err };

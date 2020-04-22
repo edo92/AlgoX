@@ -8,10 +8,6 @@ var ModelSchema = new Schema({
         unique: true
     },
 
-    type: {
-        type: String
-    },
-
     saveIn: {
         type: String
     },
@@ -21,15 +17,15 @@ var ModelSchema = new Schema({
     },
 
     layer1: {
-
+        type: Number
     },
 
     layer2: {
-
+        type: Number
     },
 
     layer3: {
-
+        type: Number
     },
 
     results: {

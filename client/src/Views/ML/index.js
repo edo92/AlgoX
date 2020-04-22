@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Collapse } from 'react-bootstrap';
 
-import { Divider, Progress, Button, Input, InputNumber, Select, List, Dropdown, Menu } from 'antd';
+import { Divider, Progress, Button, Input, InputNumber, Select, List, Dropdown, Menu, Modal } from 'antd';
 import { ExperimentOutlined, SlidersOutlined, CloseCircleOutlined, EllipsisOutlined, DotChartOutlined, DeleteOutlined } from '@ant-design/icons';
 import Chart from '../../Widgets/chart1';
 
@@ -19,13 +19,14 @@ class SamplePage extends Component {
             models: [],
             datasets: [],
             mode: 'control',
+            dataPoints: {
+
+            },
             dataset: {
                 option: 'save',
-                type: 'wl',
                 datasetName: ''
             },
             train: {
-                type: 'wl',
                 saveIn: 'local',
                 modelName: '',
                 epochs: 10,
@@ -219,16 +220,25 @@ class SamplePage extends Component {
                                                 <Col>
                                                     <Divider className='m-0 mt-3' />
                                                     <Row style={{ opacity: this.state.dataset.creating ? 0.2 : 1, justifyContent: 'space-evenly', paddingTop: '1rem' }}>
+                                                        <Button onClick={() => this.setState({ dataPoints: { modal: true } })}>Data Points</Button>
                                                         <Select onChange={val => this.handleInput('dataset', 'option', val)} disabled={this.state.creating} defaultValue='save' >
                                                             <Select.Option value='save'>Save</Select.Option>
+                                                            <Select.Option value='dont save'>Dont Save</Select.Option>
                                                         </Select>
-                                                        <Select onChange={val => this.handleInput('dataset', 'type', val)} disabled={this.state.creating} defaultValue='wl' >
-                                                            <Select.Option value='wl'>WL</Select.Option>
-                                                            <Select.Option value='ql'>QL</Select.Option>
+                                                        <Select onChange={val => this.handleInput('dataset', 'type', val)} disabled={this.state.creating} defaultValue='local' >
+                                                            <Select.Option value='cloud'>Cloud</Select.Option>
+                                                            <Select.Option value='local'>Local</Select.Option>
                                                         </Select>
                                                     </Row>
                                                 </Col>
                                             </Collapse>
+                                            <Modal
+                                                visible={this.state.dataPoints.modal}
+                                                onOk={this.handleOk}
+                                                onCancel={() => this.setState({ dataPoints: { modal: false } })}
+                                            >
+                                                <h2>Hello</h2>
+                                            </Modal>
                                         </Col>
                                     </Col>
                                 }>
@@ -328,13 +338,6 @@ class SamplePage extends Component {
                                                     <InputNumber value={this.state.train.epochs} onChange={(val) => this.handleInput('train', 'epochs', val)} />
                                                 </Col>
                                                 <Col xl={4}>
-                                                    <small className='pr-2 fs-11'>Type</small><br />
-                                                    <Select onChange={(val) => this.handleInput('train', 'type', val)} defaultValue='wl' >
-                                                        <Select.Option value='wl'>WL</Select.Option>
-                                                        <Select.Option value='ql'>QL</Select.Option>
-                                                    </Select>
-                                                </Col>
-                                                <Col xl={4}>
                                                     <small className='pr-2 fs-11'>Dataset</small><br />
                                                     <Select onChange={(val) => this.handleInput('train', 'dataset', val)} defaultValue='none' >
                                                         {Object.keys(this.state.datasets).map(dataset => {
@@ -343,6 +346,13 @@ class SamplePage extends Component {
                                                                 <Select.Option key={datasetName} value={datasetName}>{datasetName}</Select.Option>
                                                             )
                                                         })}
+                                                    </Select>
+                                                </Col>
+                                                <Col xl={4}>
+                                                    <small className='pr-2 fs-11'>Type</small><br />
+                                                    <Select onChange={(val) => this.handleInput('train', 'type', val)} defaultValue='local' >
+                                                        <Select.Option value='local'>Local</Select.Option>
+                                                        <Select.Option value='cloud'>Cloud</Select.Option>
                                                     </Select>
                                                 </Col>
                                             </Row>
