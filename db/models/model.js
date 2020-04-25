@@ -28,8 +28,18 @@ var ModelSchema = new Schema({
         type: Number
     },
 
-    results: {
-        type: Object
+    result: {
+        acc: {
+            type: Number
+        },
+
+        loss: {
+            type: Number
+        },
+
+        btAcc: {
+            type: Number
+        }
     }
 });
 

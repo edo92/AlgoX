@@ -1,0 +1,56 @@
+{
+    "event": {
+        "length": 3,
+        "points": {
+            "name": {
+                "type": "string"
+            },
+            "link": {
+                "type": "string"
+            },
+            "fights": {
+                "type": "object"
+            }
+        }
+    },
+    "fight": {
+        "length": 6,
+        "points": {
+            "method": {
+                "type": "string"
+            },
+            "round": {
+                "type": "string"
+            },
+            "time": {
+                "type": "string"
+            },
+            "weightClass": {
+                "type": "string"
+            },
+            "fighter1": {
+                "type": "object"
+            },
+            "fighter2": {
+                "type": "object"
+            }
+        }
+    },
+    "fighter": {
+        "length": 4,
+        "points": {
+            "name": {
+                "type": "string"
+            },
+            "outcome": {
+                "type": "string"
+            },
+            "stats": {
+                "type": "object"
+            },
+            "fighterId": {
+                "type": "string"
+            }
+        }
+    }
+}

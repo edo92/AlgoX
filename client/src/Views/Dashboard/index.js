@@ -4,7 +4,7 @@ import { Skeleton, Button } from 'antd';
 
 import Aux from "../../hoc/_Aux";
 import Card from "../../App/components/MainCard";
-import socket from '../../socket';
+// import socket from '../../socket';
 
 class SamplePage extends Component {
     constructor() {
@@ -21,14 +21,14 @@ class SamplePage extends Component {
     }
 
     getUpcommingEvents = () => {
-        socket.emit('get-upcome-events', { name: 'name' });
-        socket.listen('get-upcome-events', data => {
-            this.setState({ events: data });
-        })
+        // socket.emit('get-upcome-events', { name: 'name' });
+        // socket.listen('get-upcome-events', data => {
+        //     this.setState({ events: data });
+        // })
     }
 
     draftEvent = e => {
-        socket.emit('draft-event', { event: e._id });
+        // socket.emit('draft-event', { event: e._id });
 
         if (!this.state.drafting) {
             this.setState({

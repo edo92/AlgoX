@@ -8,16 +8,21 @@ var DatasetSchema = new Schema({
         unique: true
     },
 
-    type: {
-        type: String
-    },
-
     size: {
         type: Number
     },
-    
+
     dataPoints: {
         type: Number
+    },
+
+    in: {
+        type: String
+    },
+
+    used: {
+        type: Number,
+        default: 0
     }
 });
 
