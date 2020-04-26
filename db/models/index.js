@@ -3,5 +3,6 @@ module.exports = {
     Dataset: require('./dataset'),
     Events: require('./events'),
     Fighters: require('./fighters'),
-    Admin: require('./admin')
+    Admin: require('./admin'),
+    Draft: require('./draft')
 };

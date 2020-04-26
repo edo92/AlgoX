@@ -1,10 +1,12 @@
 const rimraf = require('rimraf');
+const tf = require('@tensorflow/tfjs');
+require('@tensorflow/tfjs-node');
+
+const Train = require('./train');
 
 const db = require('../../../db');
 const util = require('../../utility');
-
-const Train = require('./train');
-const dataset = require('../dataset');
+const dtset = require('../dataset');
 
 class Model {
     constructor() {
@@ -13,7 +15,8 @@ class Model {
 
     train = async (req, send) => {
         // Get dataset
-        const dataset = await this.get(req.body.config.dataset);
+        let data = await dtset.get(req.body.config.dataset);
+        const dataset = await util.convert.convert3d(data, { shuffle: true });
 
         // Create model (initial)
         const created = await db.models.Model.create(req.body.config);
@@ -61,11 +64,10 @@ class Model {
 
     get = async id => {
         try {
-            let data = await dataset.get(id);
-            if (data) {
-                return await util.convert.convert3d(data, { shuffle: true });
-            }
-        } catch (err) { throw err };
+            const file = `file://./${this.pwd}/${id}-model/model.json`;
+            return await tf.loadLayersModel(file);
+        }
+        catch (err) { throw err };
     }
 
     remove = async (req, send) => {

@@ -9,7 +9,7 @@ class Pipline extends StageOne {
 
     calculateFightAverage = async config => {
         // Get all events from db
-        let events = await db.models.Events.find().limit(3);
+        let events = await db.models.Events.find();
         let fighters = await db.models.Fighters.find();
 
         let fighterObject = await this.allFightersObject(events, fighters);

@@ -22,9 +22,10 @@ class Train {
 
         const model = tf.sequential();
 
-        model.add(tf.layers.dense({ units: this.config.layer1, inputShape: [shapeX, shapeY], activation: 'sigmoid' }));
-        model.add(tf.layers.dense({ units: this.config.layer2, activation: 'sigmoid' }));
-        model.add(tf.layers.dense({ units: this.config.layer3, activation: 'softmax' }));
+        model.add(tf.layers.dense({ units: 34, inputShape: [shapeX, shapeY], activation: 'relu' }));
+        model.add(tf.layers.dense({ units: 74, activation: 'relu' }));
+        model.add(tf.layers.dense({ units: 74, activation: 'relu' }));
+        model.add(tf.layers.dense({ units: 2, activation: 'relu' }));
 
         await model.compile({
             optimizer: tf.train.adam(),
@@ -53,10 +54,9 @@ class Train {
 
         await model.fit(trinData, outcome, {
             epochs: this.config.epochs,
+            shuffle: true,
             callbacks: { onBatchEnd }
         })
-
-        // let trainedModel = await model.save(`file://./rest/engine/model/models//${this.config.id}-model`);
 
         return { model: model, result: this.results };
     }

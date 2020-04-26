@@ -6,10 +6,17 @@ class Get {
         let datasets = await db.models.Dataset.find();
 
         let dataset = await db.models.Admin.findOne();
-
         let model = await db.models.Model.findOne().sort({ btAcc: -1 });
 
-        return callback({ models, datasets, model: model.result, dataset });
+        let result = model ? model.result : {};
+        return callback({ models, datasets, model: result, dataset });
+    }
+
+    draftInit = async (req, callback) => {
+        let draft = await db.models.Draft.findOne();
+        let models = await db.models.Model.find();
+
+        callback({ draft, models });
     }
 }
 
