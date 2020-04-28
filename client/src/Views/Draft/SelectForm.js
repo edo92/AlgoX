@@ -33,8 +33,10 @@ class SelectForm extends Component {
                                             <Button className='mx-1' shape='circle' icon={<SearchOutlined />} />
                                         </div>
                                         {fight.fighter1.predict && <div>
-                                            <span>{(fight.fighter1.predict).toUpperCase()}</span>
-                                            <Badge status={(fight.fighter1.outcome).toLowerCase() === fight.fighter1.predict ? 'success' : 'error'} />
+                                            <Badge status={(fight.fighter1.outcome) === fight.fighter1.predict.outcome ? 'success' : 'error'} />
+                                            <span>{(fight.fighter1.predict.outcome)}</span><br />
+                                            <span>{fight.fighter1.predict.win.toFixed(2) * 100}% </span>
+                                            <span>-{fight.fighter1.predict.loss.toFixed(2) * 100}%</span>
                                         </div>}
                                     </Col>
                                 </Row>
@@ -49,8 +51,10 @@ class SelectForm extends Component {
                                             <Button className='mx-1' shape='circle' icon={<SearchOutlined />} />
                                         </div>
                                         {fight.fighter2.predict && <div>
-                                            <span>{(fight.fighter2.predict).toUpperCase()}</span>
-                                            <Badge status={(fight.fighter2.outcome).toLowerCase() === fight.fighter2.predict ? 'success' : 'error'} />
+                                            <Badge status={(fight.fighter2.outcome) === fight.fighter2.predict.outcome ? 'success' : 'error'} />
+                                            <span>{(fight.fighter2.predict.outcome)}</span><br />
+                                            <span>{fight.fighter2.predict.win.toFixed(2) * 100}% </span>
+                                            <span>-{fight.fighter2.predict.loss.toFixed(2) * 100}%</span>
                                         </div>}
                                     </Col>
                                     <Radio.Group className='p-3' name={fight.fighter2.name} onChange={this.onChange}>

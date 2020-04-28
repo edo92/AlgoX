@@ -22,39 +22,35 @@ class Predict {
         let format3d = await util.custome.dataset(fights, {});
         const dataset = await util.convert.convert3d(format3d, { shuffle: true });
 
-        
-        // Tensor
-        let fightList = draft[0].fights;
-        for (let eachFight in fightList) {
-            let fight = fightList[eachFight];
+        const dataset3d = tf.tensor3d(dataset.dataset);
+        const predict = await trained.predict([dataset3d]).array();
 
-            let set = dataset.dataset[eachFight];
-            const dataset3d = tf.tensor3d([set]);
-            const predicted = await trained.predict([dataset3d]).array();
+        let list = {};
+        for (let each in predict) {
+            for (let i = 0; i < 2; i++) {
+                let fighter = dataset.name[each][i][0];
+                let predicted = predict[each][i];
 
-            let firstOne = predicted[0][0][0];
-            let firstTwo = predicted[0][1][0];
+                let isWin = predicted[1] > predict[each][Math.abs(i - 1)][1];
 
-            if (!this.list[fight.fighter1.name]) {
-                this.list[fight.fighter1.name] = {};
-                this.list[fight.fighter2.name] = {};
-            }
-
-            if (firstOne < firstTwo) {
-                this.list[fight.fighter1.name] = 'win';
-                this.list[fight.fighter2.name] = 'loss';
-            }
-            else if (firstOne > firstTwo) {
-                this.list[fight.fighter1.name] = 'loss';
-                this.list[fight.fighter2.name] = 'win';
+                list[fighter] = {
+                    win: predicted[1],
+                    loss: predicted[0],
+                    outcome: isWin ? 'Win' : 'Loss'
+                };
             }
         }
 
-        draft[0].fights.map(fight => {
-            ['fighter1', 'fighter2'].map(fighter => {
-                fight[fighter].predict = this.list[fight[fighter].name];
-            })
-        })
+        // console.log('list', list);
+
+        for (let fights in draft[0].fights) {
+            let fight = draft[0].fights[fights];
+
+            for (let i = 1; i < 3; i++) {
+                let fighter = `fighter${i}`;
+                fight[fighter].predict = list[fight[fighter].name];
+            }
+        }
 
         send({ draft: draft[0] });
     }

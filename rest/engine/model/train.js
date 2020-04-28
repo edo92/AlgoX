@@ -22,10 +22,14 @@ class Train {
 
         const model = tf.sequential();
 
-        model.add(tf.layers.dense({ units: 34, inputShape: [shapeX, shapeY], activation: 'relu' }));
-        model.add(tf.layers.dense({ units: 74, activation: 'relu' }));
-        model.add(tf.layers.dense({ units: 74, activation: 'relu' }));
-        model.add(tf.layers.dense({ units: 2, activation: 'relu' }));
+        model.add(tf.layers.dense({ units: shapeX, inputShape: [shapeX, shapeY], activation: 'relu' }));
+        model.add(tf.layers.dropout(0.5))
+        model.add(tf.layers.dense({ units: this.config.layer1, activation: 'relu' }));
+        model.add(tf.layers.dropout(0.5))
+        model.add(tf.layers.dense({ units: this.config.layer2, activation: 'relu' }));
+        model.add(tf.layers.dropout(0.5))
+        model.add(tf.layers.dense({ units: this.config.layer3, activation: 'relu' }));
+
 
         await model.compile({
             optimizer: tf.train.adam(),
@@ -54,7 +58,6 @@ class Train {
 
         await model.fit(trinData, outcome, {
             epochs: this.config.epochs,
-            shuffle: true,
             callbacks: { onBatchEnd }
         })
 
