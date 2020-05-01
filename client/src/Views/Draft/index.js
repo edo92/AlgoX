@@ -26,21 +26,27 @@ class Draft extends Component {
     }
 
     predict = async () => {
+        this.setState({ predictOnLoad: true });
         let predict = await axios.post('/engine/predict/draft/', { model: this.state.model });
-        this.setState({ draft: predict.data.draft });
+        this.setState({ predicted: true, predictOnLoad: false, draft: predict.data.draft });
+    }
+
+    generate = async () => {
+        let test = await axios.post('/engine/generate/draft/', { draft: this.state.draft });
+        console.log('test---', test)
     }
 
     render() {
-        console.log('state', this.state);
-
         return (
             <Aux>
                 <Row>
                     <Col>
                         <Card isOption title={
                             <Row>
-                                <Button disabled={!this.state.predicted} className='mr-3' type='ghost'>Generate<AppstoreAddOutlined /></Button>
-                                <Button onClick={this.predict} disabled={!this.state.model} className='mr-3' type='ghost'>Predict<BulbOutlined /></Button>
+                                <Button onClick={this.generate} disabled={!this.state.predicted} className='mr-3' type='ghost'>Generate<AppstoreAddOutlined /></Button>
+                                <Button onClick={this.predict} disabled={!this.state.model || this.state.predictOnLoad} loading={this.state.predictOnLoad} className='mr-3' type='ghost'>
+                                    Predict{!this.state.predictOnLoad && <BulbOutlined />}
+                                </Button>
                                 <Select onChange={this.handleSelectModel} defaultValue={'Model'} >
                                     {(this.state.models || []).map((model, i) => {
                                         return (

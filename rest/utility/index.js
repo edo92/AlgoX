@@ -1,6 +1,5 @@
-const pipline = require('./pipline');
-const custome = require('./customSet');
-const convert = require('./format3d');
+const dataset = require('./dataset');
+const convert = require('./3d');
 const test = require('./test');
 
-module.exports = { pipline, custome, convert, test };
+module.exports = { dataset, convert, test };

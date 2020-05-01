@@ -15,13 +15,13 @@ class Predict {
         const trained = await model.get(req.body.model);
 
         // Get draft
-        const draft = await db.models.Draft.find();
+        const draft = await db.models.Draft.findOne();
 
-        // // Convert draft to raw data
-        let fights = await util.pipline.calculateFightAverage({ list: draft });
-        let format3d = await util.custome.dataset(fights, {});
-        const dataset = await util.convert.convert3d(format3d, { shuffle: true });
+        // Convert draft to raw data
+        let set = await util.dataset.constractRawDataset({ list: draft.fights });
+        let dataset = await util.convert.convert3d(set);
 
+        //
         const dataset3d = tf.tensor3d(dataset.dataset);
         const predict = await trained.predict([dataset3d]).array();
 
@@ -41,10 +41,8 @@ class Predict {
             }
         }
 
-        // console.log('list', list);
-
-        for (let fights in draft[0].fights) {
-            let fight = draft[0].fights[fights];
+        for (let fights in draft.fights) {
+            let fight = draft.fights[fights];
 
             for (let i = 1; i < 3; i++) {
                 let fighter = `fighter${i}`;
@@ -52,7 +50,7 @@ class Predict {
             }
         }
 
-        send({ draft: draft[0] });
+        send({ draft: draft });
     }
 }
 

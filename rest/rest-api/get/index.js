@@ -16,7 +16,7 @@ class Get {
         let draft = await db.models.Draft.findOne();
         let models = await db.models.Model.find();
 
-        callback({ draft, models });
+        return callback({ draft, models });
     }
 }
 

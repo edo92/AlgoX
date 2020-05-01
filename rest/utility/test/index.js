@@ -1,12 +1,10 @@
-const DataValidation = require('./validation');
-
 const tf = require('@tensorflow/tfjs');
 require('@tensorflow/tfjs-node');
 
-class Test extends DataValidation {
+class Test {
     backtest = async (model, dataset) => {
         const predict = tf.tensor3d(dataset.dataset);
-        const predicted = await model.predict([predict]).array();
+        const predicted = await model.predict(predict).array();
 
         let total = predicted.length;
         let backTest = 0;

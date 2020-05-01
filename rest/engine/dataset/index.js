@@ -10,23 +10,18 @@ class Dataset {
     }
 
     create = async (req, send) => {
-        let config = req.body.config;
+        let set = await util.dataset.constractRawDataset({ list: 'all' });
+        let dataset = await util.convert.convert3d(set);
+        this.save(dataset, req.body.config);
 
-        let fights = await util.pipline.calculateFightAverage({ all: true });
-        let dataset = await util.custome.dataset(fights, {});
-
-        try {
-            let dtObject = await db.models.Dataset.create({ ...req.body.config, ...dataset.info });
-            let newData = await db.models.Dataset.find();
-
-            this.save(dataset.dataset, dtObject);
-            send({ datasets: newData });
-        }
-        catch (err) { throw err };
+        let newDatalist = await db.models.Dataset.find();
+        return send({ datasets: newDatalist });
     }
 
-    save = (dataset, config) => {
-        const filePath = `${this.filePath}${config._id}.json`;
+    save = async (dataset, config) => {
+        await db.models.Dataset.create({ ...dataset.info, ...config });
+
+        const filePath = `${this.filePath}${config.datasetName}.json`;
         let json = JSON.stringify(dataset);
 
         // Save file as json
@@ -39,7 +34,7 @@ class Dataset {
     get = async id => {
         try {
             let config = await db.models.Dataset.findOne({ _id: id });
-            let dataset = await require(`./datasets/${id}.json`);
+            let dataset = await require(`./datasets/${config.datasetName}.json`);
             return { dataset, config };
         }
         catch (err) { throw err };
@@ -47,14 +42,11 @@ class Dataset {
 
     remove = async (req, send) => {
         let { id } = req.params;
-        const file = `${this.filePath}/${id}.json`;
-        rimraf(file, async res => {
-            try {
-                await db.models.Dataset.findOneAndDelete({ _id: id });
-                send({ success: true });
-            }
-            catch (err) { throw err };
-        });
+        let dataset = await db.models.Dataset.findOneAndDelete({ _id: id });
+
+        const file = `${this.filePath}/${dataset.datasetName}.json`;
+        rimraf(file, res => { console.log('Dataset removed') });
+        return send({ success: true });
     }
 }
 

@@ -7,14 +7,13 @@ class Train {
 
         this.results = {};
         this.count = 0;
-        this.progress = 0;
         this.trackAcc = 0;
         this.loss = 0;
         this.acc = 0;
     }
 
     trainModel = async dataset => {
-        const shapeY = dataset.config.dataPoints;
+        const shapeY = 33//dataset.config.dataPoints;
         const shapeX = 2;
 
         const trinData = tf.tensor3d(dataset.dataset);
@@ -22,14 +21,9 @@ class Train {
 
         const model = tf.sequential();
 
-        model.add(tf.layers.dense({ units: shapeX, inputShape: [shapeX, shapeY], activation: 'relu' }));
-        model.add(tf.layers.dropout(0.5))
-        model.add(tf.layers.dense({ units: this.config.layer1, activation: 'relu' }));
-        model.add(tf.layers.dropout(0.5))
-        model.add(tf.layers.dense({ units: this.config.layer2, activation: 'relu' }));
-        model.add(tf.layers.dropout(0.5))
-        model.add(tf.layers.dense({ units: this.config.layer3, activation: 'relu' }));
-
+        model.add(tf.layers.dense({ units: this.config.layer1, inputShape: [shapeX, shapeY], activation: 'sigmoid' }));
+        model.add(tf.layers.dense({ units: this.config.layer2, activation: 'sigmoid' }));
+        model.add(tf.layers.dense({ units: this.config.layer3, activation: 'softplus' }));
 
         await model.compile({
             optimizer: tf.train.adam(),
@@ -43,7 +37,7 @@ class Train {
             this.acc += data.acc;
             this.loss += data.loss;
 
-            if (this.trackAcc > 10) {
+            if (this.trackAcc > 15) {
                 this.trackAcc = 1;
                 this.loss = 1;
                 this.acc = 1;
@@ -52,12 +46,12 @@ class Train {
             this.results = {
                 ...{ acc: Number((this.acc / this.trackAcc).toFixed(2)) },
                 ...{ loss: Number((this.loss / this.trackAcc).toFixed(2)) },
-                ...{ progress: Number((this.count / (this.config.epochs * 2)).toFixed(2)) }
             }
         }
 
         await model.fit(trinData, outcome, {
             epochs: this.config.epochs,
+            shuffle: true,
             callbacks: { onBatchEnd }
         })
 

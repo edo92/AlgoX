@@ -11,7 +11,7 @@ class Models extends Component {
             modelName: '',
             in: 'local',
             epochs: 10,
-            layer1: 125,
+            layer1: 34,
             layer2: 12,
             layer3: 2
         }
@@ -59,12 +59,14 @@ class Models extends Component {
 
             return (
                 <>
-                    <small>{model.modelName}</small>
-                    <small>{model.epochs}</small>
-                    <small>{model.layer1}-{model.layer2}-{model.layer3}</small>
-                    <small>{model.result.acc * 100}%</small>
-                    <small>{model.result.loss * 100}%</small>
-                    <small>{model.result.btAcc * 100}%</small>
+                    {model.result ? <>
+                        <small>{model.modelName}</small>
+                        <small>{model.epochs}</small>
+                        <small>{model.layer1}-{model.layer2}-{model.layer3}</small>
+                        <small>{model.result.acc * 100}%</small>
+                        <small>{model.result.loss * 100}%</small>
+                        <small>{model.result.btAcc * 100}%</small>
+                    </> : <small>Err</small>}
                 </>
             )
         }
