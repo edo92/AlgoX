@@ -32,12 +32,14 @@ class Predict {
                 let predicted = predict[each][i];
 
                 let isWin = predicted[1] > predict[each][Math.abs(i - 1)][1];
+                let differ = Number(Math.abs(predicted[0] - (predict[each][Math.abs(i - 1)][0])));
 
                 list[fighter] = {
                     win: predicted[1],
                     loss: predicted[0],
-                    outcome: isWin ? 'Win' : 'Loss'
-                };
+                    outcome: isWin ? 'Win' : 'Loss',
+                    strength: Math.round(differ * 100)
+                }
             }
         }
 

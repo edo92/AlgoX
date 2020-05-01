@@ -20,10 +20,10 @@ class SelectForm extends Component {
                             <Col xs={6}>
                                 <Row>
                                     <Radio.Group className='p-3' name={fight.fighter1.name} onChange={this.onChange}>
-                                        <Radio onChange={val => this.handelSelect(val, 'fav')} style={radioStyle} value={1}><small><Badge status='success' />Favorit</small></Radio>
-                                        <Radio onChange={val => this.handelSelect(val, 'include')} style={radioStyle} value={2}><small><Badge status='warning' />Include</small></Radio>
-                                        <Radio onChange={val => this.handelSelect(val, 'exclude')} style={radioStyle} value={3}><small><Badge status='error' />Exclude</small></Radio>
-                                        <Radio onChange={val => this.handelSelect(val, 'neutral')} style={radioStyle} value={4}><small><Badge status='default' />Neutral</small></Radio>
+                                        <Radio onChange={val => this.props.handleSelect(val, i, 'fighter1', 'favorite')} style={radioStyle} value={1}><small><Badge status='success' />Favorite</small></Radio>
+                                        <Radio onChange={val => this.props.handleSelect(val, i, 'fighter1', 'include')} style={radioStyle} value={2}><small><Badge status='warning' />Include</small></Radio>
+                                        <Radio onChange={val => this.props.handleSelect(val, i, 'fighter1', 'exclude')} style={radioStyle} value={3}><small><Badge status='error' />Exclude</small></Radio>
+                                        <Radio onChange={val => this.props.handleSelect(val, i, 'fighter1', 'neutral')} style={radioStyle} value={4}><small><Badge status='default' />Neutral</small></Radio>
                                     </Radio.Group>
                                     <Col className='p-4'>
                                         <Avatar size={75}></Avatar>
@@ -35,6 +35,7 @@ class SelectForm extends Component {
                                         {fight.fighter1.predict && <div>
                                             <Badge status={(fight.fighter1.outcome) === fight.fighter1.predict.outcome ? 'success' : 'error'} />
                                             <span>{(fight.fighter1.predict.outcome)}</span><br />
+                                            <span>Reality:{fight.fighter1.outcome}</span><br/>
                                             <span>{fight.fighter1.predict.win.toFixed(2) * 100}% </span>
                                             <span>-{fight.fighter1.predict.loss.toFixed(2) * 100}%</span>
                                         </div>}
@@ -53,15 +54,16 @@ class SelectForm extends Component {
                                         {fight.fighter2.predict && <div>
                                             <Badge status={(fight.fighter2.outcome) === fight.fighter2.predict.outcome ? 'success' : 'error'} />
                                             <span>{(fight.fighter2.predict.outcome)}</span><br />
+                                            <span>Reality:{fight.fighter2.outcome}</span><br/>
                                             <span>{fight.fighter2.predict.win.toFixed(2) * 100}% </span>
                                             <span>-{fight.fighter2.predict.loss.toFixed(2) * 100}%</span>
                                         </div>}
                                     </Col>
                                     <Radio.Group className='p-3' name={fight.fighter2.name} onChange={this.onChange}>
-                                        <Radio onChange={val => this.handelSelect(val, 'fav')} style={radioStyle} value={1}><small><Badge status='success' />Favorit</small></Radio>
-                                        <Radio onChange={val => this.handelSelect(val, 'include')} style={radioStyle} value={2}><small><Badge status='warning' />Include</small></Radio>
-                                        <Radio onChange={val => this.handelSelect(val, 'exclude')} style={radioStyle} value={3}><small><Badge status='error' />Exclude</small></Radio>
-                                        <Radio onChange={val => this.handelSelect(val, 'neutral')} style={radioStyle} value={4}><small><Badge status='default' />Neutral</small></Radio>
+                                        <Radio onChange={val => this.props.handleSelect(val, i, 'fighter2', 'favorite')} style={radioStyle} value={5}><small><Badge status='success' />Favorite</small></Radio>
+                                        <Radio onChange={val => this.props.handleSelect(val, i, 'fighter2', 'include')} style={radioStyle} value={6}><small><Badge status='warning' />Include</small></Radio>
+                                        <Radio onChange={val => this.props.handleSelect(val, i, 'fighter2', 'exclude')} style={radioStyle} value={7}><small><Badge status='error' />Exclude</small></Radio>
+                                        <Radio onChange={val => this.props.handleSelect(val, i, 'fighter2', 'neutral')} style={radioStyle} value={8}><small><Badge status='default' />Neutral</small></Radio>
                                     </Radio.Group>
                                 </Row>
                             </Col>

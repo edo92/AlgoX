@@ -25,6 +25,10 @@ class Draft extends Component {
         this.setState({ model: model });
     }
 
+    handleSelectOptions = (val, index, fighter, opt) => {
+        this.state.draft.fights[index][fighter].select = opt;
+    }
+
     predict = async () => {
         this.setState({ predictOnLoad: true });
         let predict = await axios.post('/engine/predict/draft/', { model: this.state.model });
@@ -33,7 +37,6 @@ class Draft extends Component {
 
     generate = async () => {
         let test = await axios.post('/engine/generate/draft/', { draft: this.state.draft });
-        console.log('test---', test)
     }
 
     render() {
@@ -56,7 +59,7 @@ class Draft extends Component {
                                 </Select>
                             </Row>
                         }>
-                            <SelectForm draft={this.state.draft} />
+                            <SelectForm handleSelect={this.handleSelectOptions} draft={this.state.draft} />
                         </Card>
                     </Col>
                 </Row>

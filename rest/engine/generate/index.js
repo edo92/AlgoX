@@ -4,15 +4,16 @@ class Generate extends Actions {
     constructor() {
         super();
 
-        this.draft = (req, send) => {
+        this.draft = async (req, send) => {
             let fights = req.body.draft.fights;
 
-            let fgtrList = this.setOpponent(fights);
-            let pureCombins = this.combinations(fgtrList, 6);
+            let fgtrList = await this.setOpponent(fights);
+            let pureCombins = await this.combinations(fgtrList, 6);
 
-            let cleanCombins = this.cleanCombins(pureCombins);
+            let cleanCombins = await this.cleanCombins(pureCombins);
+            let count = await this.countCombins(cleanCombins);
 
-            let test = this.rateCombins(cleanCombins);
+            let test = await this.detect(count);
 
             send();
         }
