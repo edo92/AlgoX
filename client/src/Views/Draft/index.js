@@ -7,6 +7,7 @@ import { AppstoreAddOutlined, BulbOutlined } from '@ant-design/icons';
 
 import Card from '../../App/components/MainCard';
 import Aux from '../../hoc/_Aux';
+
 import SelectForm from './SelectForm';
 import InputForm from './InputForm';
 import Combinations from './Combinations';
@@ -39,7 +40,7 @@ class Draft extends Component {
 
     generate = async () => {
         let generated = await axios.post('/engine/generate/draft/', { draft: this.state.draft });
-        this.setState({ generated: true, cards: generated.data });
+        this.setState({ cards: generated.data });
     }
 
     saveCombins = async () => {
@@ -47,6 +48,7 @@ class Draft extends Component {
     }
 
     render() {
+        console.log('state', this.state)
         return (
             <Aux>
                 <Row>
@@ -66,9 +68,13 @@ class Draft extends Component {
                                 </Select>
                             </Row>
                         }>
-                            {this.state.generated ?
-                                <Combinations saveCombins={this.saveCombins} draftInfo={this.state.draftInfo} cards={this.state.cards} /> :
+                            {this.state.inputMode ?
+                                <InputForm fights={this.state.draft.fights} /> :
                                 <SelectForm handleSelect={this.handleSelectOptions} draft={this.state.draft} />
+                            }
+                            
+                            {this.state.cards &&
+                                <Combinations saveCombins={this.saveCombins} draftInfo={this.state.draftInfo} cards={this.state.cards} />
                             }
                         </Card>
                     </Col>

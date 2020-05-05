@@ -1,5 +1,5 @@
 module.exports = list => {
-    let test = strongOpp(list);
+    return strongOpp(list);
 }
 
 function strongOpp(list) {
@@ -11,7 +11,7 @@ function strongOpp(list) {
         let strCount = 0;
 
         card.fighters.map(fighter => {
-            if (fighter.predict.strength >= 19 && fighter.predict.outcome === 'Win') {
+            if (fighter.predict.strength >= 13 && fighter.predict.outcome === 'Win') {
                 strCount += 1
             }
         })
@@ -30,6 +30,7 @@ function strongOpp(list) {
         })
     })
     getInfo(newList);
+    return newList;
 }
 
 function getInfo(list) {
@@ -40,7 +41,7 @@ function getInfo(list) {
         if (!test[item.config.real]) {
             test[item.config.real] = { count: 0 };
         }
-        test[item.config.real].count += item.config.real;
+        test[item.config.real].count += 1;
     })
 
     console.log('list', test)

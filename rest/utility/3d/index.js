@@ -81,7 +81,7 @@ class Format3d {
             // Test
             win: stats.win,
             loss: stats.loss,
-            winStrick: stats.winStrick,
+            // winStrick: stats.winStrick,
 
             kd: stats.kd,
             subAvg: stats.subAvg,

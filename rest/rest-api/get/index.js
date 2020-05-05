@@ -1,4 +1,5 @@
 const db = require('../../../db');
+const util = require('../../utility');
 
 class Get {
     init = async (req, callback) => {
@@ -17,14 +18,21 @@ class Get {
         let models = await db.models.Model.find();
 
         let inputMode = true;
-        for (let each in draft.fights) {
-            if (!draft.fights[each].dk) {
-                break
-            }
-            inputMode = false;
-        }
 
-        return callback({ draft, inputMode, models });
+        if (draft) {
+            for (let each in draft.fights) {
+                if (!draft.fights[each].dk) {
+                    break
+                }
+                inputMode = false;
+            }
+            return callback({ draft, inputMode, models });
+
+        } else {
+            await util.scrape.upcomingEvent(draft => {
+                return callback({ draft, inputMode, models });
+            });
+        }
     }
 }
 

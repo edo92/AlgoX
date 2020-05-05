@@ -60,12 +60,11 @@ class SamplePage extends Component {
     }
 
     backtest = async model => {
-        let test = await axios.post('/engine/model/backtest/', { model });
+        await axios.post('/engine/model/backtest/', { model });
     }
 
 
     render() {
-        console.log('thisttate ---', this.state)
         return (
             <Aux>
                 <Row>
