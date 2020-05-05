@@ -43,16 +43,22 @@ class Predict {
             }
         }
 
+        let strAvg = 0;
         for (let fights in draft.fights) {
             let fight = draft.fights[fights];
 
             for (let i = 1; i < 3; i++) {
                 let fighter = `fighter${i}`;
                 fight[fighter].predict = list[fight[fighter].name];
+
+                strAvg += fight[fighter].predict.strength;
             }
         }
-
-        send({ draft: draft });
+        let draftInfo = {
+            strAvg: Math.round(strAvg / draft.fights.length - 1),
+            size: draft.fights.length - 1
+        }
+        send({ draft: draft, draftInfo });
     }
 }
 

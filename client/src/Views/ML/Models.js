@@ -76,7 +76,6 @@ class Models extends Component {
                 <Card title={'Trained Models'}>
                     <List style={{ height: '170px', overflowY: 'scroll' }}>
                         <ModelGuid />
-                        {console.log('this.props.models ', this.props.models)}
                         {this.props.models ? this.props.models.map((model, i) => (
                             <List.Item key={i}>
                                 <small>
@@ -92,7 +91,7 @@ class Models extends Component {
                                             <EllipsisOutlined className='ellipsButtonStyle' />
                                         </Button>
                                     </Dropdown>
-                                    <Button style={{ width: '20px', padding: '.2em', height: '20px' }}>
+                                    <Button onClick={() => this.props.backtest(model)} style={{ width: '20px', padding: '.2em', height: '20px' }}>
                                         <DotChartOutlined className='ellipsButtonStyle' />
                                     </Button>
                                 </small>

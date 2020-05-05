@@ -1,15 +1,18 @@
 class ConstractFormat {
     performaceRawData = stats => {
         return {
+            kd: Number(stats.kd),
+
             sigStr: Number(stats.strSigPers.split('%')[0]),
+            
             // Take down
             takeDown: Number(stats.takeDownPers.split('%')[0]),
+
             // Submission
             subAtt: Number(stats.subAtt),
             pass: Number(stats.pass),
             rev: Number(stats.rev),
 
-            kd: Number(stats.kd),
             // Strick
             sigStrTotal: Number(stats.strSig.split(' of ')[1]),
             sigStrLanded: Number(stats.strSig.split(' of ')[0]),
@@ -40,6 +43,24 @@ class ConstractFormat {
     }
 
     constractStats = stats => {
+        // Test
+        let win = 0, loss = 0, count = 0, winStrick = 0;
+
+        for (let data in stats.pastFights) {
+            let fight = stats.pastFights[data];
+
+            if (fight.outcome === 'win') {
+                win += 1;
+                count += 1;
+            }
+            else {
+                if (!winStrick) {
+                    winStrick = count;
+                }
+                loss += 1;
+            }
+        }
+
         return {
             age: !stats.dob.split(', ')[1] ? 30 : new Date().getFullYear() - Number(stats.dob.split(', ')[1]),
             hight: stats.hight === '--' ? 0 : Number(`${stats.hight.split("'")[0]}.${stats.hight.split("'")[1].split('"')[0].trim()}`),
@@ -47,6 +68,8 @@ class ConstractFormat {
             // Mes.
             weight: Number(stats.weight.split(' ')[0]),
             reach: stats.reach === '--' ? 0 : Number(stats.reach.split('"')[0]),
+
+            win, loss, winStrick, // Test
 
             strAcc: Number(stats.StrAcc.split('%')[0]),
             strDef: Number(stats.StrDef.split('%')[0]),

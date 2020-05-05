@@ -78,6 +78,11 @@ class Format3d {
             weight: stats.weight,
             reach: stats.reach,
 
+            // Test
+            win: stats.win,
+            loss: stats.loss,
+            winStrick: stats.winStrick,
+
             kd: stats.kd,
             subAvg: stats.subAvg,
             subAtt: stats.subAtt,

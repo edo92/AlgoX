@@ -59,6 +59,11 @@ class SamplePage extends Component {
         let stats = await axios.get('/api/update/stats');
     }
 
+    backtest = async model => {
+        let test = await axios.post('/engine/model/backtest/', { model });
+    }
+
+
     render() {
         console.log('thisttate ---', this.state)
         return (

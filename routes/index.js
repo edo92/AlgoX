@@ -11,6 +11,15 @@ module.exports = (app) => {
         })
     })
 
+    app.post('/api/:action/:target', (req, res) => {
+        let { action, target } = req.params;
+
+        let api = rest.api[action][target];
+        api(req, data => {
+            res.status(200).json(data);
+        })
+    })
+
     // Engine
     app.post('/engine/:action/:target', (req, res) => {
         let { action, target } = req.params;

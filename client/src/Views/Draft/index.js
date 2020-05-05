@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Row, Col } from 'react-bootstrap';
 
-import { List, Avatar, Badge, Divider, InputNumber, Button, Skeleton, Radio, Select } from 'antd';
-import { InfoCircleOutlined, SearchOutlined, NodeIndexOutlined, AppstoreAddOutlined, BulbOutlined } from '@ant-design/icons';
+import { Button, Select } from 'antd';
+import { AppstoreAddOutlined, BulbOutlined } from '@ant-design/icons';
 
 import Card from '../../App/components/MainCard';
 import Aux from '../../hoc/_Aux';
 import SelectForm from './SelectForm';
+import InputForm from './InputForm';
+import Combinations from './Combinations';
 
 class Draft extends Component {
     state = {};
@@ -32,11 +34,16 @@ class Draft extends Component {
     predict = async () => {
         this.setState({ predictOnLoad: true });
         let predict = await axios.post('/engine/predict/draft/', { model: this.state.model });
-        this.setState({ predicted: true, predictOnLoad: false, draft: predict.data.draft });
+        this.setState({ predicted: true, predictOnLoad: false, draft: predict.data.draft, draftInfo: predict.data.draftInfo });
     }
 
     generate = async () => {
-        let test = await axios.post('/engine/generate/draft/', { draft: this.state.draft });
+        let generated = await axios.post('/engine/generate/draft/', { draft: this.state.draft });
+        this.setState({ generated: true, cards: generated.data });
+    }
+
+    saveCombins = async () => {
+        await axios.post('/api/create/draft/', { cards: this.state.cards });
     }
 
     render() {
@@ -59,7 +66,10 @@ class Draft extends Component {
                                 </Select>
                             </Row>
                         }>
-                            <SelectForm handleSelect={this.handleSelectOptions} draft={this.state.draft} />
+                            {this.state.generated ?
+                                <Combinations saveCombins={this.saveCombins} draftInfo={this.state.draftInfo} cards={this.state.cards} /> :
+                                <SelectForm handleSelect={this.handleSelectOptions} draft={this.state.draft} />
+                            }
                         </Card>
                     </Col>
                 </Row>

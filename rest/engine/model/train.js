@@ -13,7 +13,7 @@ class Train {
     }
 
     trainModel = async dataset => {
-        const shapeY = 33//dataset.config.dataPoints;
+        const shapeY = 36;
         const shapeX = 2;
 
         const trinData = tf.tensor3d(dataset.dataset);
@@ -23,7 +23,7 @@ class Train {
 
         model.add(tf.layers.dense({ units: this.config.layer1, inputShape: [shapeX, shapeY], activation: 'sigmoid' }));
         model.add(tf.layers.dense({ units: this.config.layer2, activation: 'sigmoid' }));
-        model.add(tf.layers.dense({ units: this.config.layer3, activation: 'softplus' }));
+        model.add(tf.layers.dense({ units: this.config.layer3, activation: 'softmax' }));
 
         await model.compile({
             optimizer: tf.train.adam(),

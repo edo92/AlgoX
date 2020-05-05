@@ -1,21 +1,18 @@
-const Actions = require('./actions');
+const combinations = require('./combins');
+const lableCombins = require('./lable');
+const sortCombins = require('./sort');
 
-class Generate extends Actions {
+class Generate {
     constructor() {
-        super();
-
         this.draft = async (req, send) => {
             let fights = req.body.draft.fights;
+            let combins = combinations(fights);
 
-            let fgtrList = await this.setOpponent(fights);
-            let pureCombins = await this.combinations(fgtrList, 6);
+            let labled = lableCombins(combins);
 
-            let cleanCombins = await this.cleanCombins(pureCombins);
-            let count = await this.countCombins(cleanCombins);
+            let sort = sortCombins(labled);
 
-            let test = await this.detect(count);
-
-            send();
+            return send(sort);
         }
     }
 }

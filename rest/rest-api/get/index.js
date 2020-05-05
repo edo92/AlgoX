@@ -16,7 +16,15 @@ class Get {
         let draft = await db.models.Draft.findOne();
         let models = await db.models.Model.find();
 
-        return callback({ draft, models });
+        let inputMode = true;
+        for (let each in draft.fights) {
+            if (!draft.fights[each].dk) {
+                break
+            }
+            inputMode = false;
+        }
+
+        return callback({ draft, inputMode, models });
     }
 }
 

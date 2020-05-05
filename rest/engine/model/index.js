@@ -13,6 +13,16 @@ class Model {
         this.pwd = 'rest/engine/model/models';
     }
 
+    backtest = async (req, send) => {
+        let dataset = await dtset.get('5eb00198b35b30693421ec3a');
+        let model = await this.get(req.body.model._id);
+
+        let test = new util.test;
+        let result = await test.backtest(model, dataset.dataset);
+
+        console.log('result', result)
+    }
+
     train = async (req, send) => {
         // Get dataset
         let dataset = await dtset.get(req.body.config.dataset);
