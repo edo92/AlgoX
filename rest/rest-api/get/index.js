@@ -13,6 +13,11 @@ class Get {
         return callback({ models, datasets, model: result, dataset });
     }
 
+    fighterStats = async (req, callback) => {
+        let stats = await db.models.Fighters.findOne({ fighterId: req.body.id });
+        callback(stats);
+    }
+
     draftInit = async (req, callback) => {
         let draft = await db.models.Draft.findOne();
         let models = await db.models.Model.find();
@@ -20,18 +25,42 @@ class Get {
         let inputMode = true;
 
         if (draft) {
+            // Check if all fighters have dk points (switch inputMode)
             for (let each in draft.fights) {
                 if (!draft.fights[each].dk) {
                     break
                 }
                 inputMode = false;
             }
-            return callback({ draft, inputMode, models });
 
-        } else {
-            await util.scrape.upcomingEvent(draft => {
-                return callback({ draft, inputMode, models });
-            });
+            let fighters = {};
+            for (let each in draft.fights) {
+                for (let i = 1; i < 3; i++) {
+                    let fighter = draft.fights[each][`fighter${i}`];
+                    if (!fighters[fighter.name]) {
+                        fighters[fighter.name] = false
+                    }
+                }
+            }
+            return callback({ draft, fighters, inputMode, models });
+        }
+        else {
+            return await util.scrape.upcomingEvent(async draft => {
+                // Save Upcoming event in Draft
+                let saved = await db.models.Draft.create(draft);
+
+                if (saved) { // Check if all fighters have profile, else create
+                    util.scrape.fighterStats(draft.fights, async fighter => {
+                        let exists = await db.models.Fighters.exists({ fighterId: fighter.fighterId });
+
+                        if (!exists) {
+                            // Create fighter profile
+                            await db.models.Fighters.create(fighter);
+                        }
+                    })
+                    callback({ draft, inputMode, models });
+                }
+            })
         }
     }
 }

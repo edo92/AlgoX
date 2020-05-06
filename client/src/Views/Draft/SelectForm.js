@@ -33,9 +33,11 @@ class SelectForm extends Component {
                                             <Button className='mx-1' shape='circle' icon={<SearchOutlined />} />
                                         </div>
                                         {fight.fighter1.predict && <div>
-                                            <Badge status={(fight.fighter1.outcome) === fight.fighter1.predict.outcome ? 'success' : 'error'} />
+                                            {fight.fighter1.outcome && < span >
+                                                <Badge status={(fight.fighter1.outcome) === fight.fighter1.predict.outcome ? 'success' : 'error'} />
+                                                <span>Reality:{fight.fighter1.outcome}</span><br />
+                                            </span>}
                                             <span>{(fight.fighter1.predict.outcome)}</span><br />
-                                            <span>Reality:{fight.fighter1.outcome}</span><br/>
                                             <span>{fight.fighter1.predict.win.toFixed(2) * 100}% </span>
                                             <span>-{fight.fighter1.predict.loss.toFixed(2) * 100}%</span>
                                         </div>}
@@ -52,9 +54,13 @@ class SelectForm extends Component {
                                             <Button className='mx-1' shape='circle' icon={<SearchOutlined />} />
                                         </div>
                                         {fight.fighter2.predict && <div>
-                                            <Badge status={(fight.fighter2.outcome) === fight.fighter2.predict.outcome ? 'success' : 'error'} />
+                                            {fight.fighter2.outcome &&
+                                                <span>
+                                                    <Badge status={(fight.fighter2.outcome) === fight.fighter2.predict.outcome ? 'success' : 'error'} />
+                                                    <span>Reality:{fight.fighter2.outcome}</span><br />
+                                                </span>
+                                            }
                                             <span>{(fight.fighter2.predict.outcome)}</span><br />
-                                            <span>Reality:{fight.fighter2.outcome}</span><br/>
                                             <span>{fight.fighter2.predict.win.toFixed(2) * 100}% </span>
                                             <span>-{fight.fighter2.predict.loss.toFixed(2) * 100}%</span>
                                         </div>}
@@ -71,7 +77,7 @@ class SelectForm extends Component {
                         </Row>
                     )
                 }) : <Skeleton />}
-            </List>
+            </List >
         )
     }
 }

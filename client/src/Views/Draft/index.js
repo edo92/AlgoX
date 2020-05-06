@@ -43,8 +43,32 @@ class Draft extends Component {
         this.setState({ cards: generated.data });
     }
 
+    saveFightsData = async () => {
+        await axios.post('/api/update/draft', { draft: this.state.draft });
+    }
+
+    handleUpdateDkForm = draft => {
+        this.setState({ draft });
+    }
+
     saveCombins = async () => {
         await axios.post('/api/create/draft/', { cards: this.state.cards });
+    }
+
+    generateCustomCombins = async () => {
+        let generated = await axios.post('/engine/generate/draft/', { draft: this.state.draft, filter: this.state.fighters });
+        this.setState({ cards: generated.data });
+    }
+
+    handleSelectFighter = (fighter, opponent) => {
+        this.setState({
+            ...this.state,
+            fighters: {
+                ...this.state.fighters,
+                [fighter]: !this.state.fighters[fighter],
+                [opponent]: this.state.fighters[fighter] ? false : this.state.fighters[fighter]
+            }
+        })
     }
 
     render() {
@@ -55,7 +79,7 @@ class Draft extends Component {
                     <Col>
                         <Card isOption title={
                             <Row>
-                                <Button onClick={this.generate} disabled={!this.state.predicted} className='mr-3' type='ghost'>Generate<AppstoreAddOutlined /></Button>
+                                <Button onClick={this.generateCustomCombins} disabled={!this.state.predicted} className='mr-3' type='ghost'>Generate<AppstoreAddOutlined /></Button>
                                 <Button onClick={this.predict} disabled={!this.state.model || this.state.predictOnLoad} loading={this.state.predictOnLoad} className='mr-3' type='ghost'>
                                     Predict{!this.state.predictOnLoad && <BulbOutlined />}
                                 </Button>
@@ -68,13 +92,11 @@ class Draft extends Component {
                                 </Select>
                             </Row>
                         }>
-                            {this.state.inputMode ?
-                                <InputForm fights={this.state.draft.fights} /> :
-                                <SelectForm handleSelect={this.handleSelectOptions} draft={this.state.draft} />
+                            {!this.state.inputMode && this.state.draft &&
+                                <InputForm update={this.handleUpdateDkForm} saveFightsData={this.saveFightsData} draft={this.state.draft} />
                             }
-                            
-                            {this.state.cards &&
-                                <Combinations saveCombins={this.saveCombins} draftInfo={this.state.draftInfo} cards={this.state.cards} />
+                            {this.state.inputMode && this.state.draft &&
+                                <Combinations state={this.state} generate={this.generateCustomCombins} handleSelect={this.handleSelectFighter} draft={this.state.draft} saveCombins={this.saveCombins} draftInfo={this.state.draftInfo} cards={this.state.cards} />
                             }
                         </Card>
                     </Col>

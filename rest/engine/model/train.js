@@ -13,7 +13,7 @@ class Train {
     }
 
     trainModel = async dataset => {
-        const shapeY = 36;
+        const shapeY = 35;
         const shapeX = 2;
 
         const trinData = tf.tensor3d(dataset.dataset);

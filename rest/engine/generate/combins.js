@@ -25,13 +25,18 @@ function cleanCombins(list) {
 
             // Count total card price
             let pricePoint = fighter.dk.price;
+
             // Split not standart price value
-            if (pricePoint.split('$')[1]) {
-                price += Number(pricePoint.split('$')[1]);
-            }
-            else {
-                let x = pricePoint.split('$')[0].split(',');
-                price += Number(x[0] + x[1]);
+            if (typeof pricePoint !== 'number') {
+                if (pricePoint.split('$')[1]) {
+                    price += Number(pricePoint.split('$')[1]);
+                }
+                else {
+                    let x = pricePoint.split('$')[0].split(',');
+                    price += Number(x[0] + x[1]);
+                }
+            } else {
+                price += pricePoint;
             }
         }
 

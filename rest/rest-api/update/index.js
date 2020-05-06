@@ -25,7 +25,19 @@ class Update {
             { ...this.state }
         )
 
-        send({ info: updated });
+        return send({ info: updated });
+    }
+
+    draft = async (req, send) => {
+        let draft = req.body.draft;
+
+        if (draft.fights) {
+            let current = await db.models.Draft.findOne();
+            await db.models.Draft.findOneAndUpdate(
+                { _id: current._id },
+                { fights: draft.fights }
+            )
+        }
     }
 }
 
