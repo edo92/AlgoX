@@ -20,12 +20,26 @@ class Get {
 
     cards = async (req, send) => {
         let event = await db.models.Combins.findOne();
-        
+
         event.cards.map(card => {
             card.config.saved = true;
         })
 
-        return send(event);
+        return send({ cards: event.cards, fighters: fightersCount(event.cards) });
+
+        function fightersCount(list) {
+            let fighters = {};
+
+            list.map(card => {
+                card.fighters.map(fighter => {
+                    if (!fighters[fighter.name]) {
+                        fighters[fighter.name] = 0;
+                    }
+                    fighters[fighter.name] += 1;
+                })
+            })
+            return fighters;
+        }
     }
 
     draftInit = async (req, callback) => {

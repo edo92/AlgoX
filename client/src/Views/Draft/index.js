@@ -3,17 +3,18 @@ import axios from 'axios';
 import { Row, Col } from 'react-bootstrap';
 
 import { Button, Select } from 'antd';
-import { AppstoreAddOutlined, BulbOutlined } from '@ant-design/icons';
+import { BulbOutlined } from '@ant-design/icons';
 
 import Card from '../../App/components/MainCard';
 import Aux from '../../hoc/_Aux';
 
-import SelectForm from './SelectForm';
 import InputForm from './InputForm';
 import Combinations from './Combinations';
+import LiveEvent from './Live';
 
 class Draft extends Component {
-    state = {};
+    state = {
+    };
 
     componentDidMount() {
         this.initialRequest();
@@ -56,13 +57,23 @@ class Draft extends Component {
     }
 
     generateCustomCombins = async () => {
-        let generated = await axios.post('/engine/generate/draft/', { draft: this.state.draft, filter: this.state.fighters });
-        this.setState({ cards: generated.data });
+        let size = 0;
+
+        // Count selected fighters number
+        Object.keys(this.state.fighters).map(fighter => {
+            if (this.state.fighters[fighter]) {
+                size += 1;
+            }
+        })
+        if (size > 2) {
+            let generated = await axios.post('/engine/generate/draft/', { draft: this.state.draft, filter: this.state.fighters });
+            this.setState({ combins: generated.data });
+        }
     }
 
     getCombins = async () => {
         let cards = await axios.get('/api/get/cards/');
-        this.setState({ cards: cards.data.cards });
+        this.setState({ combins: cards.data });
     }
 
     draftCard = async card => {
@@ -92,7 +103,7 @@ class Draft extends Component {
     }
 
     render() {
-        console.log('this.stae', this.state)
+        console.log('state',this.state)
         return (
             <Aux>
                 <Row>
@@ -100,7 +111,6 @@ class Draft extends Component {
                         <Card isOption title={
                             <Row>
                                 <Button onClick={this.getCombins} type='primary' className='mr-3'>Saved Cards</Button>
-                                <Button onClick={this.generateCustomCombins} disabled={!this.state.predicted} className='mr-3' type='ghost'>Generate<AppstoreAddOutlined /></Button>
                                 <Button onClick={this.predict} disabled={!this.state.model || this.state.predictOnLoad} loading={this.state.predictOnLoad} className='mr-3' type='ghost'>
                                     Predict{!this.state.predictOnLoad && <BulbOutlined />}
                                 </Button>
@@ -117,7 +127,11 @@ class Draft extends Component {
                                 <InputForm update={this.handleUpdateDkForm} saveFightsData={this.saveFightsData} draft={this.state.draft} />
                             }
                             {this.state.inputMode && this.state.draft &&
-                                <Combinations {...this} getCombins={this.getCombins} state={this.state} generate={this.generateCustomCombins} handleSelect={this.handleSelectFighter} draft={this.state.draft} saveCombins={this.saveCombins} draftInfo={this.state.draftInfo} cards={this.state.cards} />
+                                <Combinations {...this} state={this.state} getCombins={this.getCombins} state={this.state} generate={this.generateCustomCombins} handleSelect={this.handleSelectFighter} draft={this.state.draft} saveCombins={this.saveCombins} draftInfo={this.state.draftInfo} />
+                            }
+
+                            {!this.state.live &&
+                                <LiveEvent state={this.state} />
                             }
                         </Card>
                     </Col>
