@@ -18,6 +18,16 @@ class Get {
         callback(stats);
     }
 
+    cards = async (req, send) => {
+        let event = await db.models.Combins.findOne();
+        
+        event.cards.map(card => {
+            card.config.saved = true;
+        })
+
+        return send(event);
+    }
+
     draftInit = async (req, callback) => {
         let draft = await db.models.Draft.findOne();
         let models = await db.models.Model.find();

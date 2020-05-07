@@ -39,6 +39,45 @@ class Update {
             )
         }
     }
+
+    combins = async (req, send) => {
+        let card = req.body.card;
+        console.log('card',card)
+
+        let event = await db.models.Combins.findOne({ name: card.name });
+
+        if (!event) {
+            event = await db.models.Combins.create({ name: card.name });
+        }
+
+        let lookup = {}, exists = false;
+
+        card.fighters.map(fighter => {
+            lookup[fighter.name] = true;
+        })
+
+        event.cards.map(eachCard => {
+            let num = 0;
+
+            eachCard.fighters.map(fighter => {
+                if (lookup[fighter.name]) {
+                    num += 1;
+                }
+            })
+
+            if (num === 6) {
+                exists = true;
+            }
+        })
+        if (!exists) {
+            await db.models.Combins.findOneAndUpdate(
+                { name: event.name },
+                { $push: { cards: card } }
+            )
+        }  else {
+            console.log('Event exists')
+        }
+    }
 }
 
 module.exports = new Update;

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Collapse } from 'react-bootstrap';
 import { Card, Badge, Button, Modal, Avatar, Skeleton, Switch, Divider } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, DashOutlined, DeploymentUnitOutlined } from '@ant-design/icons';
 
 import Aux from '../../hoc/_Aux';
 import CardRow from '../../App/components/MainCard';
@@ -15,7 +15,6 @@ class Combinations extends Component {
 
     statsModalSwitch = async fighter => {
         let stats = await axios.post('/api/get/fighterStats/', { id: fighter.fighterId });
-        console.log('imp-->', fighter)
 
         this.setState({
             viewStats: { ...stats.data, predict: fighter.predict, dk: fighter.dk, outcome: fighter.outcome },
@@ -24,46 +23,55 @@ class Combinations extends Component {
     }
 
     render() {
+        const ButtonPanel = () => (
+            <Card>
+                <Button onClick={() => { this.setState({ filterCollaps: !this.state.filterCollaps }) }} size='small'><DashOutlined className='icon-fix' /></Button>
+                <Button size='small'><DeploymentUnitOutlined className='icon-fix' /></Button>
+            </Card>
+        )
+
         const IntroData = () => (
-            <Card className='p-1'>
-                <Row>
-                    <Col xl={6}>
-                        {(this.props.draft.fights.slice().splice(0, 7) || []).map((fight, i) => {
-                            return (
-                                <Row key={i} className='p-3 justify-content-center'>
-                                    <a onClick={() => this.statsModalSwitch(fight.fighter1)}>
-                                        <InfoCircleOutlined />
-                                    </a>
-                                    <Button type={(this.props.state && this.props.state.fighters[fight.fighter1.name]) ? 'primary' : 'dashed'} onClick={() => this.props.handleSelect(fight.fighter1.name, fight.fighter2.name)} className='px-3'><Badge status={fight.fighter1.predict && fight.fighter1.predict.outcome === 'Win' ? 'success' : 'error'} />{fight.fighter1.name}</Button>
-                                    <span className='px-3'>VS</span>
-                                    <Button type={(this.props.state && this.props.state.fighters[fight.fighter2.name]) ? 'primary' : 'dashed'} onClick={() => this.props.handleSelect(fight.fighter2.name, fight.fighter1.name)} className='px-3'><Badge status={fight.fighter2.predict && fight.fighter2.predict.outcome === 'Win' ? 'success' : 'error'} />{fight.fighter2.name}</Button>
-                                    <a onClick={() => this.statsModalSwitch(fight.fighter2)}>
-                                        <InfoCircleOutlined />
-                                    </a>
-                                </Row>
-                            )
-                        })}
-                    </Col>
-                    <Col xl={6}>
-                        {(this.props.draft.fights.slice().splice(7, this.props.draft.fights.length) || []).map((fight, i) => {
-                            return (
-                                <Row key={i} className='p-3 justify-content-center'>
-                                    <a onClick={() => this.statsModalSwitch(fight.fighter1)}>
-                                        <InfoCircleOutlined />
-                                    </a>
-                                    <Button type={(this.props.state && this.props.state.fighters[fight.fighter1.name]) ? 'primary' : 'dashed'} onClick={() => this.props.handleSelect(fight.fighter1.name, fight.fighter2.name)} className='px-3'><Badge status={fight.fighter1.predict && fight.fighter1.predict.outcome === 'Win' ? 'success' : 'error'} />{fight.fighter1.name}</Button>
-                                    <span className='px-3'>VS</span>
-                                    <Button type={(this.props.state && this.props.state.fighters[fight.fighter2.name]) ? 'primary' : 'dashed'} onClick={() => this.props.handleSelect(fight.fighter2.name, fight.fighter1.name)} className='px-3'><Badge status={fight.fighter2.predict && fight.fighter2.predict.outcome === 'Win' ? 'success' : 'error'} />{fight.fighter2.name}</Button>
-                                    <a onClick={() => this.statsModalSwitch(fight.fighter2)}>
-                                        <InfoCircleOutlined />
-                                    </a>
-                                </Row>
-                            )
-                        })}
-                    </Col>
-                </Row>
-                <StatsModal />
-            </Card >
+            <Collapse in={this.state.filterCollaps}>
+                <Card className='p-1'>
+                    <Row>
+                        <Col xl={6}>
+                            {(this.props.draft.fights.slice().splice(0, 7) || []).map((fight, i) => {
+                                return (
+                                    <Row key={i} className='p-3'>
+                                        <a onClick={() => this.statsModalSwitch(fight.fighter1)}>
+                                            <InfoCircleOutlined />
+                                        </a>
+                                        <Button type={(this.props.state && this.props.state.fighters[fight.fighter1.name]) ? 'primary' : 'dashed'} onClick={() => this.props.handleSelect(fight.fighter1.name, fight.fighter2.name)} className='px-3'><Badge status={fight.fighter1.predict && fight.fighter1.predict.outcome === 'Win' ? 'success' : 'error'} />{fight.fighter1.name}</Button>
+                                        <span className='px-3'>VS</span>
+                                        <Button type={(this.props.state && this.props.state.fighters[fight.fighter2.name]) ? 'primary' : 'dashed'} onClick={() => this.props.handleSelect(fight.fighter2.name, fight.fighter1.name)} className='px-3'><Badge status={fight.fighter2.predict && fight.fighter2.predict.outcome === 'Win' ? 'success' : 'error'} />{fight.fighter2.name}</Button>
+                                        <a onClick={() => this.statsModalSwitch(fight.fighter2)}>
+                                            <InfoCircleOutlined />
+                                        </a>
+                                    </Row>
+                                )
+                            })}
+                        </Col>
+                        <Col xl={6}>
+                            {(this.props.draft.fights.slice().splice(7, this.props.draft.fights.length) || []).map((fight, i) => {
+                                return (
+                                    <Row key={i} className='p-3 justify-content-center'>
+                                        <a onClick={() => this.statsModalSwitch(fight.fighter1)}>
+                                            <InfoCircleOutlined />
+                                        </a>
+                                        <Button type={(this.props.state && this.props.state.fighters[fight.fighter1.name]) ? 'primary' : 'dashed'} onClick={() => this.props.handleSelect(fight.fighter1.name, fight.fighter2.name)} className='px-3'><Badge status={fight.fighter1.predict && fight.fighter1.predict.outcome === 'Win' ? 'success' : 'error'} />{fight.fighter1.name}</Button>
+                                        <span className='px-3'>VS</span>
+                                        <Button type={(this.props.state && this.props.state.fighters[fight.fighter2.name]) ? 'primary' : 'dashed'} onClick={() => this.props.handleSelect(fight.fighter2.name, fight.fighter1.name)} className='px-3'><Badge status={fight.fighter2.predict && fight.fighter2.predict.outcome === 'Win' ? 'success' : 'error'} />{fight.fighter2.name}</Button>
+                                        <a onClick={() => this.statsModalSwitch(fight.fighter2)}>
+                                            <InfoCircleOutlined />
+                                        </a>
+                                    </Row>
+                                )
+                            })}
+                        </Col>
+                    </Row>
+                    <StatsModal />
+                </Card >
+            </Collapse>
         )
 
         const CardsList = props => {
@@ -84,7 +92,6 @@ class Combinations extends Component {
 
         const StatsModal = () => {
             let fighter = this.state.viewStats;
-            console.log('fighter-->', fighter)
             return (
                 <Modal
                     title="Basic Modal"
@@ -164,6 +171,7 @@ class Combinations extends Component {
         }
         return (
             <Aux>
+                <ButtonPanel />
                 <IntroData />
                 <Row style={{ justifyContent: 'space-evenly' }}>
                     {(this.props.cards || []).map((card, i) => {
@@ -173,7 +181,12 @@ class Combinations extends Component {
                                     <span>
                                         <small className='px-2'>{`Str: ${card.config.strength}`}</small>
                                         <small className='px-2'>{`Fppf: ${card.config.fppf}`}</small>
-                                        <Button size='small' style={{ float: 'right' }}>Drafted</Button>
+                                        {card.config.saved &&
+                                            <Button onClick={() => this.props.deleteCard(card)} size='small' style={{ float: 'right' }}>Delete</Button>
+                                        }
+                                        {!card.config.saved &&
+                                            <Button onClick={() => this.props.draftCard(card)} size='small' style={{ float: 'right' }}>Drafted</Button>
+                                        }
                                     </span>
                                 }>
                                 <CardsList card={card} />

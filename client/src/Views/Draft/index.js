@@ -60,6 +60,26 @@ class Draft extends Component {
         this.setState({ cards: generated.data });
     }
 
+    getCombins = async () => {
+        let cards = await axios.get('/api/get/cards/');
+        this.setState({ cards: cards.data.cards });
+    }
+
+    draftCard = async card => {
+        await axios.post('/api/update/combins/', { card: { ...card, name: this.state.draft.name } });
+    }
+
+    deleteCard = async card => {
+        await axios.post('/api/remove/card/', { card: { ...card, name: this.state.draft.name } });
+        this.setState({
+            cards: this.state.cards.filter(eachCard => {
+                if (eachCard._id !== card._id) {
+                    return card
+                }
+            })
+        })
+    }
+
     handleSelectFighter = (fighter, opponent) => {
         this.setState({
             ...this.state,
@@ -72,18 +92,19 @@ class Draft extends Component {
     }
 
     render() {
-        console.log('state', this.state)
+        console.log('this.stae', this.state)
         return (
             <Aux>
                 <Row>
                     <Col>
                         <Card isOption title={
                             <Row>
+                                <Button onClick={this.getCombins} type='primary' className='mr-3'>Saved Cards</Button>
                                 <Button onClick={this.generateCustomCombins} disabled={!this.state.predicted} className='mr-3' type='ghost'>Generate<AppstoreAddOutlined /></Button>
                                 <Button onClick={this.predict} disabled={!this.state.model || this.state.predictOnLoad} loading={this.state.predictOnLoad} className='mr-3' type='ghost'>
                                     Predict{!this.state.predictOnLoad && <BulbOutlined />}
                                 </Button>
-                                <Select onChange={this.handleSelectModel} defaultValue={'Model'} >
+                                <Select onChange={this.handleSelectModel} defaultValue={'Model'} className='mr-3'>
                                     {(this.state.models || []).map((model, i) => {
                                         return (
                                             <Select.Option key={i} value={model._id}>{model.modelName}</Select.Option>
@@ -96,7 +117,7 @@ class Draft extends Component {
                                 <InputForm update={this.handleUpdateDkForm} saveFightsData={this.saveFightsData} draft={this.state.draft} />
                             }
                             {this.state.inputMode && this.state.draft &&
-                                <Combinations state={this.state} generate={this.generateCustomCombins} handleSelect={this.handleSelectFighter} draft={this.state.draft} saveCombins={this.saveCombins} draftInfo={this.state.draftInfo} cards={this.state.cards} />
+                                <Combinations {...this} getCombins={this.getCombins} state={this.state} generate={this.generateCustomCombins} handleSelect={this.handleSelectFighter} draft={this.state.draft} saveCombins={this.saveCombins} draftInfo={this.state.draftInfo} cards={this.state.cards} />
                             }
                         </Card>
                     </Col>
