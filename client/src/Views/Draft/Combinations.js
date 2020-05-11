@@ -28,7 +28,8 @@ class Combinations extends Component {
                 <Row>
                     <Col>
                         <Button onClick={() => { this.setState({ filterCollaps: !this.state.filterCollaps }) }} size='small'><DashOutlined className='icon-fix' /></Button>
-                        <Button onClick={this.props.generateCustomCombins} disabled={!this.props.state.predicted} className='mr-3 icon-fix' size='small' type='ghost'><DeploymentUnitOutlined /></Button>
+                        <Button className='mr-3 icon-fix' onClick={this.props.generateCustomCombins} disabled={!this.props.state.predicted} size='small' type='ghost'><DeploymentUnitOutlined /></Button>
+                        <Button className='mr-3' onClick={this.props.autoGen} size='small'>Auto Gen</Button>
                     </Col>
                     <Col>
                         <b><span className='px-2'><span style={{ fontSize: '12px' }}>Fights: {this.props.state.draft.fights && Object.keys(this.props.state.draft.fights).length}</span></span></b>
@@ -206,8 +207,11 @@ class Combinations extends Component {
                                             {card.config.saved &&
                                                 <Button onClick={() => this.props.deleteCard(card)} size='small' style={{ float: 'right' }}>Delete</Button>
                                             }
+                                            <Button onClick={() => this.props.hideCard(i)} size='small' className='mx-1' style={{ width: '40px', float: 'right' }}>X</Button>
                                             {!card.config.saved &&
-                                                <Button onClick={() => this.props.draftCard(card)} size='small' style={{ float: 'right' }}>Drafted</Button>
+                                                <span>
+                                                    <Button onClick={() => this.props.draftCard(card)} size='small' className='mx-1' style={{ width: '70px', float: 'right' }}>Drafted</Button>
+                                                </span>
                                             }
                                         </span>
                                     }>

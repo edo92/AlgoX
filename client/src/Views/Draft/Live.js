@@ -28,7 +28,6 @@ class LiveEvent extends Component {
 
     render() {
         const draft = this.props.state.draft;
-        console.log('current', this.state.current)
         return (
             <Aux>
                 <Card title='Live Event'>
@@ -47,7 +46,7 @@ class LiveEvent extends Component {
 
                     </Row>
                     <Row className='justify-content-center'>
-                        <Button size='small'><small>End</small></Button>
+                        <Button onClick={() => this.setState({ modal: !this.state.modal })} size='small'><small>End</small></Button>
                     </Row>
                 </Card>
             </Aux>

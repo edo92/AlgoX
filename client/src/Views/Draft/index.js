@@ -39,9 +39,10 @@ class Draft extends Component {
         this.setState({ predicted: true, predictOnLoad: false, draft: predict.data.draft, draftInfo: predict.data.draftInfo });
     }
 
-    generate = async () => {
+    autoGen = async () => {
         let generated = await axios.post('/engine/generate/draft/', { draft: this.state.draft });
-        this.setState({ cards: generated.data });
+        console.log('generated',generated)
+        this.setState({ combins: generated.data });
     }
 
     saveFightsData = async () => {
@@ -80,14 +81,32 @@ class Draft extends Component {
         await axios.post('/api/update/combins/', { card: { ...card, name: this.state.draft.name } });
     }
 
+    hideCard = async index => {
+        this.setState({
+            ...this.state,
+            combins: {
+                ...this.state.combins,
+                cards: this.state.combins.cards.filter((eachCard, i) => {
+                    if (index !== i) {
+                        return eachCard;
+                    }
+                })
+            }
+        })
+    }
+
     deleteCard = async card => {
         await axios.post('/api/remove/card/', { card: { ...card, name: this.state.draft.name } });
         this.setState({
-            cards: this.state.cards.filter(eachCard => {
-                if (eachCard._id !== card._id) {
-                    return card
-                }
-            })
+            ...this.state,
+            combins: {
+                ...this.state.combins,
+                cards: this.state.combins.cards.filter(eachCard => {
+                    if (eachCard._id !== card._id) {
+                        return card
+                    }
+                })
+            }
         })
     }
 
@@ -103,7 +122,7 @@ class Draft extends Component {
     }
 
     render() {
-        console.log('state',this.state)
+        console.log('state', this.state)
         return (
             <Aux>
                 <Row>
@@ -130,9 +149,9 @@ class Draft extends Component {
                                 <Combinations {...this} state={this.state} getCombins={this.getCombins} state={this.state} generate={this.generateCustomCombins} handleSelect={this.handleSelectFighter} draft={this.state.draft} saveCombins={this.saveCombins} draftInfo={this.state.draftInfo} />
                             }
 
-                            {!this.state.live &&
+                            {/* {!this.state.live &&
                                 <LiveEvent state={this.state} />
-                            }
+                            } */}
                         </Card>
                     </Col>
                 </Row>

@@ -11,12 +11,12 @@ function strongOpp(list) {
         let strCount = 0;
 
         card.fighters.map(fighter => {
-            if (fighter.predict.strength >= 13 && fighter.predict.outcome === 'Win') {
+            if (fighter.predict.outcome === 'Win') {
                 strCount += 1
             }
         })
 
-        if (strCount >= 5 && predict >= 5) {
+        if (strCount === 3) {
             newList.push(card);
         }
     })

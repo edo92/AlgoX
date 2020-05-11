@@ -11,15 +11,18 @@ module.exports = (list, filter) => {
     if (length <= 6) {
         // Only selected fighters
         return list.filter(card => {
-            let count = 0;
+            let count = 0, winCount = 0;
 
             card.fighters.map(fighter => {
                 if (filter[fighter.name]) {
                     count += 1;
                 }
+                if (fighter.predict.outcome === 'Loss') {
+                    winCount += 1;
+                }
             })
 
-            if (count === length) {
+            if (count === length && (winCount === 2 || winCount === 3 || winCount === 4)) {
                 return card;
             }
         })
@@ -34,7 +37,7 @@ module.exports = (list, filter) => {
                 }
             })
 
-            if (count === 6) {
+            if (count !== 6) {
                 return card;
             }
         })

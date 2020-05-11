@@ -42,7 +42,6 @@ class Update {
 
     combins = async (req, send) => {
         let card = req.body.card;
-        console.log('card',card)
 
         let event = await db.models.Combins.findOne({ name: card.name });
 
@@ -74,9 +73,10 @@ class Update {
                 { name: event.name },
                 { $push: { cards: card } }
             )
-        }  else {
+        } else {
             console.log('Event exists')
         }
+        return send();
     }
 }
 
